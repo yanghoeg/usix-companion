@@ -4,6 +4,14 @@
     <!-- 로컬 브리지 소켓(127.0.0.1:8760)용. 외부 통신은 하지 않는다. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- Android 11+ 패키지 가시성: 실행 가능한(런처) 앱을 볼 수 있어야 app_open 이 동작한다. -->
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.MAIN" />
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent>
+    </queries>
+
     <application
         android:allowBackup="false"
         android:label="@string/app_name">
