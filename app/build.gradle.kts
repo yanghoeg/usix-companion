@@ -11,8 +11,8 @@ android {
         applicationId = "dev.usix.companion"
         minSdk = 24
         targetSdk = 34
-        versionCode = 4
-        versionName = "0.1.3"
+        versionCode = 5
+        versionName = "0.1.4"
     }
 
     // 저장소에 커밋한 고정 debug 키로 서명한다. CI 가 매 빌드 debug 키를 새로 만들어 서명이 바뀌면

@@ -7,6 +7,7 @@ import android.graphics.Rect
 import android.os.Bundle
 import android.view.accessibility.AccessibilityEvent
 import android.view.accessibility.AccessibilityNodeInfo
+import android.view.accessibility.AccessibilityWindowInfo
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.concurrent.CountDownLatch
@@ -30,28 +31,46 @@ class UsixAccessibilityService : AccessibilityService() {
     override fun onAccessibilityEvent(event: AccessibilityEvent?) {}
     override fun onInterrupt() {}
 
-    /** 현재 활성 창의 텍스트·클릭가능 노드를 (라벨, 중심x, 중심y, clickable, editable) 로 수집. */
-    fun dumpScreen(): JSONArray {
+    /**
+     * 대상 창의 텍스트·클릭가능 노드를 (라벨, 중심x, 중심y, clickable, editable) 로 수집.
+     * pkg 가 주어지면 그 패키지의 창을 콕 집어 읽는다(멀티윈도에서 rootInActiveWindow 가 엉뚱한
+     * 창을 주는 문제 회피). 없으면 최상위 앱 창 → 그것도 없으면 활성 창으로 폴백.
+     */
+    fun dumpScreen(pkg: String?): JSONArray {
         val arr = JSONArray()
-        val root = rootInActiveWindow ?: return arr
         val rect = Rect()
-        walk(root) { node ->
-            val text = node.text?.toString()?.trim().orEmpty()
-            val desc = node.contentDescription?.toString()?.trim().orEmpty()
-            val label = if (text.isNotEmpty()) text else desc
-            if (label.isEmpty() && !node.isClickable) return@walk
-            node.getBoundsInScreen(rect)
-            if (rect.width() <= 0 || rect.height() <= 0) return@walk
-            arr.put(
-                JSONObject()
-                    .put("text", label.ifEmpty { "(빈 버튼)" })
-                    .put("x", rect.centerX())
-                    .put("y", rect.centerY())
-                    .put("clickable", node.isClickable)
-                    .put("editable", node.isEditable),
-            )
+        for (root in targetRoots(pkg)) {
+            walk(root) { node ->
+                val text = node.text?.toString()?.trim().orEmpty()
+                val desc = node.contentDescription?.toString()?.trim().orEmpty()
+                val label = if (text.isNotEmpty()) text else desc
+                if (label.isEmpty() && !node.isClickable) return@walk
+                node.getBoundsInScreen(rect)
+                if (rect.width() <= 0 || rect.height() <= 0) return@walk
+                arr.put(
+                    JSONObject()
+                        .put("text", label.ifEmpty { "(빈 버튼)" })
+                        .put("x", rect.centerX())
+                        .put("y", rect.centerY())
+                        .put("clickable", node.isClickable)
+                        .put("editable", node.isEditable),
+                )
+            }
         }
         return arr
+    }
+
+    /** 읽을 창(들)의 루트 노드. pkg 매칭 우선, 없으면 최상위 앱 창, 최후엔 rootInActiveWindow. */
+    private fun targetRoots(pkg: String?): List<AccessibilityNodeInfo> {
+        val ws = windows ?: emptyList()
+        if (!pkg.isNullOrEmpty()) {
+            val matched = ws.mapNotNull { it.root }.filter { it.packageName?.toString() == pkg }
+            if (matched.isNotEmpty()) return matched
+        }
+        val top = ws.filter { it.type == AccessibilityWindowInfo.TYPE_APPLICATION }
+            .maxByOrNull { it.layer }
+            ?.root
+        return listOfNotNull(top ?: rootInActiveWindow)
     }
 
     private fun walk(node: AccessibilityNodeInfo?, visit: (AccessibilityNodeInfo) -> Unit) {
@@ -90,16 +109,28 @@ class UsixAccessibilityService : AccessibilityService() {
         return ok
     }
 
-    /** 포커스된(없으면 첫 번째 편집 가능) 입력창에 텍스트를 세팅. adb input 과 달리 한글이 정상 입력된다. */
+    /**
+     * 포커스된 입력창에 텍스트를 세팅. adb input 과 달리 한글이 정상 입력된다.
+     * 멀티윈도 대비: 활성 창 → 전체 창 순으로 포커스된 입력을, 없으면 편집 가능한 노드를 찾는다.
+     */
     fun setFocusedText(text: String): Boolean {
-        val root = rootInActiveWindow ?: return false
-        val target = root.findFocus(AccessibilityNodeInfo.FOCUS_INPUT)
-            ?: findEditable(root)
-            ?: return false
+        val target = findFocusedInput() ?: return false
         val args = Bundle().apply {
             putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, text)
         }
         return target.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args)
+    }
+
+    private fun findFocusedInput(): AccessibilityNodeInfo? {
+        rootInActiveWindow?.findFocus(AccessibilityNodeInfo.FOCUS_INPUT)?.let { return it }
+        val roots = (windows ?: emptyList()).mapNotNull { it.root }
+        for (r in roots) {
+            r.findFocus(AccessibilityNodeInfo.FOCUS_INPUT)?.let { return it }
+        }
+        for (r in roots) {
+            findEditable(r)?.let { return it }
+        }
+        return rootInActiveWindow?.let { findEditable(it) }
     }
 
     private fun findEditable(node: AccessibilityNodeInfo?): AccessibilityNodeInfo? {

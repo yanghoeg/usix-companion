@@ -91,7 +91,7 @@ object BridgeServer {
                 .put("accessibility", UiController.connected())
                 .toString()
 
-        method == "GET" && path == "/screen" -> screen()
+        method == "GET" && path.startsWith("/screen") -> screen(path)
 
         method == "POST" && path == "/tap" -> tap(body)
 
@@ -147,8 +147,12 @@ object BridgeServer {
                     .put("error", "accessibility service not enabled").toString()
         }
 
-    private fun screen(): Pair<String, String> =
-        accGuard() ?: ("200 OK" to UiController.screen().toString())
+    private fun screen(path: String): Pair<String, String> {
+        accGuard()?.let { return it }
+        // /screen?package=com.kakao.talk — 특정 앱 창만 읽을 때. 없으면 최상위 앱 창.
+        val pkg = path.substringAfter("package=", "").substringBefore('&').ifEmpty { null }
+        return "200 OK" to UiController.screen(pkg).toString()
+    }
 
     private fun action(ok: Boolean): Pair<String, String> =
         accGuard() ?: ("200 OK" to JSONObject().put("ok", ok).toString())

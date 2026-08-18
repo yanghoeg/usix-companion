@@ -14,7 +14,7 @@ object UiController {
 
     fun connected(): Boolean = service != null
 
-    fun screen(): JSONArray = service?.dumpScreen() ?: JSONArray()
+    fun screen(pkg: String?): JSONArray = service?.dumpScreen(pkg) ?: JSONArray()
 
     fun tap(x: Int, y: Int): Boolean = service?.tap(x, y) ?: false
 
