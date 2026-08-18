@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">usix companion</string>
+    <string name="accessibility_desc">usix 에이전트가 화면을 읽고 탭·입력해 다른 앱(카톡 등)을 조작하도록 허용합니다. 루프백 브리지에서만 호출됩니다.</string>
 </resources>

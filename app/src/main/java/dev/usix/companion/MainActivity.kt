@@ -32,9 +32,16 @@ class MainActivity : Activity() {
                 startActivity(Intent(Settings.ACTION_NOTIFICATION_LISTENER_SETTINGS))
             }
         }
+        val accessBtn = Button(this).apply {
+            text = "접근성(화면 제어) 설정 열기"
+            setOnClickListener {
+                startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
+            }
+        }
         root.addView(title)
         root.addView(status)
         root.addView(settingsBtn)
+        root.addView(accessBtn)
         setContentView(root)
     }
 
@@ -44,7 +51,8 @@ class MainActivity : Activity() {
         status.text = buildString {
             append(if (enabled) "✅ 알림 접근 허용됨\n" else "❌ 알림 접근 꺼짐 — 아래 버튼으로 켜세요\n")
             append("브리지: 127.0.0.1:${BridgeServer.PORT}\n")
-            append(if (NotifStore.listenerConnected) "✅ 리스너 연결됨" else "· 리스너 대기 중 (권한 켠 뒤 잠시)")
+            append(if (NotifStore.listenerConnected) "✅ 리스너 연결됨\n" else "· 리스너 대기 중 (권한 켠 뒤 잠시)\n")
+            append(if (UiController.connected()) "✅ 접근성(화면 제어) 연결됨" else "· 접근성 꺼짐 — 화면 제어하려면 아래 버튼으로 켜세요")
         }
     }
 

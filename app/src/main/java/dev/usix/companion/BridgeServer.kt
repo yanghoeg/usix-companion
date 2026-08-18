@@ -88,7 +88,18 @@ object BridgeServer {
             "200 OK" to JSONObject()
                 .put("ok", true)
                 .put("listener", NotifStore.listenerConnected)
+                .put("accessibility", UiController.connected())
                 .toString()
+
+        method == "GET" && path == "/screen" -> screen()
+
+        method == "POST" && path == "/tap" -> tap(body)
+
+        method == "POST" && path == "/type" -> type(body)
+
+        method == "POST" && path == "/back" -> action(UiController.back())
+
+        method == "POST" && path == "/open" -> open(body)
 
         method == "GET" && path.startsWith("/notifications") -> {
             val arr = JSONArray()
@@ -121,6 +132,57 @@ object BridgeServer {
             val ok = NotifStore.reply(key, text)
             val resp = JSONObject().put("ok", ok)
             if (!ok) resp.put("error", "no reply action for key (expired or not repliable)")
+            "200 OK" to resp.toString()
+        }
+    } catch (e: Exception) {
+        "400 Bad Request" to JSONObject().put("ok", false).put("error", "bad json").toString()
+    }
+
+    private fun accGuard(): Pair<String, String>? =
+        if (UiController.connected()) {
+            null
+        } else {
+            "503 Service Unavailable" to
+                JSONObject().put("ok", false)
+                    .put("error", "accessibility service not enabled").toString()
+        }
+
+    private fun screen(): Pair<String, String> =
+        accGuard() ?: ("200 OK" to UiController.screen().toString())
+
+    private fun action(ok: Boolean): Pair<String, String> =
+        accGuard() ?: ("200 OK" to JSONObject().put("ok", ok).toString())
+
+    private fun tap(body: String): Pair<String, String> = try {
+        val obj = JSONObject(body)
+        if (!obj.has("x") || !obj.has("y")) {
+            "400 Bad Request" to JSONObject().put("ok", false).put("error", "x/y required").toString()
+        } else {
+            accGuard() ?: ("200 OK" to JSONObject().put("ok", UiController.tap(obj.getInt("x"), obj.getInt("y"))).toString())
+        }
+    } catch (e: Exception) {
+        "400 Bad Request" to JSONObject().put("ok", false).put("error", "bad json").toString()
+    }
+
+    private fun type(body: String): Pair<String, String> = try {
+        val text = JSONObject(body).optString("text")
+        if (text.isEmpty()) {
+            "400 Bad Request" to JSONObject().put("ok", false).put("error", "text required").toString()
+        } else {
+            accGuard() ?: ("200 OK" to JSONObject().put("ok", UiController.type(text)).toString())
+        }
+    } catch (e: Exception) {
+        "400 Bad Request" to JSONObject().put("ok", false).put("error", "bad json").toString()
+    }
+
+    private fun open(body: String): Pair<String, String> = try {
+        val pkg = JSONObject(body).optString("package")
+        if (pkg.isEmpty()) {
+            "400 Bad Request" to JSONObject().put("ok", false).put("error", "package required").toString()
+        } else {
+            val ok = UiController.openApp(pkg)
+            val resp = JSONObject().put("ok", ok)
+            if (!ok) resp.put("error", "no launch intent for package")
             "200 OK" to resp.toString()
         }
     } catch (e: Exception) {
