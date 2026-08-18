@@ -6,6 +6,7 @@ import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.io.OutputStream
 import java.net.InetAddress
+import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
 
@@ -21,17 +22,28 @@ object BridgeServer {
 
     fun start() {
         if (running) return
+        // 바인드가 성공한 뒤에만 running 을 세운다. 실패(예: 이전 프로세스가 아직 포트를 안 놓음)하면
+        // running 이 false 로 남아 다음 재바인드에서 다시 시도할 수 있다. reuseAddress 로 TIME_WAIT 회피.
+        val server = try {
+            ServerSocket().apply {
+                reuseAddress = true
+                bind(InetSocketAddress(InetAddress.getByName("127.0.0.1"), PORT), 50)
+            }
+        } catch (e: Exception) {
+            return
+        }
         running = true
-        Thread({ serve() }, "usix-bridge").apply { isDaemon = true }.start()
+        Thread({ serve(server) }, "usix-bridge").apply { isDaemon = true }.start()
     }
 
-    private fun serve() {
-        val server = ServerSocket(PORT, 50, InetAddress.getByName("127.0.0.1"))
-        while (running) {
-            try {
-                handle(server.accept())
-            } catch (e: Exception) {
-                // 개별 요청 실패는 무시하고 계속 받는다.
+    private fun serve(server: ServerSocket) {
+        server.use {
+            while (running) {
+                try {
+                    handle(server.accept())
+                } catch (e: Exception) {
+                    // 개별 요청 실패는 무시하고 계속 받는다.
+                }
             }
         }
     }
