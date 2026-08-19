@@ -1,7 +1,10 @@
 package dev.usix.companion
 
+import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.provider.Settings
 import android.widget.Button
@@ -43,6 +46,15 @@ class MainActivity : Activity() {
         root.addView(settingsBtn)
         root.addView(accessBtn)
         setContentView(root)
+
+        // 상시 알림 권한(Android 13+) — 없으면 포그라운드 알림이 숨겨질 수 있다.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&
+            checkSelfPermission(Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissions(arrayOf(Manifest.permission.POST_NOTIFICATIONS), 1)
+        }
+        // 프로세스를 포그라운드로 고정 — 브리지가 메모리 압박에 죽지 않게. (액티비티 포그라운드에서 시작해야 허용)
+        BridgeForegroundService.start(this)
     }
 
     override fun onResume() {

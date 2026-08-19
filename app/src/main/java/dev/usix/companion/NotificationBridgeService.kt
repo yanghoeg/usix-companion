@@ -16,6 +16,13 @@ class NotificationBridgeService : NotificationListenerService() {
         NotifStore.listenerConnected = true
         NotifStore.appContext = applicationContext
         BridgeServer.start()
+        // 재부팅 등으로 리스너가 붙으면 프로세스도 포그라운드로 고정 시도. 백그라운드-시작이
+        // 제한되는 버전(Android 12+)에선 예외가 날 수 있어 삼킨다 — 그땐 앱을 열면 고정된다.
+        try {
+            BridgeForegroundService.start(this)
+        } catch (e: Exception) {
+            // best-effort — MainActivity 를 열면 확실히 고정된다.
+        }
     }
 
     override fun onListenerDisconnected() {

@@ -4,6 +4,12 @@
     <!-- 로컬 브리지 소켓(127.0.0.1:8760)용. 외부 통신은 하지 않는다. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- 프로세스를 포그라운드로 고정해 브리지가 메모리 압박에 안 죽게 한다. -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
+    <!-- 상시 알림 표시용(Android 13+). 없어도 서비스는 뜨지만 알림이 숨겨질 수 있다. -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
     <!-- Android 11+ 패키지 가시성: 실행 가능한(런처) 앱을 볼 수 있어야 app_open 이 동작한다. -->
     <queries>
         <intent>
@@ -33,6 +39,15 @@
             <intent-filter>
                 <action android:name="android.service.notification.NotificationListenerService" />
             </intent-filter>
+        </service>
+
+        <service
+            android:name=".BridgeForegroundService"
+            android:exported="false"
+            android:foregroundServiceType="specialUse">
+            <property
+                android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
+                android:value="local loopback bridge (127.0.0.1:8760) for on-device agent" />
         </service>
 
         <service
