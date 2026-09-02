@@ -19,7 +19,7 @@ class BridgeForegroundService : Service() {
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground(NOTIF_ID, buildNotification())
-        BridgeServer.start()
+        BridgeServer.start(applicationContext)
         return START_STICKY
     }
 
