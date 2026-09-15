@@ -13,6 +13,7 @@ import android.service.notification.StatusBarNotification
 class NotificationBridgeService : NotificationListenerService() {
 
     override fun onListenerConnected() {
+        NotifStore.clear()
         NotifStore.listenerConnected = true
         NotifStore.appContext = applicationContext
         BridgeServer.start(applicationContext)
@@ -26,7 +27,14 @@ class NotificationBridgeService : NotificationListenerService() {
     }
 
     override fun onListenerDisconnected() {
+        NotifStore.clear()
         NotifStore.listenerConnected = false
+    }
+
+    override fun onDestroy() {
+        NotifStore.clear()
+        NotifStore.listenerConnected = false
+        super.onDestroy()
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {

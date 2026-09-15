@@ -22,7 +22,7 @@ object UiController {
 
     fun back(): Boolean = service?.back() ?: false
 
-    /** 접근성 없이 런처 인텐트로 앱을 연다. 컨텍스트는 알림 서비스가 채워 둔 것을 재사용. */
+    /** 접근성 없이 런처 인텐트로 앱을 연다. 브리지 시작 시 저장한 애플리케이션 컨텍스트를 재사용. */
     fun openApp(pkg: String): Boolean {
         val ctx = NotifStore.appContext ?: return false
         val intent = ctx.packageManager.getLaunchIntentForPackage(pkg) ?: return false

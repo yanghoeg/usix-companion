@@ -64,6 +64,13 @@ object NotifStore {
         handles.remove(key)
     }
 
+    /** 리스너 연결이 끊기면 이전 권한 세션의 알림과 답장 핸들을 모두 폐기한다. */
+    @Synchronized
+    fun clear() {
+        items.clear()
+        handles.clear()
+    }
+
     /** 최신 우선. */
     @Synchronized
     fun snapshot(): List<NotifItem> = items.toList().asReversed()

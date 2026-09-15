@@ -8,11 +8,13 @@ on:
     branches: [main]
 
 permissions:
-  contents: write # required to publish a Release on tag push
+  contents: read
 
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -25,20 +27,35 @@ jobs:
         with:
           gradle-version: "8.10.2"
 
-      - name: Build debug APK
-        run: gradle assembleDebug --no-daemon --stacktrace
+      - name: Build release APK
+        run: |
+          if [[ "$GITHUB_REF_NAME" == v* ]]; then
+            gradle assembleRelease --no-daemon --stacktrace -PversionName="${GITHUB_REF_NAME#v}"
+          else
+            gradle assembleRelease --no-daemon --stacktrace
+          fi
 
-      # Every push/PR: keep the APK as a build artifact (dev-facing, expires).
+      # Every push/PR: keep the signed APK as a build artifact (expires).
       - uses: actions/upload-artifact@v4
         with:
-          name: usix-companion-debug
-          path: app/build/outputs/apk/debug/app-debug.apk
+          name: usix-companion-release
+          path: app/build/outputs/apk/release/app-release.apk
 
-      # Only on a version tag (vX.Y.Z): attach the APK to a GitHub Release
-      # so end users always grab one stable "Latest" download.
+  release:
+    if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: usix-companion-release
+          path: release
+
+      # Only on a version tag (vX.Y.Z): attach the already-built APK to a GitHub Release.
       - name: Publish Release
-        if: startsWith(github.ref, 'refs/tags/v')
         uses: softprops/action-gh-release@v2
         with:
-          files: app/build/outputs/apk/debug/app-debug.apk
+          files: release/app-release.apk
           generate_release_notes: true

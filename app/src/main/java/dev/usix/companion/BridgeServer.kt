@@ -5,14 +5,16 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
 import java.io.IOException
-import java.io.InputStream
 import java.io.OutputStream
 import java.net.InetAddress
 import java.net.InetSocketAddress
 import java.net.ServerSocket
 import java.net.Socket
 import java.net.SocketTimeoutException
-import java.util.concurrent.Executors
+import java.util.concurrent.ArrayBlockingQueue
+import java.util.concurrent.RejectedExecutionException
+import java.util.concurrent.ThreadPoolExecutor
+import java.util.concurrent.TimeUnit
 import java.util.concurrent.atomic.AtomicBoolean
 
 /**
@@ -23,17 +25,20 @@ import java.util.concurrent.atomic.AtomicBoolean
 object BridgeServer {
     const val PORT = 8760
 
-    /** 한 연결이 워커를 붙들 수 있는 최대 시간. 멈춘 클라이언트가 브리지를 영영 막지 못하게. */
-    private const val SOCKET_TIMEOUT_MS = 10_000
+    /** 읽기 사이의 유휴 제한과 헤더·바디를 읽는 전체 제한. 느린 로컬 클라이언트가 워커를 독점하지 못하게 한다. */
+    private const val SOCKET_IDLE_TIMEOUT_MS = 10_000
+    private const val MAX_REQUEST_TIME_MS = 10_000
 
     /** 헤더·바디 상한. Content-Length 를 믿고 그대로 할당하면 요청 하나로 OOM 이 난다. */
     private const val MAX_HEADER_BYTES = 16 * 1024
     private const val MAX_BODY_BYTES = 64 * 1024
     private const val WORKERS = 4
+    private const val MAX_PENDING = 16
 
     private val running = AtomicBoolean(false)
 
     fun start(ctx: Context) {
+        NotifStore.appContext = ctx.applicationContext
         BridgeAuth.init(ctx)
         // CAS 로 동시 start(리스너 연결 + 포그라운드 서비스)를 하나만 통과시킨다. 바인드 실패
         // (예: 이전 프로세스가 아직 포트를 안 놓음)면 되돌려 다음 호출에서 재시도할 수 있게.
@@ -51,10 +56,16 @@ object BridgeServer {
     }
 
     private fun serve(server: ServerSocket) {
-        // 연결당 워커 — accept 루프에서 직접 처리하면 느린 클라이언트 하나가 전체를 세운다.
-        val pool = Executors.newFixedThreadPool(WORKERS) { r ->
-            Thread(r, "usix-bridge-worker").apply { isDaemon = true }
-        }
+        // 연결당 워커 — 느린 클라이언트 하나가 전체를 세우지 않되, 대기 연결도 무한히 쌓이지 않게 한다.
+        val pool = ThreadPoolExecutor(
+            WORKERS,
+            WORKERS,
+            0L,
+            TimeUnit.MILLISECONDS,
+            ArrayBlockingQueue(MAX_PENDING),
+            { r -> Thread(r, "usix-bridge-worker").apply { isDaemon = true } },
+            ThreadPoolExecutor.AbortPolicy(),
+        )
         server.use {
             while (running.get() && !server.isClosed) {
                 val sock = try {
@@ -62,28 +73,102 @@ object BridgeServer {
                 } catch (e: IOException) {
                     continue
                 }
-                pool.execute {
-                    try {
-                        handle(sock)
-                    } catch (e: Exception) {
-                        // 개별 요청 실패는 무시하고 계속 받는다.
+                try {
+                    pool.execute {
+                        try {
+                            handle(sock)
+                        } catch (e: Exception) {
+                            // 개별 요청 실패는 무시하고 계속 받는다.
+                        }
                     }
+                } catch (e: RejectedExecutionException) {
+                    // 대기열이 가득 차면 소켓을 즉시 닫아 연결 수가 무한히 늘지 않게 한다.
+                    runCatching { sock.close() }
                 }
             }
         }
         pool.shutdownNow()
     }
 
-    private class Request(val method: String, val path: String, val headers: Map<String, String>, val body: String)
+    private class RequestHead(val method: String, val path: String, val headers: Map<String, String>)
 
     private class RequestError(val status: String, message: String) : Exception(message)
 
+    /** 헤더와 바디를 같은 총 제한 시간 안에서 읽는다. 인증 전에는 바디를 읽지 않는다. */
+    private class RequestReader(private val sock: Socket) {
+        private val input = sock.getInputStream()
+        private val deadlineNanos = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(MAX_REQUEST_TIME_MS.toLong())
+
+        fun readHead(): RequestHead {
+            val head = ByteArrayOutputStream()
+            var matched = 0 // \r\n\r\n 상태기계
+            while (matched < 4) {
+                val b = readByte()
+                if (b < 0) throw RequestError("400 Bad Request", "truncated request")
+                head.write(b)
+                if (head.size() > MAX_HEADER_BYTES) {
+                    throw RequestError("431 Request Header Fields Too Large", "headers exceed $MAX_HEADER_BYTES bytes")
+                }
+                matched = when {
+                    b == '\r'.code && (matched == 0 || matched == 2) -> matched + 1
+                    b == '\n'.code && (matched == 1 || matched == 3) -> matched + 1
+                    b == '\r'.code -> 1
+                    else -> 0
+                }
+            }
+            val lines = head.toString("ISO-8859-1").split("\r\n")
+            val parts = lines.first().split(" ")
+            if (parts.size < 2 || parts[0].isEmpty() || !parts[1].startsWith("/")) {
+                throw RequestError("400 Bad Request", "malformed request line")
+            }
+            val headers = HashMap<String, String>()
+            for (line in lines.drop(1)) {
+                val i = line.indexOf(':')
+                if (i <= 0) continue
+                headers[line.substring(0, i).trim().lowercase()] = line.substring(i + 1).trim()
+            }
+            return RequestHead(parts[0], parts[1], headers)
+        }
+
+        fun readBody(headers: Map<String, String>): String {
+            val len = headers["content-length"]?.let {
+                it.toIntOrNull() ?: throw RequestError("400 Bad Request", "bad content-length")
+            } ?: 0
+            if (len < 0) throw RequestError("400 Bad Request", "bad content-length")
+            if (len > MAX_BODY_BYTES) throw RequestError("413 Payload Too Large", "body exceeds $MAX_BODY_BYTES bytes")
+            val body = ByteArray(len)
+            var read = 0
+            while (read < len) {
+                val r = readBytes(body, read, len - read)
+                if (r < 0) throw RequestError("400 Bad Request", "truncated body")
+                read += r
+            }
+            return String(body, Charsets.UTF_8)
+        }
+
+        private fun readByte(): Int {
+            sock.soTimeout = readTimeoutMillis()
+            return input.read()
+        }
+
+        private fun readBytes(buffer: ByteArray, offset: Int, length: Int): Int {
+            sock.soTimeout = readTimeoutMillis()
+            return input.read(buffer, offset, length)
+        }
+
+        private fun readTimeoutMillis(): Int {
+            val remainingMillis = TimeUnit.NANOSECONDS.toMillis(deadlineNanos - System.nanoTime())
+            if (remainingMillis <= 0) throw SocketTimeoutException("request deadline exceeded")
+            return minOf(SOCKET_IDLE_TIMEOUT_MS.toLong(), remainingMillis).coerceAtLeast(1L).toInt()
+        }
+    }
+
     private fun handle(sock: Socket) {
         sock.use {
-            sock.soTimeout = SOCKET_TIMEOUT_MS
             val out = sock.getOutputStream()
-            val req = try {
-                parseRequest(sock.getInputStream())
+            val reader = RequestReader(sock)
+            val head = try {
+                reader.readHead()
             } catch (e: RequestError) {
                 writeResponse(out, e.status, err(e.message ?: "bad request"))
                 return
@@ -91,59 +176,24 @@ object BridgeServer {
                 writeResponse(out, "408 Request Timeout", err("request timed out"))
                 return
             }
-            val paired = BridgeAuth.check(req.headers["authorization"])
-            if (req.path != "/health" && !paired) {
+            val paired = BridgeAuth.check(head.headers["authorization"])
+            if (head.path != "/health" && !paired) {
                 writeResponse(out, "401 Unauthorized", err("missing or bad bearer token — pair with the companion app"))
                 return
             }
-            val (status, json) = route(req.method, req.path, req.body, paired)
+            val body = try {
+                // /health 는 본문이 필요 없으므로 느린/과대한 본문을 기다리지 않는다.
+                if (head.method == "GET" && head.path == "/health") "" else reader.readBody(head.headers)
+            } catch (e: RequestError) {
+                writeResponse(out, e.status, err(e.message ?: "bad request"))
+                return
+            } catch (e: SocketTimeoutException) {
+                writeResponse(out, "408 Request Timeout", err("request timed out"))
+                return
+            }
+            val (status, json) = route(head.method, head.path, body, paired)
             writeResponse(out, status, json)
         }
-    }
-
-    /**
-     * 요청 라인·헤더를 CRLFCRLF 까지 바이트로 읽고, 바디는 Content-Length 만큼 정확히 바이트로 읽는다.
-     * Reader 로 읽으면 Content-Length(바이트)와 문자 수가 어긋나 한글 바디에서 영원히 기다린다.
-     */
-    private fun parseRequest(input: InputStream): Request {
-        val head = ByteArrayOutputStream()
-        var matched = 0 // \r\n\r\n 상태기계
-        while (matched < 4) {
-            val b = input.read()
-            if (b < 0) throw RequestError("400 Bad Request", "truncated request")
-            head.write(b)
-            if (head.size() > MAX_HEADER_BYTES) {
-                throw RequestError("431 Request Header Fields Too Large", "headers exceed $MAX_HEADER_BYTES bytes")
-            }
-            matched = when {
-                b == '\r'.code && (matched == 0 || matched == 2) -> matched + 1
-                b == '\n'.code && (matched == 1 || matched == 3) -> matched + 1
-                b == '\r'.code -> 1
-                else -> 0
-            }
-        }
-        val lines = head.toString("ISO-8859-1").split("\r\n")
-        val parts = lines.first().split(" ")
-        if (parts.size < 2 || parts[0].isEmpty() || !parts[1].startsWith("/")) {
-            throw RequestError("400 Bad Request", "malformed request line")
-        }
-        val headers = HashMap<String, String>()
-        for (line in lines.drop(1)) {
-            val i = line.indexOf(':')
-            if (i <= 0) continue
-            headers[line.substring(0, i).trim().lowercase()] = line.substring(i + 1).trim()
-        }
-        val len = headers["content-length"]?.toIntOrNull() ?: 0
-        if (len < 0) throw RequestError("400 Bad Request", "bad content-length")
-        if (len > MAX_BODY_BYTES) throw RequestError("413 Payload Too Large", "body exceeds $MAX_BODY_BYTES bytes")
-        val body = ByteArray(len)
-        var read = 0
-        while (read < len) {
-            val r = input.read(body, read, len - read)
-            if (r < 0) throw RequestError("400 Bad Request", "truncated body")
-            read += r
-        }
-        return Request(parts[0], parts[1], headers, String(body, Charsets.UTF_8))
     }
 
     private fun err(msg: String): String = JSONObject().put("ok", false).put("error", msg).toString()

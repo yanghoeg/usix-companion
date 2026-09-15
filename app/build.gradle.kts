@@ -3,6 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
 }
 
+val appVersionName = (project.findProperty("versionName") as? String) ?: "0.1.6"
+
 android {
     namespace = "dev.usix.companion"
     compileSdk = 34
@@ -11,8 +13,8 @@ android {
         applicationId = "dev.usix.companion"
         minSdk = 24
         targetSdk = 34
-        versionCode = 5
-        versionName = "0.1.4"
+        versionCode = 6
+        versionName = appVersionName
     }
 
     // 저장소에 커밋한 고정 debug 키로 서명한다. CI 가 매 빌드 debug 키를 새로 만들어 서명이 바뀌면
@@ -30,6 +32,8 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
+            // 개인용 사이드로드 앱이라 기존 설치본과 같은 안정적인 키를 사용한다.
+            signingConfig = signingConfigs.getByName("debug")
         }
     }
 
