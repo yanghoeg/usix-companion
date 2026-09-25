@@ -53,8 +53,9 @@ class UsixAccessibilityService : AccessibilityService() {
     fun dumpScreen(pkg: String?): JSONArray {
         val arr = JSONArray()
         val rect = Rect()
-        for (root in targetRoots(pkg)) {
-            walk(root) { node ->
+        val roots = targetRoots(pkg)
+        try {
+            for (root in roots) walk(root) { node ->
                 val text = node.text?.toString()?.trim().orEmpty()
                 val desc = node.contentDescription?.toString()?.trim().orEmpty()
                 val label = if (text.isNotEmpty()) text else desc
@@ -70,12 +71,13 @@ class UsixAccessibilityService : AccessibilityService() {
                         .put("editable", node.isEditable),
                 )
             }
-            root.release()
+        } finally {
+            roots.forEach { it.release() }
         }
         return arr
     }
 
-    /** 읽을 창(들)의 루트 노드. pkg 매칭 우선, 없으면 최상위 앱 창, 최후엔 rootInActiveWindow. 호출자가 release. */
+    /** pkg 지정 시 일치하는 창만 반환. 미지정 시 최상위 앱 창 → 활성 창. 호출자가 release. */
     private fun targetRoots(pkg: String?): List<AccessibilityNodeInfo> {
         val ws = windows ?: emptyList()
         try {
@@ -86,6 +88,11 @@ class UsixAccessibilityService : AccessibilityService() {
                     if (r.packageName?.toString() == pkg) matched.add(r) else r.release()
                 }
                 if (matched.isNotEmpty()) return matched
+                // 창 목록을 얻지 못해도 활성 창의 패키지는 반드시 확인한다.
+                val active = rootInActiveWindow ?: return emptyList()
+                if (active.packageName?.toString() == pkg) return listOf(active)
+                active.release()
+                return emptyList()
             }
             val top = ws.filter { it.type == AccessibilityWindowInfo.TYPE_APPLICATION }
                 .maxByOrNull { it.layer }
@@ -101,8 +108,11 @@ class UsixAccessibilityService : AccessibilityService() {
         visit(node)
         for (i in 0 until node.childCount) {
             val child = node.getChild(i) ?: continue
-            walk(child, visit)
-            child.release()
+            try {
+                walk(child, visit)
+            } finally {
+                child.release()
+            }
         }
     }
 

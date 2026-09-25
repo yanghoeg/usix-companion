@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.app.RemoteInput
 import android.service.notification.NotificationListenerService
 import android.service.notification.StatusBarNotification
+import android.util.Log
 
 /**
  * 알림 접근 권한이 켜지면 시스템이 바인딩한다. 게시되는 알림을 NotifStore 에 쌓고,
@@ -13,9 +14,19 @@ import android.service.notification.StatusBarNotification
 class NotificationBridgeService : NotificationListenerService() {
 
     override fun onListenerConnected() {
+        NotifStore.listenerConnected = false
         NotifStore.clear()
-        NotifStore.listenerConnected = true
         NotifStore.appContext = applicationContext
+        // 연결 전부터 떠 있던 알림은 onNotificationPosted 로 다시 오지 않을 수 있다.
+        // 시스템 반환 순서와 무관하게 오래된 것부터 넣어 최신 MAX 건을 남긴다.
+        val active = try {
+            activeNotifications.orEmpty()
+        } catch (e: SecurityException) {
+            Log.w("UsixNotifications", "Notification access lost while reconnecting", e)
+            return
+        }
+        active.sortedBy { it.postTime }.forEach { storeNotification(it) }
+        NotifStore.listenerConnected = true
         BridgeServer.start(applicationContext)
         // 재부팅 등으로 리스너가 붙으면 프로세스도 포그라운드로 고정 시도. 백그라운드-시작이
         // 제한되는 버전(Android 12+)에선 예외가 날 수 있어 삼킨다 — 그땐 앱을 열면 고정된다.
@@ -38,6 +49,10 @@ class NotificationBridgeService : NotificationListenerService() {
     }
 
     override fun onNotificationPosted(sbn: StatusBarNotification) {
+        storeNotification(sbn)
+    }
+
+    private fun storeNotification(sbn: StatusBarNotification) {
         val n = sbn.notification ?: return
         val extras = n.extras
         val title = extras.getCharSequence(Notification.EXTRA_TITLE)?.toString() ?: ""

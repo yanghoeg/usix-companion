@@ -1,6 +1,7 @@
 package dev.usix.companion
 
 import android.content.Context
+import android.net.Uri
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
@@ -209,7 +210,7 @@ object BridgeServer {
                 .put("accessibility", UiController.connected())
                 .toString()
 
-        method == "GET" && path.startsWith("/screen") -> screen(path)
+        method == "GET" && path.substringBefore('?') == "/screen" -> screen(path)
 
         method == "POST" && path == "/tap" -> tap(body)
 
@@ -219,7 +220,7 @@ object BridgeServer {
 
         method == "POST" && path == "/open" -> open(body)
 
-        method == "GET" && path.startsWith("/notifications") -> {
+        method == "GET" && path.substringBefore('?') == "/notifications" -> {
             val arr = JSONArray()
             for (n in NotifStore.snapshot()) {
                 arr.put(
@@ -262,7 +263,7 @@ object BridgeServer {
     private fun screen(path: String): Pair<String, String> {
         accGuard()?.let { return it }
         // /screen?package=com.kakao.talk — 특정 앱 창만 읽을 때. 없으면 최상위 앱 창.
-        val pkg = path.substringAfter("package=", "").substringBefore('&').ifEmpty { null }
+        val pkg = Uri.parse(path).getQueryParameter("package")?.ifEmpty { null }
         return "200 OK" to UiController.screen(pkg).toString()
     }
 

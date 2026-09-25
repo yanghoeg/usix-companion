@@ -35,6 +35,9 @@ jobs:
             gradle assembleRelease --no-daemon --stacktrace
           fi
 
+      - name: Run regression tests
+        run: gradle testDebugUnitTest --no-daemon --stacktrace
+
       # Every push/PR: keep the signed APK as a build artifact (expires).
       - uses: actions/upload-artifact@v4
         with:
