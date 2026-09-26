@@ -29,6 +29,25 @@ private database or connect directly to the mail server. Accessible text and
 controls depend on the installed mail app and current screen, so a live-device
 check is needed for each supported app flow.
 
+## Independent assistant and scheduled work
+
+`usix-termux` owns the model loop, saved task checkpoints, schedules, and human
+approvals. This companion supplies the Android controls used by those tasks.
+With the task-enabled Termux agent, queue and inspect work with:
+
+```sh
+usix-termux task add "Check my battery and summarize recent notifications"
+usix-termux worker --once
+usix-termux task list
+usix-termux task run 1  # use the returned task ID to resume with human approvals
+```
+
+`usix-termux task schedule --every 1h "Check my battery"` creates a repeat schedule;
+`usix-termux worker` must remain running to process it. Phone-changing actions pause
+for explicit approval. Android may suspend Termux, so execution time is best-effort.
+See the [Termux task guide](https://github.com/yanghoeg/usix-termux/blob/main/docs/tasks.md)
+for scheduling, cancellation, and recovery behavior.
+
 Build with JDK 17, Gradle 8.10.2, and Android SDK 34:
 
 ```sh
