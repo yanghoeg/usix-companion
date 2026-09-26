@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.ScrollView
 import android.widget.TextView
 import android.widget.Toast
 
@@ -48,6 +49,11 @@ class MainActivity : Activity() {
                 startActivity(Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS))
             }
         }
+        val mailHelp = TextView(this).apply {
+            text = "알림이 없어도 Thunderbird 메일·대화 화면을 읽고 입력할 수 있습니다. 화면 잠금을 풀고 접근성을 켜세요. 메일 계정은 Thunderbird에 등록하세요."
+            textSize = 13f
+            setPadding(0, 16, 0, 16)
+        }
         val tokenLabel = TextView(this).apply {
             text = "브리지 토큰 — 복사한 뒤 Termux 에서 `usix-termux pair`"
             textSize = 13f
@@ -74,11 +80,12 @@ class MainActivity : Activity() {
         root.addView(status)
         root.addView(settingsBtn)
         root.addView(accessBtn)
+        root.addView(mailHelp)
         root.addView(tokenLabel)
         root.addView(tokenView)
         root.addView(copyBtn)
         root.addView(regenBtn)
-        setContentView(root)
+        setContentView(ScrollView(this).apply { addView(root) })
 
         // 상시 알림 권한(Android 13+) — 없으면 포그라운드 알림이 숨겨질 수 있다.
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU &&

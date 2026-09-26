@@ -5,6 +5,7 @@ import android.graphics.Rect
 import android.view.accessibility.AccessibilityNodeInfo
 import android.view.accessibility.AccessibilityWindowInfo
 import org.json.JSONArray
+import org.json.JSONObject
 import org.junit.After
 import org.junit.Assert.*
 import org.junit.Before
@@ -111,6 +112,81 @@ class ScreenQueryTest {
         assertEquals("503 Service Unavailable", route("/screen?package=wanted.app").first)
     }
 
+    @Test
+    fun emptyReplyFieldAndScrollContainerAreExposed() {
+        shadow.activeRoot = node("mail.app", "").apply { isEditable = true }
+        val input = service.dumpScreen("mail.app").getJSONObject(0)
+        assertTrue(input.getBoolean("editable"))
+        assertEquals("(입력창)", input.getString("text"))
+
+        shadow.activeRoot = node("mail.app", "").apply { isScrollable = true }
+        val container = service.dumpScreen("mail.app").getJSONObject(0)
+        assertTrue(container.getBoolean("scrollable"))
+    }
+
+    @Test
+    fun scrollOnlyActsOnTheRequestedAppAndUsesTheRequestedDirection() {
+        val actions = mutableListOf<Int>()
+        val root = node("mail.app", "Inbox").apply {
+            isScrollable = true
+            isVisibleToUser = true
+            isEnabled = true
+        }
+        shadowOf(root).setOnPerformActionListener { action, _ -> actions.add(action); true }
+        shadow.activeRoot = root
+
+        assertFalse(service.scroll("other.app", true))
+        assertTrue(actions.isEmpty())
+        assertTrue(service.scroll("mail.app", true))
+        assertTrue(service.scroll("mail.app", false))
+        assertEquals(listOf(AccessibilityNodeInfo.ACTION_SCROLL_FORWARD, AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD), actions)
+    }
+
+    @Test
+    fun scrollRejectsHiddenContainersAndReportsEndOfContent() {
+        var attempts = 0
+        val root = node("mail.app", "Inbox").apply {
+            isScrollable = true
+            isEnabled = true
+        }
+        shadowOf(root).setOnPerformActionListener { _, _ -> attempts++; false }
+        shadow.activeRoot = root
+
+        assertFalse(service.scroll("mail.app", true))
+        assertEquals(0, attempts)
+        root.isVisibleToUser = true
+        val result = route("/scroll", "POST", "{\"direction\":\"down\",\"package\":\"mail.app\"}")
+        assertEquals("200 OK", result.first)
+        assertFalse(JSONObject(result.second).getBoolean("ok"))
+        assertEquals(1, attempts)
+    }
+
+    @Test
+    fun scrollValidatesArgumentsAndRequiresAccessibility() {
+        assertEquals("400 Bad Request", route("/scroll", "POST", "{\"direction\":\"left\"}").first)
+        assertEquals("400 Bad Request", route("/scroll", "POST", "{\"direction\":\"down\",\"package\":null}").first)
+        UiController.service = null
+        assertEquals("503 Service Unavailable", route("/scroll", "POST", "{\"direction\":\"down\"}").first)
+    }
+
+    @Test
+    fun scopedReplyCannotTypeInAnotherAppsEditor() {
+        var actions = 0
+        val root = node("other.app", "Private editor").apply {
+            isEditable = true
+            isEnabled = true
+            isVisibleToUser = true
+        }
+        shadowOf(root).setOnPerformActionListener { _, _ -> actions++; true }
+        shadow.activeRoot = root
+
+        val result = route("/type", "POST", "{\"text\":\"reply\",\"package\":\"mail.app\"}")
+
+        assertEquals("200 OK", result.first)
+        assertFalse(JSONObject(result.second).getBoolean("ok"))
+        assertEquals(0, actions)
+    }
+
     private fun labels(array: JSONArray): List<String> =
         (0 until array.length()).map { array.getJSONObject(it).getString("text") }
 
@@ -130,12 +206,12 @@ class ScreenQueryTest {
 
     // Exercise routing and the real screen traversal without binding the fixed production port.
     @Suppress("UNCHECKED_CAST")
-    private fun route(path: String): Pair<String, String> {
+    private fun route(path: String, verb: String = "GET", body: String = ""): Pair<String, String> {
         val method = BridgeServer::class.java.getDeclaredMethod(
             "route", String::class.java, String::class.java, String::class.java, Boolean::class.javaPrimitiveType,
         )
         method.isAccessible = true
-        return method.invoke(BridgeServer, "GET", path, "", true) as Pair<String, String>
+        return method.invoke(BridgeServer, verb, path, body, true) as Pair<String, String>
     }
 
     @Implements(AccessibilityService::class)
@@ -143,6 +219,6 @@ class ScreenQueryTest {
         var activeRoot: AccessibilityNodeInfo? = null
 
         @Implementation
-        protected fun getRootInActiveWindow(): AccessibilityNodeInfo? = activeRoot
+        protected fun getRootInActiveWindow(): AccessibilityNodeInfo? = activeRoot?.let { AccessibilityNodeInfo.obtain(it) }
     }
 }

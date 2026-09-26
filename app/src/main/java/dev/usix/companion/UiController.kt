@@ -18,9 +18,11 @@ object UiController {
 
     fun tap(x: Int, y: Int): Boolean = service?.tap(x, y) ?: false
 
-    fun type(text: String): Boolean = service?.setFocusedText(text) ?: false
+    fun type(text: String, pkg: String? = null): Boolean = service?.setFocusedText(text, pkg) ?: false
 
     fun back(): Boolean = service?.back() ?: false
+
+    fun scroll(pkg: String?, forward: Boolean): Boolean = service?.scroll(pkg, forward) ?: false
 
     /** 접근성 없이 런처 인텐트로 앱을 연다. 브리지 시작 시 저장한 애플리케이션 컨텍스트를 재사용. */
     fun openApp(pkg: String): Boolean {

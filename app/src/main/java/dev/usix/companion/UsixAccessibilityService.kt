@@ -59,16 +59,23 @@ class UsixAccessibilityService : AccessibilityService() {
                 val text = node.text?.toString()?.trim().orEmpty()
                 val desc = node.contentDescription?.toString()?.trim().orEmpty()
                 val label = if (text.isNotEmpty()) text else desc
-                if (label.isEmpty() && !node.isClickable) return@walk
+                if (label.isEmpty() && !node.isClickable && !node.isEditable && !node.isScrollable) return@walk
                 node.getBoundsInScreen(rect)
                 if (rect.width() <= 0 || rect.height() <= 0) return@walk
                 arr.put(
                     JSONObject()
-                        .put("text", label.ifEmpty { "(빈 버튼)" })
+                        .put("text", label.ifEmpty {
+                            when {
+                                node.isEditable -> "(입력창)"
+                                node.isScrollable -> "(스크롤 영역)"
+                                else -> "(빈 버튼)"
+                            }
+                        })
                         .put("x", rect.centerX())
                         .put("y", rect.centerY())
                         .put("clickable", node.isClickable)
-                        .put("editable", node.isEditable),
+                        .put("editable", node.isEditable)
+                        .put("scrollable", node.isScrollable),
                 )
             }
         } finally {
@@ -148,14 +155,35 @@ class UsixAccessibilityService : AccessibilityService() {
      * 포커스된 입력창에 텍스트를 세팅. adb input 과 달리 한글이 정상 입력된다.
      * 멀티윈도 대비: 활성 창 → 전체 창 순으로 포커스된 입력을, 없으면 편집 가능한 노드를 찾는다.
      */
-    fun setFocusedText(text: String): Boolean {
-        val target = findFocusedInput() ?: return false
+    fun setFocusedText(text: String, pkg: String? = null): Boolean {
+        val target = (if (pkg == null) findFocusedInput() else findFocusedInputInPackage(pkg)) ?: return false
         val args = Bundle().apply {
             putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, text)
         }
-        val ok = target.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args)
-        target.release()
-        return ok
+        try {
+            return target.performAction(AccessibilityNodeInfo.ACTION_SET_TEXT, args)
+        } finally {
+            target.release()
+        }
+    }
+
+    /** With an explicit app, require its focused editor rather than choosing another field. */
+    private fun findFocusedInputInPackage(pkg: String): AccessibilityNodeInfo? {
+        val roots = targetRoots(pkg)
+        var found: AccessibilityNodeInfo? = null
+        try {
+            for (root in roots) {
+                val focused = root.findFocus(AccessibilityNodeInfo.FOCUS_INPUT) ?: continue
+                if (focused.isEditable && focused.isEnabled && focused.isVisibleToUser) {
+                    found = focused
+                    break
+                }
+                if (focused !== root) focused.release()
+            }
+            return found
+        } finally {
+            roots.filter { it !== found }.forEach { it.release() }
+        }
     }
 
     /** 반환 노드는 호출자가 release. 그 외 중간에 얻은 노드는 여기서 회수한다. */
@@ -203,4 +231,28 @@ class UsixAccessibilityService : AccessibilityService() {
     }
 
     fun back(): Boolean = performGlobalAction(GLOBAL_ACTION_BACK)
+
+    /** Scroll only a visible container in the requested app; never fall back to another app. */
+    fun scroll(pkg: String?, forward: Boolean): Boolean {
+        val action = if (forward) AccessibilityNodeInfo.ACTION_SCROLL_FORWARD else AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD
+        val roots = targetRoots(pkg)
+        try {
+            return roots.any { scrollFirst(it, action) }
+        } finally {
+            roots.forEach { it.release() }
+        }
+    }
+
+    private fun scrollFirst(node: AccessibilityNodeInfo, action: Int): Boolean {
+        if (node.isVisibleToUser && node.isEnabled && node.isScrollable && node.performAction(action)) return true
+        for (i in 0 until node.childCount) {
+            val child = node.getChild(i) ?: continue
+            try {
+                if (scrollFirst(child, action)) return true
+            } finally {
+                child.release()
+            }
+        }
+        return false
+    }
 }

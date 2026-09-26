@@ -2,6 +2,7 @@ package dev.usix.companion
 
 import android.content.Context
 import android.net.Uri
+import android.util.Patterns
 import org.json.JSONArray
 import org.json.JSONObject
 import java.io.ByteArrayOutputStream
@@ -220,6 +221,12 @@ object BridgeServer {
 
         method == "POST" && path == "/open" -> open(body)
 
+        method == "POST" && path == "/scroll" -> scroll(body)
+
+        method == "POST" && path == "/email/open" -> emailOpen(body)
+
+        method == "POST" && path == "/email/compose" -> emailCompose(body)
+
         method == "GET" && path.substringBefore('?') == "/notifications" -> {
             val arr = JSONArray()
             for (n in NotifStore.snapshot()) {
@@ -282,11 +289,13 @@ object BridgeServer {
     }
 
     private fun type(body: String): Pair<String, String> = try {
-        val text = JSONObject(body).optString("text")
+        val obj = JSONObject(body)
+        val text = obj.opt("text") as? String ?: ""
+        val pkg = optionalPackage(obj)
         if (text.isEmpty()) {
             "400 Bad Request" to err("text required")
         } else {
-            accGuard() ?: ("200 OK" to JSONObject().put("ok", UiController.type(text)).toString())
+            accGuard() ?: ("200 OK" to JSONObject().put("ok", UiController.type(text, pkg)).toString())
         }
     } catch (e: Exception) {
         "400 Bad Request" to err("bad json")
@@ -303,6 +312,67 @@ object BridgeServer {
             "200 OK" to resp.toString()
         }
     } catch (e: Exception) {
+        "400 Bad Request" to err("bad json")
+    }
+
+    /** Optional package filters must not silently turn into an unfiltered action. */
+    private fun optionalPackage(obj: JSONObject): String? {
+        if (!obj.has("package")) return null
+        val pkg = obj.get("package") as? String
+        require(pkg != null && pkg.matches(Regex("[A-Za-z0-9_]+(?:\\.[A-Za-z0-9_]+)+"))) {
+            "package must be a package name"
+        }
+        return pkg
+    }
+
+    private fun scroll(body: String): Pair<String, String> = try {
+        val obj = JSONObject(body)
+        val pkg = optionalPackage(obj)
+        val direction = obj.optString("direction")
+        require(direction == "down" || direction == "up") { "direction must be down or up" }
+        accGuard() ?: run {
+            val ok = UiController.scroll(pkg, direction == "down")
+            val resp = JSONObject().put("ok", ok)
+            if (!ok) resp.put("error", "no scrollable content moved; the app may not be visible or the end is reached")
+            "200 OK" to resp.toString()
+        }
+    } catch (e: IllegalArgumentException) {
+        "400 Bad Request" to err(e.message ?: "invalid arguments")
+    } catch (e: org.json.JSONException) {
+        "400 Bad Request" to err("bad json")
+    }
+
+    private fun emailOpen(body: String): Pair<String, String> = try {
+        val pkg = optionalPackage(JSONObject(body)) ?: EmailController.THUNDERBIRD_PACKAGE
+        val ok = EmailController.open(pkg)
+        val resp = JSONObject().put("ok", ok)
+        if (!ok) resp.put("error", "email app could not be opened; install Thunderbird or specify its package")
+        "200 OK" to resp.toString()
+    } catch (e: IllegalArgumentException) {
+        "400 Bad Request" to err(e.message ?: "invalid arguments")
+    } catch (e: org.json.JSONException) {
+        "400 Bad Request" to err("bad json")
+    }
+
+    private fun emailCompose(body: String): Pair<String, String> = try {
+        val obj = JSONObject(body)
+        val pkg = optionalPackage(obj) ?: EmailController.THUNDERBIRD_PACKAGE
+        val to = obj.opt("to") as? String
+        // Thunderbird decodes the mailto recipient twice. Reject percent escapes so one address
+        // cannot turn into a comma-separated recipient list after the second decode.
+        require(to != null && '%' !in to && Patterns.EMAIL_ADDRESS.matcher(to).matches()) {
+            "to must be one plain email address without percent escapes"
+        }
+        val subject = if (obj.has("subject")) obj.get("subject") as? String else ""
+        val text = if (obj.has("body")) obj.get("body") as? String else ""
+        require(subject != null && text != null) { "subject/body must be strings" }
+        val ok = EmailController.compose(to, subject, text, pkg)
+        val resp = JSONObject().put("ok", ok).put("sent", false)
+        if (!ok) resp.put("error", "email app could not open the composer; install Thunderbird or specify its package")
+        "200 OK" to resp.toString()
+    } catch (e: IllegalArgumentException) {
+        "400 Bad Request" to err(e.message ?: "invalid arguments")
+    } catch (e: org.json.JSONException) {
         "400 Bad Request" to err("bad json")
     }
 
