@@ -1,0 +1,138 @@
+{
+  "runtimeRevision": "f92c164c3a54f505391ed8d38c98445605641768",
+  "source": "genuine unchanged usix-termux TUI; installed llama.cpp and existing GGUF",
+  "model": "Qwen3.5-2B-Q5_K_M",
+  "backend": "llama.cpp",
+  "invocationCwd": "/data/data/com.termux/files/home/usix-termux",
+  "configuration": {
+    "server": "loopback 127.0.0.1:8080; unchanged runtime reuses an already running model server",
+    "contextTokens": 8192,
+    "parallelSlots": 1,
+    "gpuLayers": 0,
+    "threads": 2,
+    "threadsBatch": 2,
+    "poll": 0,
+    "batchSize": 1024,
+    "ubatchSize": 256,
+    "predictLimit": 256,
+    "warmup": false,
+    "wallLimitSeconds": 900,
+    "persistentRuntimeSettingsChanged": false
+  },
+  "modelRequests": 3,
+  "approvalPrompts": 2,
+  "approvalDecisions": {
+    "denied": 1,
+    "approved": 1
+  },
+  "events": [
+    {
+      "type": "approval",
+      "observedAt": "2026-10-01T10:47:05.366Z",
+      "text": "approval needed: shell {\"command\":\"python3 /data/data/com.termux/files/home/usix-companion/tools/capture_health_baseline.py --runtime usix-termux .\"}  [y/N] "
+    },
+    {
+      "type": "approval_decision",
+      "decision": "denied",
+      "reason": "unexpected trailing '.' argument",
+      "observedAt": "2026-10-01T10:47:36.318Z"
+    },
+    {
+      "type": "correction_request",
+      "observedAt": "2026-10-01T10:48:04.201Z",
+      "command": "python3 /data/data/com.termux/files/home/usix-companion/tools/capture_health_baseline.py --runtime usix-termux"
+    },
+    {
+      "type": "approval",
+      "observedAt": "2026-10-01T10:49:22.538Z",
+      "tool": "shell",
+      "arguments": {
+        "command": "python3 /data/data/com.termux/files/home/usix-companion/tools/capture_health_baseline.py --runtime usix-termux"
+      }
+    },
+    {
+      "type": "approval_decision",
+      "decision": "approved",
+      "command": "python3 /data/data/com.termux/files/home/usix-companion/tools/capture_health_baseline.py --runtime usix-termux",
+      "observedAt": "2026-10-01T10:49:42.066Z"
+    }
+  ],
+  "finalModelReport": "health: ok=true, auth=true, paired=true, listener=true, accessibility=false",
+  "finalModelReportObserved": true,
+  "exactCommandApproved": true,
+  "deviceHealthViaModelVerified": true,
+  "runtimeExitCode": 0,
+  "serverState": "evaluation-owned exact-command server stopped; loopback 8080 confirmed closed",
+  "redaction": "only generated health commands, approval decisions, model timings and five health booleans; no credentials, account IDs, private notifications, screen contents or hidden reasoning",
+  "deviceWitness": {
+    "runtimeLabel": "usix-termux",
+    "invocationCwd": "/data/data/com.termux/files/home/usix-termux",
+    "recordedAt": "2026-10-01T10:49:41.823579+00:00",
+    "operation": "v1.health",
+    "helperExitCode": 0,
+    "health": {
+      "ok": true,
+      "auth": true,
+      "paired": true,
+      "listener": true,
+      "accessibility": false
+    },
+    "elapsedMs": 937
+  },
+  "modelTimings": [
+    {
+      "task": 0,
+      "phase": "prompt eval",
+      "elapsedMs": 501912.14,
+      "tokens": 3873
+    },
+    {
+      "task": 0,
+      "phase": "eval",
+      "elapsedMs": 12188.48,
+      "tokens": 52
+    },
+    {
+      "task": 0,
+      "phase": "total",
+      "elapsedMs": 514100.62,
+      "tokens": 3925
+    },
+    {
+      "task": 59,
+      "phase": "prompt eval",
+      "elapsedMs": 24055.56,
+      "tokens": 183
+    },
+    {
+      "task": 59,
+      "phase": "eval",
+      "elapsedMs": 9298.38,
+      "tokens": 51
+    },
+    {
+      "task": 59,
+      "phase": "total",
+      "elapsedMs": 33353.94,
+      "tokens": 234
+    },
+    {
+      "task": 113,
+      "phase": "prompt eval",
+      "elapsedMs": 15423.25,
+      "tokens": 140
+    },
+    {
+      "task": 113,
+      "phase": "eval",
+      "elapsedMs": 2617.5,
+      "tokens": 17
+    },
+    {
+      "task": 113,
+      "phase": "total",
+      "elapsedMs": 18040.75,
+      "tokens": 157
+    }
+  ]
+}

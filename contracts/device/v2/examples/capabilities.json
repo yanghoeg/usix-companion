@@ -1,0 +1,50 @@
+{
+  "contractVersion": "usix-companion.device/v2",
+  "kind": "capabilities",
+  "requestId": "00000000-0000-4000-8000-000000000016",
+  "deviceId": "00000000-0000-4000-8000-000000000001",
+  "observedAt": "2026-10-01T12:00:00Z",
+  "supportedVersions": [
+    "usix-companion.device/v2"
+  ],
+  "capabilities": [
+    {
+      "operation": "mail.send",
+      "supported": true,
+      "readiness": "ready",
+      "authority": "approval",
+      "requiresController": true,
+      "requiresSnapshot": true,
+      "requiresAccount": true,
+      "reason": null
+    },
+    {
+      "operation": "screen.observe",
+      "supported": true,
+      "readiness": "accessibility_disconnected",
+      "authority": "grant",
+      "requiresController": false,
+      "requiresSnapshot": false,
+      "requiresAccount": false,
+      "reason": "Accessibility is disconnected."
+    },
+    {
+      "operation": "screen.ocr",
+      "supported": false,
+      "readiness": "unsupported",
+      "authority": "grant",
+      "requiresController": false,
+      "requiresSnapshot": false,
+      "requiresAccount": false,
+      "reason": "Not implemented in this profile."
+    }
+  ],
+  "limits": {
+    "maxCommandBytes": 65536,
+    "maxObservationBytes": 1048576,
+    "maxMediaBytes": 0,
+    "maxPageItems": 80,
+    "eventRetentionCount": 1000
+  },
+  "pagination": true
+}

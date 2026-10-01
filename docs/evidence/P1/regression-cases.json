@@ -1,0 +1,50 @@
+[
+  {
+    "sourceBefore": "app/src/test/java/dev/usix/companion/EmailTest.kt",
+    "sourceAfter": "adapters/android/src/test/kotlin/dev/usix/companion/adapters/android/EmailTest.kt",
+    "beforeSha256": "9d22af7626699e3410553ec3e0d1361fa872a481d8301663837757a9c026bdc2",
+    "baselineCases": [
+      "composeWithoutNotificationPreservesContentAndDoesNotReportSent",
+      "openThunderbirdDoesNotNeedNotificationOrAccessibility",
+      "explicitEmailPackageIsRespected",
+      "invalidRecipientsAndFieldTypesDoNotLaunch",
+      "unavailableMailAppIsAnActionFailureNotBadJson"
+    ],
+    "afterSha256": "96ee94f5c7ddf1ad17e7641c989b537f15f24ab257d1e425fd1754f5d29cbdc0"
+  },
+  {
+    "sourceBefore": "app/src/test/java/dev/usix/companion/NotificationBridgeServiceTest.kt",
+    "sourceAfter": "adapters/android/src/test/kotlin/dev/usix/companion/adapters/android/NotificationBridgeServiceTest.kt",
+    "beforeSha256": "de8b7c100f8e2f87475a60ea6a37319b9864d2d89990ddb3ae7333d2217731ec",
+    "baselineCases": [
+      "connectionRestoresNewestFiftyRegardlessOfSystemOrder",
+      "restoredNotificationCanSendInlineReply",
+      "reconnectReplacesStaleNotificationsAndReplyHandles",
+      "restoredNotificationsStillReceiveUpdatesAndRemovals",
+      "disconnectDiscardsRestoredNotifications"
+    ],
+    "afterSha256": "ede4813cc4cb2c36914cd09861fa253b341c1d447a772309250c836c8b835017"
+  },
+  {
+    "sourceBefore": "app/src/test/java/dev/usix/companion/ScreenQueryTest.kt",
+    "sourceAfter": "adapters/android/src/test/kotlin/dev/usix/companion/adapters/android/ScreenQueryTest.kt",
+    "beforeSha256": "97f44ecbc0f0ad59154594b79da66ddb38d50f610cb0a2aede8e0e25d8c54e92",
+    "baselineCases": [
+      "missingPackageDoesNotReturnAnotherAppsWindow",
+      "packageFilterReturnsOnlyMatchingWindows",
+      "matchingActiveWindowWorksWhenWindowListIsUnavailable",
+      "unrelatedActiveWindowIsRejectedWhenWindowListIsUnavailable",
+      "noPackageStillSelectsTopApplicationWindow",
+      "noPackageStillFallsBackToActiveWindow",
+      "encodedPackageIsDecodedAndOtherQueryValuesCannotOverrideIt",
+      "routePrefixesDoNotMatchRealEndpoints",
+      "screenWithoutAccessibilityReturnsUnavailable",
+      "emptyReplyFieldAndScrollContainerAreExposed",
+      "scrollOnlyActsOnTheRequestedAppAndUsesTheRequestedDirection",
+      "scrollRejectsHiddenContainersAndReportsEndOfContent",
+      "scrollValidatesArgumentsAndRequiresAccessibility",
+      "scopedReplyCannotTypeInAnotherAppsEditor"
+    ],
+    "afterSha256": "3fe1b522944b371eca314e8b80d3fd0cee91acd92c278f737c0a7221ad2641fe"
+  }
+]

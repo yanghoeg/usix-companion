@@ -1,0 +1,47 @@
+{
+  "profile": "Termux aarch64; ConscryptMode.OFF; all tests retained",
+  "gradle": "8.10.2",
+  "jdk": "17.0.20",
+  "agp": "8.5.2",
+  "kotlin": "1.9.24",
+  "compileSdk": 34,
+  "testSdk": 28,
+  "suites": [
+    {
+      "name": "dev.usix.companion.EmailTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-01T09:04:14"
+    },
+    {
+      "name": "dev.usix.companion.NotificationBridgeServiceTest",
+      "tests": "5",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-01T09:04:43"
+    },
+    {
+      "name": "dev.usix.companion.ScreenQueryTest",
+      "tests": "14",
+      "failures": "0",
+      "errors": "0",
+      "skipped": "0",
+      "timestamp": "2026-10-01T09:04:44"
+    }
+  ],
+  "testSourceSha256": {
+    "app/src/test/java/dev/usix/companion/EmailTest.kt": "9d22af7626699e3410553ec3e0d1361fa872a481d8301663837757a9c026bdc2",
+    "app/src/test/java/dev/usix/companion/NotificationBridgeServiceTest.kt": "de8b7c100f8e2f87475a60ea6a37319b9864d2d89990ddb3ae7333d2217731ec",
+    "app/src/test/java/dev/usix/companion/ScreenQueryTest.kt": "97f44ecbc0f0ad59154594b79da66ddb38d50f610cb0a2aede8e0e25d8c54e92"
+  },
+  "apk": {
+    "path": "app/build/outputs/apk/release/app-release.apk",
+    "bytes": 635341,
+    "sha256": "cb5857b0c4114589589091e583091524277278e236826aca2c8c80e1f87a164f",
+    "signatureVerified": "APK Signature Scheme v2",
+    "installedForThisEvaluation": false
+  }
+}

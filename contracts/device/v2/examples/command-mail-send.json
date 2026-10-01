@@ -1,0 +1,38 @@
+{
+  "contractVersion": "usix-companion.device/v2",
+  "kind": "command",
+  "requestId": "00000000-0000-4000-8000-000000000009",
+  "context": {
+    "deviceId": "00000000-0000-4000-8000-000000000001",
+    "runtimeId": "00000000-0000-4000-8000-000000000002",
+    "sessionId": "00000000-0000-4000-8000-000000000003",
+    "taskId": "00000000-0000-4000-8000-000000000004",
+    "taskRevision": 1,
+    "workspaceId": "00000000-0000-4000-8000-000000000005"
+  },
+  "actionId": "00000000-0000-4000-8000-000000000010",
+  "operation": "mail.send",
+  "scope": {
+    "packageId": "dev.usix.fixture",
+    "accountRef": "00000000-0000-4000-8000-000000000006",
+    "resourceRefs": [
+      "00000000-0000-4000-8000-000000000007"
+    ],
+    "snapshotRef": "00000000-0000-4000-8000-000000000008"
+  },
+  "payload": {
+    "recipient": "test@example.invalid",
+    "body": "P0 fixture: 안녕하세요"
+  },
+  "controllerLease": {
+    "leaseId": "00000000-0000-4000-8000-000000000011",
+    "revision": 2
+  },
+  "deadline": "2026-10-01T12:05:00Z",
+  "cancellationId": null,
+  "authority": {
+    "kind": "approval",
+    "ref": "00000000-0000-4000-8000-000000000012"
+  },
+  "payloadHash": "sha256:230f8f414ff7d93564af0a5cc8166eaecef4ee797d859cc2c7868bdc0d16ed02"
+}

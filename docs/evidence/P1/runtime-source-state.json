@@ -1,0 +1,51 @@
+{
+  "before": {
+    "usix": {
+      "revision": "b7a9755386a4b5017da7d921516e3c21b67244c2",
+      "statusPorcelain": ""
+    },
+    "usix-termux": {
+      "revision": "f92c164c3a54f505391ed8d38c98445605641768",
+      "statusPorcelain": ""
+    }
+  },
+  "after": {
+    "usix": {
+      "revision": "b7a9755386a4b5017da7d921516e3c21b67244c2",
+      "statusPorcelain": ""
+    },
+    "usix-termux": {
+      "revision": "a678eea24e00d5852e1aaf9b460eea88fe68c508",
+      "statusPorcelain": ""
+    }
+  },
+  "headsUnchanged": false,
+  "companionWorkChangedRuntimeSource": false,
+  "externalRevisionChange": {
+    "runtime": "usix-termux",
+    "previousRevision": "f92c164c3a54f505391ed8d38c98445605641768",
+    "observedRevision": "a678eea24e00d5852e1aaf9b460eea88fe68c508",
+    "reflog": "a678eea commit: Fix review findings and enforce hexagonal core boundaries",
+    "classification": "Observed checkout advancement outside Companion work; not reverted or written by this chapter",
+    "genuineModelDeviceTraceForObservedRevision": false
+  },
+  "termuxV1SourceAudit": {
+    "src/tools/bridge.rs": {
+      "sha256": "5b4c04840b87d99fe366957587bbbee8582972647e7543a722e73da216970796",
+      "unchangedFromP0": true
+    },
+    "src/tools/ui.rs": {
+      "sha256": "f36780270a7d85417bef6e2a2360f734428af306646e76fc165aa04215649ec3",
+      "unchangedFromP0": true
+    },
+    "src/tools/companion.rs": {
+      "sha256": "9e15a0735f64828e43d5a59f5759742a1d5f05d584796deb9a5101be4bced473",
+      "unchangedFromP0": true
+    },
+    "src/tools/mod.rs": {
+      "sha256": "fbfdd60a2caf9d68a667bea8c006b558b85dcf74efbbfe56ce2658b715b2ec16",
+      "unchangedFromP0": true
+    }
+  },
+  "termuxShellStillApprovalClassMutating": true
+}

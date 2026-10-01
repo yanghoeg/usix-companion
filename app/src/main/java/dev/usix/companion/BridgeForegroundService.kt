@@ -8,18 +8,33 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import dagger.hilt.android.AndroidEntryPoint
+import dev.usix.companion.adapters.transport.LoopbackBridgeServer
+import dev.usix.companion.adapters.transport.OutboundDeviceConnection
+import dev.usix.companion.application.DeviceExecution
+import kotlinx.coroutines.*
+import javax.inject.Inject
 
 /**
  * 프로세스를 포그라운드로 고정하는 서비스. 상시 알림 하나를 띄워 두면 안드로이드 LMK 가
  * 메모리 압박에도 이 프로세스를 잘 안 죽인다 — 브리지(127.0.0.1:8760)가 간헐적으로 끊기던
  * 문제의 근본 대책. NotificationListenerService 와 같은 프로세스라 리스너·접근성·브리지가 함께 산다.
  */
+@AndroidEntryPoint
 class BridgeForegroundService : Service() {
+    @Inject lateinit var bridge: LoopbackBridgeServer
+    @Inject lateinit var execution: DeviceExecution
+    @Inject lateinit var remote: OutboundDeviceConnection
+    private val lifetime = CoroutineScope(SupervisorJob() + Dispatchers.IO)
+    private var initialized = false
     override fun onBind(intent: Intent?): IBinder? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         startForeground(NOTIF_ID, buildNotification())
-        BridgeServer.start(applicationContext)
+        if (!initialized) {
+            initialized = true
+            lifetime.launch { execution.recover(); bridge.start(); remote.restore() }
+        }
         return START_STICKY
     }
 
@@ -36,10 +51,17 @@ class BridgeForegroundService : Service() {
         }
         return builder
             .setContentTitle("usix companion 실행 중")
-            .setContentText("127.0.0.1:${BridgeServer.PORT} 브리지 유지 중")
+            .setContentText("127.0.0.1:${LoopbackBridgeServer.PORT} 브리지 유지 중")
             .setSmallIcon(android.R.drawable.stat_notify_sync)
             .setOngoing(true)
             .build()
+    }
+
+    override fun onDestroy() {
+        bridge.close()
+        remote.close()
+        lifetime.cancel()
+        super.onDestroy()
     }
 
     companion object {

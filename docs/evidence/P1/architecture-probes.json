@@ -1,0 +1,39 @@
+{
+  "source": [
+    {
+      "probe": "android-import",
+      "exitCode": 1,
+      "diagnostic": "core/application/src/main/kotlin/Forbidden.kt: forbidden core import: android.content.Context\ncore/application/src/main/kotlin/Forbidden.kt: forbidden fully qualified core API"
+    },
+    {
+      "probe": "ambient-time",
+      "exitCode": 1,
+      "diagnostic": "core/domain/src/main/kotlin/Forbidden.kt: ambient core API: System\ncore/domain/src/main/kotlin/Forbidden.kt: ambient core API: nanoTime("
+    },
+    {
+      "probe": "outer-reference",
+      "exitCode": 1,
+      "diagnostic": "core/application/src/main/kotlin/Forbidden.kt: outward reference: dev.usix.companion.adapters.android.AndroidAppLauncher\ncore/application/src/main/kotlin/Forbidden.kt: forbidden fully qualified core API"
+    }
+  ],
+  "dependencies": [
+    {
+      "probe": "project",
+      "exitCode": 1,
+      "diagnostic": "Architecture violation: :core:application:implementation -> :protocol"
+    },
+    {
+      "probe": "library",
+      "exitCode": 1,
+      "diagnostic": "Architecture violation: :core:application declares org.json:json"
+    },
+    {
+      "probe": "transitive",
+      "exitCode": 1,
+      "diagnostic": "Architecture violation: :core:application:compileClasspath leaks org.json:json"
+    }
+  ],
+  "projectInjection": "gradle.projectsEvaluated {\n    rootProject.project(':core:application').dependencies.add('implementation', rootProject.project(':protocol'))\n}\n",
+  "libraryInjection": "gradle.projectsEvaluated {\n    rootProject.project(':core:application').dependencies.add('implementation', 'org.json:json:20240303')\n}\n",
+  "transitiveInjection": "allprojects {\n    dependencies.components.withModule('org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm') {\n        allVariants {\n            withDependencies { add('org.json:json:20240303') }\n        }\n    }\n}\n"
+}

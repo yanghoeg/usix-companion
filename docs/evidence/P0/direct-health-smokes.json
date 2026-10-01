@@ -1,0 +1,31 @@
+{
+  "modelInvocation": false,
+  "attempts": [
+    {
+      "runtimeDirectory": "usix",
+      "kind": "direct-helper-smoke-only",
+      "elapsedMs": 1412,
+      "exitCode": 0,
+      "health": {
+        "ok": true,
+        "auth": true,
+        "paired": true,
+        "listener": true,
+        "accessibility": false
+      }
+    },
+    {
+      "runtimeDirectory": "usix-termux",
+      "kind": "direct-helper-smoke-only",
+      "elapsedMs": 1096,
+      "exitCode": 0,
+      "health": {
+        "ok": true,
+        "auth": true,
+        "paired": true,
+        "listener": true,
+        "accessibility": false
+      }
+    }
+  ]
+}

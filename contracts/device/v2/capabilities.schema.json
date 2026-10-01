@@ -1,0 +1,199 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usix-companion:device:v2:capabilities",
+  "type": "object",
+  "properties": {
+    "contractVersion": {
+      "const": "usix-companion.device/v2"
+    },
+    "kind": {
+      "const": "capabilities"
+    },
+    "requestId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "deviceId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "observedAt": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+    },
+    "supportedVersions": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 8,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "usix-companion.device/v1",
+          "usix-companion.device/v2"
+        ]
+      },
+      "contains": {
+        "const": "usix-companion.device/v2"
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "operation": {
+            "$ref": "urn:usix-companion:device:v2:types#/$defs/operation"
+          },
+          "supported": {
+            "type": "boolean"
+          },
+          "readiness": {
+            "enum": [
+              "ready",
+              "permission_required",
+              "accessibility_disconnected",
+              "device_locked",
+              "app_missing",
+              "unsupported",
+              "offline",
+              "busy"
+            ]
+          },
+          "authority": {
+            "enum": [
+              "none",
+              "grant",
+              "approval"
+            ]
+          },
+          "requiresController": {
+            "type": "boolean"
+          },
+          "requiresSnapshot": {
+            "type": "boolean"
+          },
+          "requiresAccount": {
+            "type": "boolean"
+          },
+          "reason": {
+            "anyOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        },
+        "required": [
+          "operation",
+          "supported",
+          "readiness",
+          "authority",
+          "requiresController",
+          "requiresSnapshot",
+          "requiresAccount",
+          "reason"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "supported": {
+                  "const": false
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "readiness": {
+                  "const": "unsupported"
+                },
+                "reason": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 512
+                }
+              }
+            }
+          },
+          {
+            "if": {
+              "properties": {
+                "supported": {
+                  "const": true
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "readiness": {
+                  "not": {
+                    "const": "unsupported"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "minItems": 0,
+      "maxItems": 128,
+      "uniqueItems": true
+    },
+    "limits": {
+      "type": "object",
+      "properties": {
+        "maxCommandBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 65536
+        },
+        "maxObservationBytes": {
+          "type": "integer",
+          "minimum": 1024,
+          "maximum": 1048576
+        },
+        "maxMediaBytes": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 10485760
+        },
+        "maxPageItems": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 1024
+        },
+        "eventRetentionCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 100000
+        }
+      },
+      "required": [
+        "maxCommandBytes",
+        "maxObservationBytes",
+        "maxMediaBytes",
+        "maxPageItems",
+        "eventRetentionCount"
+      ],
+      "additionalProperties": false
+    },
+    "pagination": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "contractVersion",
+    "kind",
+    "requestId",
+    "deviceId",
+    "observedAt",
+    "supportedVersions",
+    "capabilities",
+    "limits",
+    "pagination"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,13 @@
+def catalog = extensions.getByType(org.gradle.api.artifacts.VersionCatalogsExtension).named('libs')
+android {
+    compileSdk = catalog.findVersion('compile-sdk').get().requiredVersion.toInteger()
+    defaultConfig { minSdk = catalog.findVersion('min-sdk').get().requiredVersion.toInteger() }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+    testOptions { unitTests.includeAndroidResources = true }
+}
+tasks.matching { it.name.startsWith('compile') && it.name.endsWith('Kotlin') }.configureEach {
+    kotlinOptions.jvmTarget = '17'
+}

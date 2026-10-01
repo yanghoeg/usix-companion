@@ -1,0 +1,95 @@
+{
+  "context": {
+    "deviceId": "00000000-0000-4000-8000-000000000001",
+    "runtimeId": "00000000-0000-4000-8000-000000000002",
+    "sessionId": "00000000-0000-4000-8000-000000000003",
+    "taskId": "00000000-0000-4000-8000-000000000004",
+    "taskRevision": 1,
+    "workspaceId": "00000000-0000-4000-8000-000000000005"
+  },
+  "now": "2026-10-01T12:00:00Z",
+  "capabilities": [
+    {
+      "operation": "mail.send",
+      "supported": true,
+      "readiness": "ready",
+      "authority": "approval",
+      "requiresController": true,
+      "requiresSnapshot": true,
+      "requiresAccount": true,
+      "reason": null
+    }
+  ],
+  "lease": {
+    "leaseId": "00000000-0000-4000-8000-000000000011",
+    "revision": 2,
+    "runtimeId": "00000000-0000-4000-8000-000000000002",
+    "expiresAt": "2026-10-01T12:05:00Z"
+  },
+  "snapshot": {
+    "snapshotRef": "00000000-0000-4000-8000-000000000008",
+    "packageId": "dev.usix.fixture",
+    "expiresAt": "2026-10-01T12:01:00Z"
+  },
+  "authorities": {
+    "00000000-0000-4000-8000-000000000012": {
+      "contractVersion": "usix-companion.device/v2",
+      "kind": "approval",
+      "authorityId": "00000000-0000-4000-8000-000000000012",
+      "revision": 2,
+      "context": {
+        "deviceId": "00000000-0000-4000-8000-000000000001",
+        "runtimeId": "00000000-0000-4000-8000-000000000002",
+        "sessionId": "00000000-0000-4000-8000-000000000003",
+        "taskId": "00000000-0000-4000-8000-000000000004",
+        "taskRevision": 1,
+        "workspaceId": "00000000-0000-4000-8000-000000000005"
+      },
+      "issuedAt": "2026-10-01T11:59:00Z",
+      "expiresAt": "2026-10-01T12:05:00Z",
+      "status": "approved",
+      "operation": "mail.send",
+      "actionId": "00000000-0000-4000-8000-000000000010",
+      "payloadHash": "sha256:230f8f414ff7d93564af0a5cc8166eaecef4ee797d859cc2c7868bdc0d16ed02",
+      "scope": {
+        "packageId": "dev.usix.fixture",
+        "accountRef": "00000000-0000-4000-8000-000000000006",
+        "resourceRefs": [
+          "00000000-0000-4000-8000-000000000007"
+        ],
+        "snapshotRef": "00000000-0000-4000-8000-000000000008"
+      }
+    },
+    "00000000-0000-4000-8000-000000000017": {
+      "contractVersion": "usix-companion.device/v2",
+      "kind": "grant",
+      "authorityId": "00000000-0000-4000-8000-000000000017",
+      "revision": 1,
+      "context": {
+        "deviceId": "00000000-0000-4000-8000-000000000001",
+        "runtimeId": "00000000-0000-4000-8000-000000000002",
+        "sessionId": "00000000-0000-4000-8000-000000000003",
+        "taskId": "00000000-0000-4000-8000-000000000004",
+        "taskRevision": 1,
+        "workspaceId": "00000000-0000-4000-8000-000000000005"
+      },
+      "issuedAt": "2026-10-01T11:59:00Z",
+      "expiresAt": "2026-10-01T12:05:00Z",
+      "status": "active",
+      "operations": [
+        "screen.observe"
+      ],
+      "scope": {
+        "packageId": "dev.usix.fixture",
+        "accountRef": "00000000-0000-4000-8000-000000000006",
+        "resourceRefs": [
+          "00000000-0000-4000-8000-000000000007"
+        ]
+      },
+      "maxActions": 10
+    }
+  },
+  "actionsUsed": 0,
+  "actions": [],
+  "cancelled": []
+}

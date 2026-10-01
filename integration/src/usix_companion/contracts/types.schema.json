@@ -1,0 +1,316 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usix-companion:device:v2:types",
+  "$defs": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "pattern": "^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "pattern": "^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}(\\.\\d{1,3})?Z$"
+    },
+    "hash": {
+      "type": "string",
+      "pattern": "^sha256:[0-9a-f]{64}$"
+    },
+    "operation": {
+      "type": "string",
+      "pattern": "^[a-z][a-z0-9]*(\\.[a-z][a-z0-9_]*){1,4}$",
+      "maxLength": 96
+    },
+    "package": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_]*(\\.[A-Za-z][A-Za-z0-9_]*)+$",
+      "maxLength": 255
+    },
+    "context": {
+      "type": "object",
+      "properties": {
+        "deviceId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "runtimeId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "sessionId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "taskId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "taskRevision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "workspaceId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        }
+      },
+      "required": [
+        "deviceId",
+        "runtimeId",
+        "sessionId",
+        "taskId",
+        "taskRevision",
+        "workspaceId"
+      ],
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "properties": {
+        "packageId": {
+          "anyOf": [
+            {
+              "$ref": "urn:usix-companion:device:v2:types#/$defs/package"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "accountRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "resourceRefs": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+          },
+          "minItems": 0,
+          "maxItems": 64,
+          "uniqueItems": true
+        },
+        "snapshotRef": {
+          "anyOf": [
+            {
+              "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "packageId",
+        "accountRef",
+        "resourceRefs",
+        "snapshotRef"
+      ],
+      "additionalProperties": false
+    },
+    "lease": {
+      "anyOf": [
+        {
+          "type": "object",
+          "properties": {
+            "leaseId": {
+              "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+            },
+            "revision": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 9007199254740991
+            }
+          },
+          "required": [
+            "leaseId",
+            "revision"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "authority": {
+      "oneOf": [
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "const": "none"
+            },
+            "ref": {
+              "type": "null"
+            }
+          },
+          "required": [
+            "kind",
+            "ref"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "type": "object",
+          "properties": {
+            "kind": {
+              "enum": [
+                "grant",
+                "approval"
+              ]
+            },
+            "ref": {
+              "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+            }
+          },
+          "required": [
+            "kind",
+            "ref"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    },
+    "jsonValue": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "type": "boolean"
+        },
+        {
+          "type": "integer",
+          "minimum": -9007199254740991,
+          "maximum": 9007199254740991
+        },
+        {
+          "type": "string",
+          "maxLength": 8192
+        },
+        {
+          "type": "array",
+          "maxItems": 1024,
+          "items": {
+            "$ref": "urn:usix-companion:device:v2:types#/$defs/jsonValue"
+          }
+        },
+        {
+          "type": "object",
+          "maxProperties": 128,
+          "propertyNames": {
+            "pattern": "^[A-Za-z][A-Za-z0-9_]{0,63}$"
+          },
+          "additionalProperties": {
+            "$ref": "urn:usix-companion:device:v2:types#/$defs/jsonValue"
+          }
+        }
+      ]
+    },
+    "payload": {
+      "type": "object",
+      "maxProperties": 128,
+      "propertyNames": {
+        "pattern": "^[A-Za-z][A-Za-z0-9_]{0,63}$"
+      },
+      "additionalProperties": {
+        "$ref": "urn:usix-companion:device:v2:types#/$defs/jsonValue"
+      }
+    },
+    "error": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "enum": [
+            "InvalidRequest",
+            "IdentityMismatch",
+            "UnsupportedVersion",
+            "UnsupportedCapability",
+            "PermissionRequired",
+            "AccessibilityDisconnected",
+            "DeviceLocked",
+            "AppMissing",
+            "Offline",
+            "Busy",
+            "StaleSnapshot",
+            "ExpiredReference",
+            "AmbiguousTarget",
+            "ControllerConflict",
+            "ActionConflict",
+            "ApprovalRequired",
+            "AuthorityExpired",
+            "AuthorityRevoked",
+            "Cancelled",
+            "DeadlineExceeded",
+            "UnknownEffect",
+            "EventGap"
+          ]
+        },
+        "message": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ],
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "properties": {
+        "evidenceRef": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "goalId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "method": {
+          "enum": [
+            "observed_state",
+            "provider_ack",
+            "content_hash"
+          ]
+        },
+        "verifiedAt": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+        }
+      },
+      "required": [
+        "evidenceRef",
+        "goalId",
+        "method",
+        "verifiedAt"
+      ],
+      "additionalProperties": false
+    },
+    "retry": {
+      "type": "object",
+      "properties": {
+        "decision": {
+          "enum": [
+            "never",
+            "safe",
+            "reconcile"
+          ]
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        }
+      },
+      "required": [
+        "decision",
+        "reason"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

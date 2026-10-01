@@ -1,0 +1,14 @@
+{
+  "contractVersion": "usix-companion.device/v2",
+  "kind": "event",
+  "eventId": "00000000-0000-4000-8000-000000000018",
+  "deviceId": "00000000-0000-4000-8000-000000000001",
+  "cursor": 102,
+  "createdAt": "2026-10-01T12:00:04Z",
+  "type": "gap",
+  "payload": {
+    "requestedCursor": 50,
+    "oldestAvailableCursor": 100,
+    "resyncRequired": true
+  }
+}

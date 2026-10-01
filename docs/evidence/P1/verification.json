@@ -1,0 +1,459 @@
+{
+  "chapter": "P1",
+  "status": "complete",
+  "capturedAtUtc": "2026-10-01T13:38:23.339943+00:00",
+  "profile": {
+    "platform": "Termux aarch64",
+    "jdk": "17.0.20",
+    "gradle": "8.10.2",
+    "agp": "8.5.2",
+    "kotlin": "1.9.24",
+    "compileSdk": 34,
+    "robolectricSdk": 28,
+    "conscryptMode": "OFF",
+    "remoteCiExecuted": false,
+    "liveDeviceInstalled": false
+  },
+  "builds": {
+    "sdkUnavailableCore": {
+      "command": "ANDROID_HOME=/nonexistent/p1-sdk ANDROID_SDK_ROOT=/nonexistent/p1-sdk GRADLE_USER_HOME=\"$PWD/.build-tools/gradle-home\" ./gradlew -PcoreOnly=true checkArchitecture :core:domain:check :core:application:check :protocol:check :adapters:transport:check --rerun-tasks --no-daemon --console=plain --max-workers=2",
+      "result": "passed",
+      "summary": "BUILD SUCCESSFUL in 2m 17s; 22 actionable tasks: 22 executed",
+      "logPath": ".build-tools/P1-core-final.log",
+      "logSha256": "0616730ddcbd9b376d5fa62ccfd8d290eaa4219b9e315559ffcf47b327c0c971"
+    },
+    "android": {
+      "command": "ANDROID_HOME=\"$PWD/.build-tools/android-sdk\" ANDROID_SDK_ROOT=\"$PWD/.build-tools/android-sdk\" GRADLE_USER_HOME=\"$PWD/.build-tools/gradle-home\" ./gradlew checkArchitecture testDebugUnitTest lintDebug assembleRelease --no-daemon --console=plain --max-workers=2 --init-script gradle/termux-tests.init.gradle.kts -Pandroid.aapt2FromMavenOverride=/data/data/com.termux/files/usr/bin/aapt2",
+      "result": "passed",
+      "summary": "BUILD SUCCESSFUL in 17m 19s; 393 actionable tasks: 312 executed, 81 up-to-date",
+      "logPath": ".build-tools/P1-android.log",
+      "logSha256": "d0828742d44084086f78254581f212554269cefaea8910acc48bc576788969c4"
+    }
+  },
+  "testTotals": {
+    "kotlinJvmAndroid": 61,
+    "pythonP1Baseline": 32,
+    "retainedP0Regressions": 24,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "testSuites": [
+    {
+      "module": ":core:application",
+      "task": "test",
+      "name": "dev.usix.companion.application.DeviceApplicationTest",
+      "tests": 11,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-01T13:12:13",
+      "testCases": [
+        "scopedTextScrollAndObservationKeepTheirPackageAndDirection",
+        "invalidExplicitScopeCannotBecomeAnUnscopedAction",
+        "cancellationOfAnActiveAdapterReleasesUiOwnership",
+        "failedDraftRemainsADraftAndReplyFailureRemainsUnverified",
+        "appLaunchAndComposerShareUiSerializationWithoutRequiringAccessibility",
+        "readinessIsRecheckedWhenQueuedActionAcquiresUi",
+        "healthReflectsInjectedStateAndInstancesAreIndependent",
+        "plainRecipientAndFieldValidationPrecedeDraftLaunch",
+        "suspendedGestureSerializesUiAndCancellingAQueuedActionNeverDispatchesIt",
+        "disconnectedUiNeverDispatchesAndDoesNotBlockAppLaunch",
+        "missingRequiredFieldsDoNotReachAdapters"
+      ],
+      "reportPath": "core/application/build/test-results/test/TEST-dev.usix.companion.application.DeviceApplicationTest.xml",
+      "reportSha256": "b85f08748268732cce83843b9f8d1b6f9c1399916c6803d146adb186110b807d"
+    },
+    {
+      "module": ":protocol",
+      "task": "test",
+      "name": "dev.usix.companion.protocol.LegacyCodecTest",
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-01T13:11:44",
+      "testCases": [
+        "healthAndDraftWireFieldsRemainCompatible",
+        "endpointNamesMatchExactlyAndQueryPackagesAreDecoded",
+        "malformedJsonAndInvalidCoordinatesAreDecodeFailures",
+        "legacyNumericTapArgumentsRemainSupported",
+        "optionalScopePresenceAndInvalidTypeSurviveDecoding",
+        "screenAndNotificationFieldsKeepTheirTypes"
+      ],
+      "reportPath": "protocol/build/test-results/test/TEST-dev.usix.companion.protocol.LegacyCodecTest.xml",
+      "reportSha256": "882f7b51269fe8e9af235fc5e586b373a3c527f9ad948cebf56dc0b8eb61b22f"
+    },
+    {
+      "module": ":adapters:transport",
+      "task": "test",
+      "name": "dev.usix.companion.adapters.transport.LoopbackBridgeServerTest",
+      "tests": 7,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-01T13:12:18",
+      "testCases": [
+        "workerQueueIsBoundedAndCloseReleasesActiveConnections",
+        "boundedHeadersAndBodiesRejectOversizeMalformedAndTruncatedRequests",
+        "incompleteHeadersAndBodiesHaveBoundedDeadlines",
+        "unauthenticatedRequestsRejectBeforeReadingBodiesOrDispatching",
+        "healthIsLivenessAndReportsAuthenticationWithoutWaitingForItsBody",
+        "lifecycleStartIsIdempotentAndClosedServerCanRestartOnLoopback",
+        "authenticatedCommandsReachPortsAndResponseLengthCountsUtf8Bytes"
+      ],
+      "reportPath": "adapters/transport/build/test-results/test/TEST-dev.usix.companion.adapters.transport.LoopbackBridgeServerTest.xml",
+      "reportSha256": "a1024ec7321556112f1a595a16a0e7caa5dc840596948f977b36dca6a3ac42f6"
+    },
+    {
+      "module": ":adapters:android",
+      "task": "testDebugUnitTest",
+      "name": "dev.usix.companion.adapters.android.AccessibilityAdapterTest",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-01T12:50:02",
+      "testCases": [
+        "cancelledGestureDoesNotCompleteLater",
+        "missingGestureCallbackTimesOutAndLateCallbackIsIgnored",
+        "gestureUsesInjectedDispatcherAndSuspendsUntilCallback",
+        "staleServiceCannotDetachItsReplacement"
+      ],
+      "reportPath": "adapters/android/build/test-results/testDebugUnitTest/TEST-dev.usix.companion.adapters.android.AccessibilityAdapterTest.xml",
+      "reportSha256": "22a262f494d4ae9e46fc3ad034473f99128383225ef7708d1da2e7ad967ffa96"
+    },
+    {
+      "module": ":adapters:android",
+      "task": "testDebugUnitTest",
+      "name": "dev.usix.companion.adapters.android.EmailTest",
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-01T12:50:20",
+      "testCases": [
+        "composeWithoutNotificationPreservesContentAndDoesNotReportSent",
+        "invalidRecipientsAndFieldTypesDoNotLaunch",
+        "unavailableMailAppIsAnActionFailureNotBadJson",
+        "openThunderbirdDoesNotNeedNotificationOrAccessibility",
+        "explicitEmailPackageIsRespected"
+      ],
+      "reportPath": "adapters/android/build/test-results/testDebugUnitTest/TEST-dev.usix.companion.adapters.android.EmailTest.xml",
+      "reportSha256": "b57a1452a06c560d7d444a17de7b51f85f2f218ab55f24d4c863cdd739022699"
+    },
+    {
+      "module": ":adapters:android",
+      "task": "testDebugUnitTest",
+      "name": "dev.usix.companion.adapters.android.NotificationBridgeServiceTest",
+      "tests": 8,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-01T12:50:21",
+      "testCases": [
+        "disconnectDiscardsRestoredNotifications",
+        "cancelledPendingIntentDoesNotReportReplyAcceptance",
+        "restoredNotificationsStillReceiveUpdatesAndRemovals",
+        "connectionRestoresNewestFiftyRegardlessOfSystemOrder",
+        "restoredNotificationCanSendInlineReply",
+        "updatedNotificationWithoutReplyAndRemovedNotificationInvalidateHandles",
+        "permissionLossDuringReconnectClearsHandlesAndReadiness",
+        "reconnectReplacesStaleNotificationsAndReplyHandles"
+      ],
+      "reportPath": "adapters/android/build/test-results/testDebugUnitTest/TEST-dev.usix.companion.adapters.android.NotificationBridgeServiceTest.xml",
+      "reportSha256": "5e0b503a1c074a2b6eb188ce0b30922f08ac23d673daf4bd024593c2b700df63"
+    },
+    {
+      "module": ":adapters:android",
+      "task": "testDebugUnitTest",
+      "name": "dev.usix.companion.adapters.android.ScreenQueryTest",
+      "tests": 14,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-01T12:50:23",
+      "testCases": [
+        "routePrefixesDoNotMatchRealEndpoints",
+        "noPackageStillFallsBackToActiveWindow",
+        "packageFilterReturnsOnlyMatchingWindows",
+        "scrollValidatesArgumentsAndRequiresAccessibility",
+        "encodedPackageIsDecodedAndOtherQueryValuesCannotOverrideIt",
+        "missingPackageDoesNotReturnAnotherAppsWindow",
+        "noPackageStillSelectsTopApplicationWindow",
+        "scopedReplyCannotTypeInAnotherAppsEditor",
+        "unrelatedActiveWindowIsRejectedWhenWindowListIsUnavailable",
+        "screenWithoutAccessibilityReturnsUnavailable",
+        "scrollOnlyActsOnTheRequestedAppAndUsesTheRequestedDirection",
+        "scrollRejectsHiddenContainersAndReportsEndOfContent",
+        "emptyReplyFieldAndScrollContainerAreExposed",
+        "matchingActiveWindowWorksWhenWindowListIsUnavailable"
+      ],
+      "reportPath": "adapters/android/build/test-results/testDebugUnitTest/TEST-dev.usix.companion.adapters.android.ScreenQueryTest.xml",
+      "reportSha256": "84760085372b657d81b64514cec559a5c94e47959ac2f13a0d54425e7e3a6a50"
+    },
+    {
+      "module": ":adapters:persistence",
+      "task": "testDebugUnitTest",
+      "name": "dev.usix.companion.adapters.persistence.BridgeCredentialStoreTest",
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-01T12:52:23",
+      "testCases": [
+        "existingInstalledTokenRetainsItsStorageAndAuthority",
+        "freshTokenIsRandomAndPersistsAcrossInstances",
+        "rotationRejectsPreviousTokenAndSurvivesReload"
+      ],
+      "reportPath": "adapters/persistence/build/test-results/testDebugUnitTest/TEST-dev.usix.companion.adapters.persistence.BridgeCredentialStoreTest.xml",
+      "reportSha256": "c27cd9b7890759dbce87d2d5e9234bc183bef66cd1cd4e5b2adaac340555fa6d"
+    },
+    {
+      "module": ":feature:control",
+      "task": "testDebugUnitTest",
+      "name": "dev.usix.companion.feature.control.ControlViewModelTest",
+      "tests": 2,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-01T12:53:46",
+      "testCases": [
+        "rotatingTokenUpdatesTheSameStateUsedForDisplayAndCopy",
+        "refreshDistinguishesPermissionFromConnectedReadiness"
+      ],
+      "reportPath": "feature/control/build/test-results/testDebugUnitTest/TEST-dev.usix.companion.feature.control.ControlViewModelTest.xml",
+      "reportSha256": "f50649c260f80b2758bafa71670788aaa2ded7872d12ee7d6df6a6a0fc888e1d"
+    },
+    {
+      "module": ":app",
+      "task": "testDebugUnitTest",
+      "name": "dev.usix.companion.CompositionTest",
+      "tests": 1,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "timestamp": "2026-10-01T12:53:19",
+      "testCases": [
+        "graphSharesInjectedDeviceStateAndDoesNotStartTransportImplicitly"
+      ],
+      "reportPath": "app/build/test-results/testDebugUnitTest/TEST-dev.usix.companion.CompositionTest.xml",
+      "reportSha256": "c4e83068044c00393ecd1feeb42acbdc0fdbdafdf2651e19a77ad333c455adb5"
+    }
+  ],
+  "pythonChecks": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/architecture",
+        "-v"
+      ],
+      "tests": 6,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "result": "passed",
+      "output": "test_checker_reports_path_and_application_reflection (test_architecture.ArchitectureTest.test_checker_reports_path_and_application_reflection) ... ok\ntest_comments_strings_and_injected_primitives_are_allowed (test_architecture.ArchitectureTest.test_comments_strings_and_injected_primitives_are_allowed) ... ok\ntest_core_forbids_ambient_time_environment_files_threads_and_default_dispatchers (test_architecture.ArchitectureTest.test_core_forbids_ambient_time_environment_files_threads_and_default_dispatchers) ... ok\ntest_core_forbids_android_json_di_and_fully_qualified_api (test_architecture.ArchitectureTest.test_core_forbids_android_json_di_and_fully_qualified_api) ... ok\ntest_executable_string_templates_cannot_hide_ambient_apis (test_architecture.ArchitectureTest.test_executable_string_templates_cannot_hide_ambient_apis) ... ok\ntest_outer_dependencies_and_composition_root_cannot_leak_inward (test_architecture.ArchitectureTest.test_outer_dependencies_and_composition_root_cannot_leak_inward) ... ok\n\n----------------------------------------------------------------------\nRan 6 tests in 0.058s\n\nOK\n"
+    },
+    {
+      "command": [
+        "/data/data/com.termux/files/home/usix-companion/.venv-contracts/bin/python",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/contracts",
+        "-v"
+      ],
+      "tests": 18,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "result": "passed",
+      "output": "test_approval_revoked_expired_or_pending_does_not_authorize (test_device_contract.DeviceContractTest.test_approval_revoked_expired_or_pending_does_not_authorize) ... ok\ntest_bound_command_and_duplicate_are_valid (test_device_contract.DeviceContractTest.test_bound_command_and_duplicate_are_valid) ... ok\ntest_deadline_and_cancellation_stop_dispatch (test_device_contract.DeviceContractTest.test_deadline_and_cancellation_stop_dispatch) ... ok\ntest_gap_explicitly_requires_resync (test_device_contract.DeviceContractTest.test_gap_explicitly_requires_resync) ... ok\ntest_grant_cannot_approve_send (test_device_contract.DeviceContractTest.test_grant_cannot_approve_send) ... ok\ntest_grant_scope_budget_and_operation_enforced (test_device_contract.DeviceContractTest.test_grant_scope_budget_and_operation_enforced) ... ok\ntest_korean_hash_vector_and_order_independence (test_device_contract.DeviceContractTest.test_korean_hash_vector_and_order_independence) ... ok\ntest_payload_change_is_not_same_action_or_approval (test_device_contract.DeviceContractTest.test_payload_change_is_not_same_action_or_approval) ... ok\ntest_portable_failure_vectors (test_device_contract.DeviceContractTest.test_portable_failure_vectors) ... ok\ntest_reconciliation_allows_verification_not_reexecution (test_device_contract.DeviceContractTest.test_reconciliation_allows_verification_not_reexecution) ... ok\ntest_stale_and_replaced_controller_rejected (test_device_contract.DeviceContractTest.test_stale_and_replaced_controller_rejected) ... ok\ntest_stale_wrong_package_or_expired_snapshot_rejected (test_device_contract.DeviceContractTest.test_stale_wrong_package_or_expired_snapshot_rejected) ... ok\ntest_strict_json_rejects_ambiguous_or_unbounded_input (test_device_contract.DeviceContractTest.test_strict_json_rejects_ambiguous_or_unbounded_input) ... ok\ntest_supported_feature_is_not_readiness (test_device_contract.DeviceContractTest.test_supported_feature_is_not_readiness) ... ok\ntest_unknown_effect_requires_reconciliation (test_device_contract.DeviceContractTest.test_unknown_effect_requires_reconciliation) ... ok\ntest_unknown_fields_missing_context_and_bad_dates_rejected (test_device_contract.DeviceContractTest.test_unknown_fields_missing_context_and_bad_dates_rejected) ... ok\ntest_verification_requires_evidence_and_cancel_cannot_erase_effect (test_device_contract.DeviceContractTest.test_verification_requires_evidence_and_cancel_cannot_erase_effect) ... ok\ntest_workspace_and_requester_cannot_follow_new_cwd (test_device_contract.DeviceContractTest.test_workspace_and_requester_cannot_follow_new_cwd) ... ok\n\n----------------------------------------------------------------------\nRan 18 tests in 0.551s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/tools",
+        "-p",
+        "test_android_sdk.py",
+        "-v"
+      ],
+      "tests": 3,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "result": "passed",
+      "output": "test_checksum_mismatch_prevents_extraction (test_android_sdk.SdkPreparationTest.test_checksum_mismatch_prevents_extraction) ... ok\ntest_traversal_and_symlinks_never_escape_cache (test_android_sdk.SdkPreparationTest.test_traversal_and_symlinks_never_escape_cache) ... ok\ntest_verified_archive_installs_metadata_and_executable (test_android_sdk.SdkPreparationTest.test_verified_archive_installs_metadata_and_executable) ... ok\n\n----------------------------------------------------------------------\nRan 3 tests in 0.019s\n\nOK\n"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests/tools",
+        "-p",
+        "test_runtime_evidence.py",
+        "-v"
+      ],
+      "tests": 5,
+      "failures": 0,
+      "errors": 0,
+      "skipped": 0,
+      "result": "passed",
+      "output": "test_claim_or_unrelated_tool_cannot_satisfy_device_gate (test_runtime_evidence.RuntimeEvidenceTest.test_claim_or_unrelated_tool_cannot_satisfy_device_gate) ... ok\ntest_interleaved_tool_results_are_not_assumed_to_correlate (test_runtime_evidence.RuntimeEvidenceTest.test_interleaved_tool_results_are_not_assumed_to_correlate) ... ok\ntest_reasoning_private_arguments_and_error_output_are_discarded (test_runtime_evidence.RuntimeEvidenceTest.test_reasoning_private_arguments_and_error_output_are_discarded) ... ok\ntest_serial_real_health_accepts_unavailable_accessibility (test_runtime_evidence.RuntimeEvidenceTest.test_serial_real_health_accepts_unavailable_accessibility) ... ok\ntest_timeout_incomplete_turn_or_disagreeing_witness_cannot_pass (test_runtime_evidence.RuntimeEvidenceTest.test_timeout_incomplete_turn_or_disagreeing_witness_cannot_pass) ... ok\n\n----------------------------------------------------------------------\nRan 5 tests in 0.002s\n\nOK\n"
+    }
+  ],
+  "pythonScope": "Architecture, contracts, SDK preparation and runtime evidence only. Concurrently edited mail tool/tests are outside this P1 evidence capture and were left unchanged.",
+  "contractConformance": {
+    "command": [
+      "/data/data/com.termux/files/home/usix-companion/.venv-contracts/bin/python",
+      "tools/check_contracts.py"
+    ],
+    "result": "passed",
+    "output": "PASS: 6 schemas, 7 wire examples, hash/context checks\n"
+  },
+  "architecture": {
+    "sourceCheckerResult": "passed",
+    "output": "Source imports and APIs obey module boundaries.\n",
+    "negativeProbeRecord": "architecture-probes.json",
+    "rejectedSourceProbes": 3,
+    "rejectedGradleProbes": 3
+  },
+  "regressions": {
+    "manifest": "regression-cases.json",
+    "allBaselineCasesExecuted": true,
+    "originalHashesMatchP0": true
+  },
+  "lint": [
+    {
+      "module": ":app",
+      "errors": 0,
+      "warnings": 20,
+      "issueIds": [
+        "AndroidGradlePluginVersion",
+        "DataExtractionRules",
+        "GradleDependency",
+        "MissingApplicationIcon"
+      ],
+      "reportPath": "app/build/reports/lint-results-debug.xml",
+      "reportSha256": "795ce7e6c8c898492d5f26d98c7b3971cde7bdfae684a65d91ba449f21c77e2c"
+    },
+    {
+      "module": ":adapters:android",
+      "errors": 0,
+      "warnings": 0,
+      "issueIds": [],
+      "reportPath": "adapters/android/build/reports/lint-results-debug.xml",
+      "reportSha256": "5cf3c77628c12283b650a4bf94b61f1d12463a9a05e664caf28d6982eff153bd"
+    },
+    {
+      "module": ":adapters:persistence",
+      "errors": 0,
+      "warnings": 0,
+      "issueIds": [],
+      "reportPath": "adapters/persistence/build/reports/lint-results-debug.xml",
+      "reportSha256": "5cf3c77628c12283b650a4bf94b61f1d12463a9a05e664caf28d6982eff153bd"
+    },
+    {
+      "module": ":feature:control",
+      "errors": 0,
+      "warnings": 0,
+      "issueIds": [],
+      "reportPath": "feature/control/build/reports/lint-results-debug.xml",
+      "reportSha256": "5cf3c77628c12283b650a4bf94b61f1d12463a9a05e664caf28d6982eff153bd"
+    }
+  ],
+  "apk": {
+    "path": "app/build/outputs/apk/release/app-release.apk",
+    "bytes": 6183713,
+    "sha256": "08c5f107972d1128c42fb66a71bea20379a5cfa4092c2c6ffec214cc36e8377b",
+    "applicationId": "dev.usix.companion",
+    "versionName": "0.1.6",
+    "versionCode": 6,
+    "minSdk": 24,
+    "targetSdk": 34,
+    "signatureScheme": "v2",
+    "signatureVerificationExitCode": 0,
+    "certificateSha256": "1bf19c9316904bfea9df9f422af589a589dbdb425e4329a56bf473d79eca1ded",
+    "keystoreGitBlob": "5508ee3632d27f24fa454054b01cabb744389dfa",
+    "keystoreUnchanged": true,
+    "installedForThisEvaluation": false,
+    "signatureVerificationOutput": "Verifies\nVerified using v1 scheme (JAR signing): false\nVerified using v2 scheme (APK Signature Scheme v2): true\nVerified using v3 scheme (APK Signature Scheme v3): false\nVerified using v3.1 scheme (APK Signature Scheme v3.1): false\nVerified using v4 scheme (APK Signature Scheme v4): false\nVerified for SourceStamp: false\nNumber of signers: 1\nSigner #1 certificate DN: CN=usix, OU=dev, O=usix, L=x, ST=x, C=KR\nSigner #1 certificate SHA-256 digest: 1bf19c9316904bfea9df9f422af589a589dbdb425e4329a56bf473d79eca1ded\nSigner #1 certificate SHA-1 digest: 831ec0f42342b41148dcfcb4fb4a0c76716adff0\nSigner #1 certificate MD5 digest: 07fffac0858fdb5644576e9767820f6c\nSigner #1 key algorithm: RSA\nSigner #1 key size (bits): 2048\nSigner #1 public key SHA-256 digest: 2313f2ef502807fb0817a65e2623f207ccbdce0598021c410a3b832cebe18563\nSigner #1 public key SHA-1 digest: 6c0c08f1a4ce4a9d92c7f477b1077e46c219f212\nSigner #1 public key MD5 digest: 54595e280deddebdfdec188b7169e5d9\n"
+  },
+  "runtimeSourceState": "runtime-source-state.json",
+  "sourceSha256": {
+    ".github/workflows/build.yml": "9d5b68db697e54ccdc5d9385d43d746ae095fe434cfcad9776f182d0b93f5422",
+    "adapters/android/build.gradle.kts": "c9c3569359cd65580f669ecc6f189fd471e8587fbf3368a5b447c9102f0ea1bc",
+    "adapters/android/src/main/kotlin/dev/usix/companion/adapters/android/AccessibilityOperations.kt": "43452e1e3527e9555ab7c177434a26b36f848f4a3578cb0e80aa340c7b7e1651",
+    "adapters/android/src/main/kotlin/dev/usix/companion/adapters/android/AndroidAppLauncher.kt": "918362cde0c5b63d7bd46368c2bf48803b4b6ddcf13a190ac8cb7e52c89609eb",
+    "adapters/android/src/main/kotlin/dev/usix/companion/adapters/android/AndroidNotificationAdapter.kt": "842fe3501148de77763063bbfbbeb4e4c7670d637b3a97e6b29843f98b21f1a8",
+    "adapters/android/src/main/kotlin/dev/usix/companion/adapters/android/ConnectedAccessibilityAdapter.kt": "2db8a9ed9944c2a53e7a7c702636ba9c8f6e93066c89016e7ecb86d0d601182d",
+    "adapters/android/src/test/kotlin/dev/usix/companion/adapters/android/AccessibilityAdapterTest.kt": "8b00e929f96a84d68e250cdb2b49fb727d2b4b7b0bf3a0370538f88fe52d2896",
+    "adapters/android/src/test/kotlin/dev/usix/companion/adapters/android/EmailTest.kt": "96ee94f5c7ddf1ad17e7641c989b537f15f24ab257d1e425fd1754f5d29cbdc0",
+    "adapters/android/src/test/kotlin/dev/usix/companion/adapters/android/NotificationBridgeServiceTest.kt": "ede4813cc4cb2c36914cd09861fa253b341c1d447a772309250c836c8b835017",
+    "adapters/android/src/test/kotlin/dev/usix/companion/adapters/android/ScreenQueryTest.kt": "3fe1b522944b371eca314e8b80d3fd0cee91acd92c278f737c0a7221ad2641fe",
+    "adapters/android/src/test/kotlin/dev/usix/companion/adapters/android/TestServices.kt": "1aba298803d78116e08f4b39182291bf2474b7d7ab0f2218571faf1dc71f91c2",
+    "adapters/persistence/build.gradle.kts": "232d62a97e3aa6d1777163466bcdf24dafdede5a40a122038e773430e4dac2ec",
+    "adapters/persistence/src/main/kotlin/dev/usix/companion/adapters/persistence/BridgeCredentialStore.kt": "cd445f360f288ff4b47f0dc54e529041485a25c594730797a3a00bfe5936fe30",
+    "adapters/persistence/src/test/kotlin/dev/usix/companion/adapters/persistence/BridgeCredentialStoreTest.kt": "e9d9892e7df5fbae273577a0d70998d263de5db195f0c9d5548ed9b2edb050a9",
+    "adapters/transport/build.gradle.kts": "3803818dbcd07b12f590255639b95f840e054ac1535991e9a101f7707efe34a5",
+    "adapters/transport/src/main/kotlin/dev/usix/companion/adapters/transport/LegacyDeviceRouter.kt": "45007e38e1c33600c65afec976c56d6c2084969a57c540fac792183ba9bbef7d",
+    "adapters/transport/src/main/kotlin/dev/usix/companion/adapters/transport/LoopbackBridgeServer.kt": "9229c1e6da1dfb579a11f3a378b3e9c56bc683779404d672a06cfeed65ee17df",
+    "adapters/transport/src/test/kotlin/dev/usix/companion/adapters/transport/LoopbackBridgeServerTest.kt": "0ca71cec4a6278d89382a0cb53b6926366c569c00e0b8efb5077dfb9b9164c10",
+    "app/build.gradle.kts": "ac4b33f522e0bedc10ddc6aaaea3e5a2cccb7f36368205314279cbc93c68e3f1",
+    "app/src/debug/java/dev/usix/companion/CompositionEntryPoint.kt": "1664e1efa5517b5a29542cff9dc45df3fb79e71eddcb8cf8533242f915a16947",
+    "app/src/main/AndroidManifest.xml": "b80636d6c246b27a7f3664dc9cd3c9462e7960d2f4540ee272e262110d334b2d",
+    "app/src/main/java/dev/usix/companion/BridgeForegroundService.kt": "7b76a64b81472f09de9b0c1dfb128a4df01f5999bb5f894bd6afd12d743b406a",
+    "app/src/main/java/dev/usix/companion/CompanionApplication.kt": "41df45054974a3ef0f9593e1f48f2dcfbb6bf3ab1b43bc7dd9109bb5b5b1c3ee",
+    "app/src/main/java/dev/usix/companion/CompanionModule.kt": "677c3b40b59325a93311f118bb6ce9b2f1a93014b0d6d0b6746b45aa7bccf20e",
+    "app/src/main/java/dev/usix/companion/MainActivity.kt": "2a20ea913375e219e50c4765162dc58211a20fe85d4d06fceacacfbcbda3fdd2",
+    "app/src/main/java/dev/usix/companion/NotificationBridgeService.kt": "261c36a677b273e6aaa186d8aed0c51ab9501171382912c484befd06cf2339d6",
+    "app/src/main/java/dev/usix/companion/UsixAccessibilityService.kt": "caa27df1cd15929280a1062dd0826198a997c6efe554b3abcf8ef01c47d970de",
+    "app/src/main/res/values/strings.xml": "244da161b016fb13953d487927d95ead30c6467ef7816b8de176df9234d14fec",
+    "app/src/main/res/xml/accessibility_service_config.xml": "71a8258bfed38e967f753fc389efff3439d567b75b12fe6ddea895df477f7ff5",
+    "app/src/test/java/dev/usix/companion/CompositionTest.kt": "51b2991af2d70759e7c7e6c36c9008cbdabf44c23f27e676516d70392c5dad01",
+    "build.gradle.kts": "e4268fab04cab9bb2dbdd9abd5ae710b2e93d0b362800b9acfea432bfd7fad08",
+    "core/application/build.gradle.kts": "ff48dd18b1d02f23503f6c312a9568aad652fd55c7e69660f498615fc29d4aa7",
+    "core/application/src/main/kotlin/dev/usix/companion/application/DeviceAction.kt": "69c48ed08c5279df7616095eed41dc6e326d4b76239ef54685e9cd859e8d8c9c",
+    "core/application/src/main/kotlin/dev/usix/companion/application/DeviceApplication.kt": "b1d063fdea6b95d8542a38ad76ecc0c77ccd9989b2b2b1578fb994013abd774e",
+    "core/application/src/main/kotlin/dev/usix/companion/application/Ports.kt": "717c5bed4a68cacf793ad49b10c4d86fb2cfee22f2599c31af776f66a714ac30",
+    "core/application/src/test/kotlin/dev/usix/companion/application/DeviceApplicationTest.kt": "6fb593a075259c28d4af6b339eb9b88237d633cb022b52e6a7fcfe189872e6f4",
+    "core/domain/build.gradle.kts": "197df53913e63da50450c1827f7dd257a2821270a3f2bfbff8a5bdfdfc44816b",
+    "core/domain/src/main/kotlin/dev/usix/companion/domain/Device.kt": "378c28e81ff526020032a3bfb5fa3c2ce8352de5fb44fa21e3121b235188bd20",
+    "feature/control/build.gradle.kts": "bcfca998c84f47ea8cf186076d91c5e2127f7f5013481193337ebddcd337970d",
+    "feature/control/src/main/kotlin/dev/usix/companion/feature/control/ControlScreen.kt": "928564eabc33acc7c2b47a9bce4252b7b327367ef27c7bb4e70fe6533fad688d",
+    "feature/control/src/main/kotlin/dev/usix/companion/feature/control/ControlViewModel.kt": "e7fd475011c1c11c7fd832daf79b6d4dd1da6aab1ee25e3ed30546a5a569f327",
+    "feature/control/src/test/kotlin/dev/usix/companion/feature/control/ControlViewModelTest.kt": "1e81a03c77605a31cde92256530edf398194271061b48ff0f70e3a39b60c1b0e",
+    "gradle/android-library.gradle": "7f6fc8071c2ea09acc8fd31d182169d3044346b69826e34eb4b639461e6c905b",
+    "gradle/architecture.gradle.kts": "6f294705f3d1e6eb482f53d2f4051ec7e91fcb0e3dc755365e178a663f44b01e",
+    "gradle/kotlin-jvm.gradle": "85d138816e3f126508c3093c43f290d118f902784dc77d841bcbc9ce02aee916",
+    "gradle/libs.versions.toml": "30595071bb5b389bde57ba982eb40ef086403974147dd2292891d7a677822c79",
+    "gradle/termux-tests.init.gradle.kts": "57a46b8875a3de6e978314c7d0654e96b18768a81ec465448ba013a9abc43615",
+    "protocol/build.gradle.kts": "755a7ecbb1ec6829dac74d4ee21c75a4adc558bb4f35c4c4cc4524da4293f495",
+    "protocol/src/main/kotlin/dev/usix/companion/protocol/LegacyProtocol.kt": "62486b395a4b43d1c66cc47e138f4b4855db7875874b16f3ed9a2cf0efe4f2fa",
+    "protocol/src/test/kotlin/dev/usix/companion/protocol/LegacyCodecTest.kt": "c20b49f3f1337872b5df18c4ac3c453289f88d046dc561c78abb874d8a146c3a",
+    "settings.gradle.kts": "726320ed25ba6853d83103bdab23f953afd08cf55a57c0d6fdcdea9a45cb6d6f",
+    "testing/fixtures/build.gradle.kts": "ed19dea36536a44e10e3963d380bdfe822175d990ace2f7cf91ebbb395f74172",
+    "testing/fixtures/src/main/kotlin/dev/usix/companion/testing/FakeDevice.kt": "4a7f3c1548e23eea34f8f720ee7ea372b78955593ba2948dd9a2b484dd3da599",
+    "tests/architecture/test_architecture.py": "106d3f3c95d541b5b96267451da953b292304b33c5e2bbb360e4e06af7308b3c",
+    "tools/check_architecture.py": "0ed50d1a798b13bcadcd852e834fd35ab9d61000d15e6645a971cccf2986f291"
+  },
+  "limitations": [
+    "No remote CI or native TLS run is claimed by the local Termux checks.",
+    "No live accessibility/mail workflow, APK installation/upgrade or business outcome verification is claimed.",
+    "The observed externally advanced Termux revision has no fresh genuine model/device trace; P2 must pin and evaluate the selected runtime/binary revisions.",
+    "v2/WSS, pairing, leases, durable receipts and outbox remain P2 work."
+  ]
+}

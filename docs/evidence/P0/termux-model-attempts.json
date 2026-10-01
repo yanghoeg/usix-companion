@@ -1,0 +1,53 @@
+{
+  "runtimeRevision": "f92c164c3a54f505391ed8d38c98445605641768",
+  "backend": "existing llama.cpp via unchanged usix-termux",
+  "deviceHealthViaModelVerified": true,
+  "attempts": [
+    {
+      "model": "Qwen3.5-2B-Q5_K_M",
+      "entry": "chat/TUI",
+      "wallLimitSeconds": 240,
+      "exitCode": 124,
+      "approvalObserved": false,
+      "deviceCallObserved": false
+    },
+    {
+      "model": "Qwen3.5-2B-Q5_K_M",
+      "entry": "chat/TUI",
+      "wallLimitSeconds": 900,
+      "exitCode": 124,
+      "approvalObserved": false,
+      "deviceCallObserved": false
+    },
+    {
+      "model": "hammer2.1-3b-q4_k_m",
+      "entry": "chat/TUI",
+      "configuration": "per-process USIX_MODEL; existing installed GGUF",
+      "wallLimitSeconds": 900,
+      "exitCode": 124,
+      "approvalObserved": false,
+      "deviceCallObserved": false,
+      "healthWitnessCreated": false
+    },
+    {
+      "model": "Qwen3.5-2B-Q5_K_M",
+      "entry": "chat/TUI",
+      "configuration": "existing CPU llama server reused by unchanged runtime; 2 threads; no persistent setting change",
+      "wallLimitSeconds": 900,
+      "exitCode": 0,
+      "modelRequests": 3,
+      "approvalObserved": true,
+      "approvalPrompts": 2,
+      "approvalDecisions": {
+        "denied": 1,
+        "approved": 1
+      },
+      "deviceCallObserved": true,
+      "healthWitnessCreated": true,
+      "healthElapsedMs": 937,
+      "evidence": "termux-model-health-trace.json"
+    }
+  ],
+  "serverState": "all evaluation-owned model servers stopped; final port 8080 check confirmed closed",
+  "gpuReadiness": "launcher requested GPU/OpenCL; server reported platform IDs unavailable and CPU fallback"
+}

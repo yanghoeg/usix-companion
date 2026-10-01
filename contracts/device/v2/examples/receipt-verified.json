@@ -1,0 +1,34 @@
+{
+  "contractVersion": "usix-companion.device/v2",
+  "kind": "receipt",
+  "requestId": "00000000-0000-4000-8000-000000000009",
+  "receiptId": "00000000-0000-4000-8000-000000000013",
+  "revision": 4,
+  "context": {
+    "deviceId": "00000000-0000-4000-8000-000000000001",
+    "runtimeId": "00000000-0000-4000-8000-000000000002",
+    "sessionId": "00000000-0000-4000-8000-000000000003",
+    "taskId": "00000000-0000-4000-8000-000000000004",
+    "taskRevision": 1,
+    "workspaceId": "00000000-0000-4000-8000-000000000005"
+  },
+  "actionId": "00000000-0000-4000-8000-000000000010",
+  "payloadHash": "sha256:230f8f414ff7d93564af0a5cc8166eaecef4ee797d859cc2c7868bdc0d16ed02",
+  "state": "Verified",
+  "effect": "verified",
+  "updatedAt": "2026-10-01T12:00:03Z",
+  "cancellationRequested": true,
+  "evidence": [
+    {
+      "evidenceRef": "00000000-0000-4000-8000-000000000014",
+      "goalId": "00000000-0000-4000-8000-000000000015",
+      "method": "observed_state",
+      "verifiedAt": "2026-10-01T12:00:03Z"
+    }
+  ],
+  "error": null,
+  "retry": {
+    "decision": "never",
+    "reason": "The bound goal was verified; return this receipt without dispatch."
+  }
+}

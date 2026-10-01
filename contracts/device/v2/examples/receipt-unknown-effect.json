@@ -1,0 +1,30 @@
+{
+  "contractVersion": "usix-companion.device/v2",
+  "kind": "receipt",
+  "requestId": "00000000-0000-4000-8000-000000000009",
+  "receiptId": "00000000-0000-4000-8000-000000000013",
+  "revision": 3,
+  "context": {
+    "deviceId": "00000000-0000-4000-8000-000000000001",
+    "runtimeId": "00000000-0000-4000-8000-000000000002",
+    "sessionId": "00000000-0000-4000-8000-000000000003",
+    "taskId": "00000000-0000-4000-8000-000000000004",
+    "taskRevision": 1,
+    "workspaceId": "00000000-0000-4000-8000-000000000005"
+  },
+  "actionId": "00000000-0000-4000-8000-000000000010",
+  "payloadHash": "sha256:230f8f414ff7d93564af0a5cc8166eaecef4ee797d859cc2c7868bdc0d16ed02",
+  "state": "UnknownEffect",
+  "effect": "possible",
+  "updatedAt": "2026-10-01T12:00:02Z",
+  "cancellationRequested": true,
+  "evidence": [],
+  "error": {
+    "code": "UnknownEffect",
+    "message": "Adapter acknowledgement lost; observe before another send."
+  },
+  "retry": {
+    "decision": "reconcile",
+    "reason": "A lost acknowledgement does not prove that nothing was sent."
+  }
+}

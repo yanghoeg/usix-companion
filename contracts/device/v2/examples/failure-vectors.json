@@ -1,0 +1,141 @@
+{
+  "commandSource": "command-mail-send.json",
+  "trustedStateSource": "trusted-state.json",
+  "cases": [
+    {
+      "name": "changed_workspace",
+      "commandChanges": {
+        "/context/workspaceId": "00000000-0000-4000-8000-000000000099"
+      },
+      "expected": [
+        "IdentityMismatch"
+      ]
+    },
+    {
+      "name": "stale_controller",
+      "commandChanges": {
+        "/controllerLease/revision": 1
+      },
+      "expected": [
+        "ControllerConflict"
+      ]
+    },
+    {
+      "name": "expired_controller",
+      "stateChanges": {
+        "/lease/expiresAt": "2026-10-01T12:00:00Z"
+      },
+      "expected": [
+        "ControllerConflict"
+      ]
+    },
+    {
+      "name": "expired_snapshot",
+      "stateChanges": {
+        "/snapshot/expiresAt": "2026-10-01T12:00:00Z"
+      },
+      "expected": [
+        "StaleSnapshot"
+      ]
+    },
+    {
+      "name": "expired_approval",
+      "stateChanges": {
+        "/authorities/00000000-0000-4000-8000-000000000012/expiresAt": "2026-10-01T12:00:00Z"
+      },
+      "expected": [
+        "AuthorityExpired"
+      ]
+    },
+    {
+      "name": "revoked_approval",
+      "stateChanges": {
+        "/authorities/00000000-0000-4000-8000-000000000012/status": "revoked"
+      },
+      "expected": [
+        "AuthorityRevoked"
+      ]
+    },
+    {
+      "name": "pending_approval",
+      "stateChanges": {
+        "/authorities/00000000-0000-4000-8000-000000000012/status": "pending"
+      },
+      "expected": [
+        "ApprovalRequired"
+      ]
+    },
+    {
+      "name": "wrong_authority_reference",
+      "stateChanges": {
+        "/authorities/00000000-0000-4000-8000-000000000012/authorityId": "00000000-0000-4000-8000-000000000099"
+      },
+      "expected": [
+        "ApprovalRequired"
+      ]
+    },
+    {
+      "name": "changed_recipient_without_hash",
+      "commandChanges": {
+        "/payload/recipient": "other@example.invalid"
+      },
+      "expected": [
+        "InvalidRequest"
+      ]
+    },
+    {
+      "name": "changed_recipient_with_hash_and_prior_action",
+      "priorAction": true,
+      "rehash": true,
+      "commandChanges": {
+        "/payload/recipient": "other@example.invalid"
+      },
+      "expected": [
+        "ActionConflict",
+        "ApprovalRequired"
+      ]
+    },
+    {
+      "name": "denied_permission",
+      "stateChanges": {
+        "/capabilities/0/readiness": "permission_required"
+      },
+      "expected": [
+        "PermissionRequired"
+      ]
+    },
+    {
+      "name": "unsupported_operation",
+      "stateChanges": {
+        "/capabilities/0/supported": false,
+        "/capabilities/0/readiness": "unsupported"
+      },
+      "expected": [
+        "UnsupportedCapability"
+      ]
+    },
+    {
+      "name": "deadline_reached",
+      "commandChanges": {
+        "/deadline": "2026-10-01T12:00:00Z"
+      },
+      "expected": [
+        "DeadlineExceeded"
+      ]
+    },
+    {
+      "name": "cancelled_action",
+      "commandChanges": {
+        "/cancellationId": "00000000-0000-4000-8000-000000000010"
+      },
+      "stateChanges": {
+        "/cancelled": [
+          "00000000-0000-4000-8000-000000000010"
+        ]
+      },
+      "expected": [
+        "Cancelled"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "source": "genuine usix.event/v1 client output",
+  "redaction": "only tool/admission events and model counts; session/account IDs and reasoning omitted",
+  "events": [
+    {
+      "level": "warn",
+      "request_id": "p0-usix-standard",
+      "schema": "usix.event/v1",
+      "seq": 61,
+      "text": "Bash: 이 surface에서 호출 불가(권한/매니페스트 범위 밖)",
+      "type": "diagnostic"
+    },
+    {
+      "args": {
+        "command": "python3 /data/data/com.termux/files/home/.usix/companion_http.py health"
+      },
+      "request_id": "p0-usix-standard",
+      "schema": "usix.event/v1",
+      "seq": 62,
+      "tool": "Bash",
+      "type": "tool_start"
+    },
+    {
+      "code": "tool_not_available",
+      "output": "error: 'Bash' is not available in this surface",
+      "request_id": "p0-usix-standard",
+      "schema": "usix.event/v1",
+      "seq": 63,
+      "success": false,
+      "type": "tool_result"
+    },
+    {
+      "level": "info",
+      "request_id": "p0-usix-standard",
+      "schema": "usix.event/v1",
+      "seq": 64,
+      "text": "작업 경로 재점검 — 완료 조건과 사용 가능한 도구를 기준으로 다음 행동을 교정합니다.",
+      "type": "diagnostic"
+    },
+    {
+      "args": {
+        "url": "http://127.0.0.1:8760/health"
+      },
+      "request_id": "p0-usix-standard",
+      "schema": "usix.event/v1",
+      "seq": 67,
+      "tool": "fetch_url",
+      "type": "tool_start"
+    },
+    {
+      "output": "error: gateway error: BLOCKED: private/reserved IP (127.0.0.1 → 127.0.0.1)",
+      "request_id": "p0-usix-standard",
+      "schema": "usix.event/v1",
+      "seq": 68,
+      "success": false,
+      "type": "tool_result"
+    },
+    {
+      "coding": true,
+      "context_used": 7609,
+      "context_window": 205473,
+      "finish_reason": "completed",
+      "model": "qwen3.8-flash-next",
+      "prompt_tokens": 6089,
+      "request_id": "p0-usix-standard",
+      "schema": "usix.event/v1",
+      "seq": 573,
+      "tokens": 651,
+      "tool_definition_tokens": 607,
+      "type": "done",
+      "verify_profile": "code"
+    }
+  ]
+}

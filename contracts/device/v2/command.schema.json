@@ -1,0 +1,69 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usix-companion:device:v2:command",
+  "type": "object",
+  "properties": {
+    "contractVersion": {
+      "const": "usix-companion.device/v2"
+    },
+    "kind": {
+      "const": "command"
+    },
+    "requestId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "context": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/context"
+    },
+    "actionId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "operation": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/operation"
+    },
+    "scope": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/scope"
+    },
+    "payload": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/payload"
+    },
+    "payloadHash": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/hash"
+    },
+    "controllerLease": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/lease"
+    },
+    "deadline": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+    },
+    "cancellationId": {
+      "anyOf": [
+        {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "authority": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/authority"
+    }
+  },
+  "required": [
+    "contractVersion",
+    "kind",
+    "requestId",
+    "context",
+    "actionId",
+    "operation",
+    "scope",
+    "payload",
+    "payloadHash",
+    "controllerLease",
+    "deadline",
+    "cancellationId",
+    "authority"
+  ],
+  "additionalProperties": false
+}

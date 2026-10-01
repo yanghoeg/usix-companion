@@ -1,0 +1,4 @@
+{
+  "canonicalUtf8": "{\"operation\":\"mail.send\",\"payload\":{\"body\":\"P0 fixture: 안녕하세요\",\"recipient\":\"test@example.invalid\"},\"scope\":{\"accountRef\":\"00000000-0000-4000-8000-000000000006\",\"packageId\":\"dev.usix.fixture\",\"resourceRefs\":[\"00000000-0000-4000-8000-000000000007\"],\"snapshotRef\":\"00000000-0000-4000-8000-000000000008\"}}",
+  "sha256": "sha256:230f8f414ff7d93564af0a5cc8166eaecef4ee797d859cc2c7868bdc0d16ed02"
+}

@@ -1,19 +1,21 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.application)
+    alias(libs.plugins.kotlin.android)
+    alias(libs.plugins.kotlin.kapt)
+    alias(libs.plugins.hilt)
 }
 
-val appVersionName = (project.findProperty("versionName") as? String) ?: "0.1.6"
+val appVersionName = (project.findProperty("versionName") as? String) ?: "0.2.0"
 
 android {
     namespace = "dev.usix.companion"
-    compileSdk = 34
+    compileSdk = libs.versions.compile.sdk.get().toInt()
 
     defaultConfig {
         applicationId = "dev.usix.companion"
-        minSdk = 24
-        targetSdk = 34
-        versionCode = 6
+        minSdk = libs.versions.min.sdk.get().toInt()
+        targetSdk = libs.versions.target.sdk.get().toInt()
+        versionCode = 7
         versionName = appVersionName
     }
 
@@ -45,13 +47,30 @@ android {
         jvmTarget = "17"
     }
 
+    buildFeatures.compose = true
+    composeOptions.kotlinCompilerExtensionVersion = libs.versions.compose.compiler.get()
+
     testOptions {
         unitTests.isIncludeAndroidResources = true
     }
 }
 
+kapt { correctErrorTypes = true }
+
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-stdlib")
-    testImplementation("junit:junit:4.13.2")
-    testImplementation("org.robolectric:robolectric:4.14.1")
+    implementation(libs.kotlin.stdlib)
+    implementation(project(":core:domain"))
+    implementation(project(":core:application"))
+    implementation(project(":adapters:android"))
+    implementation(project(":adapters:persistence"))
+    implementation(project(":adapters:transport"))
+    implementation(project(":feature:control"))
+    implementation(libs.coroutines.android)
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+    implementation(libs.activity.compose)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.compose.ui)
+    testImplementation(libs.junit)
+    testImplementation(libs.robolectric)
 }

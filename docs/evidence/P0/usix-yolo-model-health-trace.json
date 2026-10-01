@@ -1,0 +1,78 @@
+{
+  "source": "unchanged USIX CLI against the existing configured deployment",
+  "redaction": "only expected health-tool output and model counts; no credentials, account/session IDs or reasoning",
+  "recordedAt": "2026-10-01T11:41:40.525035+00:00",
+  "invocationCwd": "/data/data/com.termux/files/home/usix",
+  "configuration": {
+    "modelRoute": "code",
+    "effort": "xhigh",
+    "wallLimitSeconds": 180,
+    "permission": "user-authorized --yolo; existing static/surface/deployment gates retained; health-only task"
+  },
+  "elapsedMs": 10878,
+  "exitCode": 0,
+  "rawOutputBytes": 28620,
+  "modelOrToolEventsObserved": true,
+  "events": [
+    {
+      "type": "tool_start",
+      "seq": 24,
+      "tool": "bash",
+      "args": {
+        "command": "python3 /data/data/com.termux/files/home/usix-companion/tools/capture_health_baseline.py --runtime usix"
+      }
+    },
+    {
+      "type": "tool_result",
+      "seq": 26,
+      "success": true,
+      "exactCommandResult": true,
+      "deviceWitness": {
+        "runtimeLabel": "usix",
+        "invocationCwd": "/data/data/com.termux/files/home/usix",
+        "recordedAt": "2026-10-01T11:41:44.696962+00:00",
+        "operation": "v1.health",
+        "helperExitCode": 0,
+        "health": {
+          "ok": true,
+          "auth": true,
+          "paired": true,
+          "listener": true,
+          "accessibility": false
+        },
+        "elapsedMs": 414
+      },
+      "outputOmitted": false
+    },
+    {
+      "type": "done",
+      "seq": 242,
+      "model": "qwen3.8-flash-next",
+      "tokens": 292,
+      "prompt_tokens": 13062,
+      "tool_definition_tokens": 8377,
+      "context_used": 8353,
+      "context_window": 163840,
+      "finish_reason": "completed",
+      "coding": true,
+      "verify_profile": "code"
+    }
+  ],
+  "deviceWitness": {
+    "runtimeLabel": "usix",
+    "invocationCwd": "/data/data/com.termux/files/home/usix",
+    "recordedAt": "2026-10-01T11:41:44.696962+00:00",
+    "operation": "v1.health",
+    "helperExitCode": 0,
+    "health": {
+      "ok": true,
+      "auth": true,
+      "paired": true,
+      "listener": true,
+      "accessibility": false
+    },
+    "elapsedMs": 414
+  },
+  "deviceHealthViaModelVerified": true,
+  "runtimeRevision": "b7a9755386a4b5017da7d921516e3c21b67244c2"
+}

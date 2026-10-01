@@ -1,0 +1,28 @@
+{
+  "contractVersion": "usix-companion.device/v2",
+  "kind": "grant",
+  "authorityId": "00000000-0000-4000-8000-000000000017",
+  "revision": 1,
+  "context": {
+    "deviceId": "00000000-0000-4000-8000-000000000001",
+    "runtimeId": "00000000-0000-4000-8000-000000000002",
+    "sessionId": "00000000-0000-4000-8000-000000000003",
+    "taskId": "00000000-0000-4000-8000-000000000004",
+    "taskRevision": 1,
+    "workspaceId": "00000000-0000-4000-8000-000000000005"
+  },
+  "issuedAt": "2026-10-01T11:59:00Z",
+  "expiresAt": "2026-10-01T12:05:00Z",
+  "status": "active",
+  "operations": [
+    "screen.observe"
+  ],
+  "scope": {
+    "packageId": "dev.usix.fixture",
+    "accountRef": "00000000-0000-4000-8000-000000000006",
+    "resourceRefs": [
+      "00000000-0000-4000-8000-000000000007"
+    ]
+  },
+  "maxActions": 10
+}

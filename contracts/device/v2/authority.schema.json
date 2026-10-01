@@ -1,0 +1,173 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usix-companion:device:v2:authority",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "contractVersion": {
+          "const": "usix-companion.device/v2"
+        },
+        "kind": {
+          "const": "grant"
+        },
+        "authorityId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "context": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/context"
+        },
+        "issuedAt": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+        },
+        "expiresAt": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+        },
+        "status": {
+          "enum": [
+            "active",
+            "revoked",
+            "expired"
+          ]
+        },
+        "operations": {
+          "type": "array",
+          "items": {
+            "$ref": "urn:usix-companion:device:v2:types#/$defs/operation"
+          },
+          "minItems": 1,
+          "maxItems": 64,
+          "uniqueItems": true
+        },
+        "scope": {
+          "type": "object",
+          "properties": {
+            "packageId": {
+              "anyOf": [
+                {
+                  "$ref": "urn:usix-companion:device:v2:types#/$defs/package"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "accountRef": {
+              "anyOf": [
+                {
+                  "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+                },
+                {
+                  "type": "null"
+                }
+              ]
+            },
+            "resourceRefs": {
+              "type": "array",
+              "items": {
+                "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+              },
+              "minItems": 0,
+              "maxItems": 64,
+              "uniqueItems": true
+            }
+          },
+          "required": [
+            "packageId",
+            "accountRef",
+            "resourceRefs"
+          ],
+          "additionalProperties": false
+        },
+        "maxActions": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 1000
+        }
+      },
+      "required": [
+        "contractVersion",
+        "kind",
+        "authorityId",
+        "revision",
+        "context",
+        "issuedAt",
+        "expiresAt",
+        "status",
+        "operations",
+        "scope",
+        "maxActions"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "contractVersion": {
+          "const": "usix-companion.device/v2"
+        },
+        "kind": {
+          "const": "approval"
+        },
+        "authorityId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "revision": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 9007199254740991
+        },
+        "context": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/context"
+        },
+        "issuedAt": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+        },
+        "expiresAt": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+        },
+        "status": {
+          "enum": [
+            "pending",
+            "approved",
+            "denied",
+            "expired",
+            "revoked"
+          ]
+        },
+        "operation": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/operation"
+        },
+        "actionId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "payloadHash": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/hash"
+        },
+        "scope": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/scope"
+        }
+      },
+      "required": [
+        "contractVersion",
+        "kind",
+        "authorityId",
+        "revision",
+        "context",
+        "issuedAt",
+        "expiresAt",
+        "status",
+        "operation",
+        "actionId",
+        "payloadHash",
+        "scope"
+      ],
+      "additionalProperties": false
+    }
+  ]
+}

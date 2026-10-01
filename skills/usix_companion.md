@@ -16,4 +16,8 @@ description: usix-companion 컴패니언 안드로이드 앱 화면 제어 메�
 3. 화면/메일: 등록된 UI 도구를 사용한다. 없는 메일/스크롤 도구는 `shell`로 위 스크립트의 `email-open`, `screen '{"package":"net.thunderbird.android"}'`, `email-compose '{"to":"person@example.com","subject":"제목","body":"내용"}'`, `type '{"text":"내용","package":"net.thunderbird.android"}'`, `scroll '{"direction":"down","package":"net.thunderbird.android"}'`를 호출한다. 각 예시 앞에 `python3 "$HOME/.usix/companion_http.py"`를 붙인다. 실제 인자는 사용자의 요청에서 가져와 올바른 JSON과 셸 인자로 인코딩한다.
 4. 화면을 먼저 읽고 앱·대상을 확인한다. 변화 뒤 다시 관찰하고 오래된 좌표나 모호한 대상을 탭하지 않는다. 메일 답장은 원본 스레드의 답장 화면에서 작성하고 계정·수신자·본문을 확인한다.
 5. 발신은 사용자 권한과 기존 런타임 승인을 충족한 뒤 실행한다. 알림 답장은 등록된 `notif_reply` 또는 스크립트의 `reply '{"key":"최신 key","text":"승인된 내용"}'`를 사용한다. `email-compose`는 `sent:false`인 초안이고 `ok:true`는 전달 증거가 아니다. 실제 결과를 관찰하고 불명확하면 미확인으로 보고한다. 응답 유실 후 발신을 자동 반복하지 않는다.
-6. 401은 페어링, 503은 접근성, 연결 실패는 Companion 앱을 확인한다. v2/WSS/OCR/스케줄러나 없는 `/email/send` 등을 가정하지 않는다. 비대화형 `usix-termux -c`는 변경 도구를 거부하며 이 스킬은 그 정책을 바꾸지 않는다.
+6. 401은 페어링, 503은 접근성, 연결 실패는 Companion 앱을 확인한다. 설정되지 않은 v2/WSS, 미지원 OCR/스케줄러나 없는 `/email/send` 등을 가정하지 않는다. 비대화형 `usix-termux -c`는 변경 도구를 거부하며 이 스킬은 그 정책을 바꾸지 않는다.
+
+P2 APK: 기존 UI/답장 호출이 403 `ApprovalRequired`이면 인자에 결합된 Companion 권한이 없는 상태이므로 중지한다. 사용자의 기존 런타임 승인이 이 권한을 대체하지 않는다. v2 제어권이 활성화되면 v1 효과가 409로 중지한다. 이전 UI 순서를 자동 실행하거나 다른 패키지/도구로 우회하지 않는다. 조회·앱 열기·`sent:false` 초안 API는 유지된다.
+
+사용자가 v2를 설정한 경우 기존 `shell`/`bash`로 지정된 절대 CLI와 프로필 경로를 호출한다: `/absolute/companion-tools/bin/companion-v2 --profile /absolute/private/profile.json capabilities`, `health`, `acquire`, `open --action-id UUID`, `receipt --action-id UUID`, `events --cursor N`, `release`. P2는 설정에서 선택한 앱 열기와 health를 지원한다. `Dispatched`는 전달 상태이며 업무 완료가 아니다. 동일한 action ID를 유지하고 응답 유실 시 영수증을 조회한다. 프로필/자격증명/기기/계정/작업공간을 모델이 새로 설정하거나 파일 내용으로 노출하지 않는다. OCR·v2 메일 발신·상세 UI는 `unsupported`이면 수행하지 않는다. 설치 안내는 Companion 저장소의 `docs/device-integration.md`이며 런타임 코드는 변경하지 않는다.

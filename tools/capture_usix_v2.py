@@ -1,0 +1,118 @@
+#!/usr/bin/env python3
+"""Genuine unchanged USIX → existing admitted tool → controlled device v2 witness."""
+import argparse
+import json
+import os
+from pathlib import Path
+import shlex
+import signal
+import subprocess
+import time
+from datetime import datetime, timezone
+
+HEALTH_KEYS = ("ok", "auth", "paired", "listener", "accessibility")
+DONE_KEYS = ("model", "tokens", "prompt_tokens", "tool_definition_tokens", "context_used", "context_window", "finish_reason")
+
+
+def witness(value):
+    if not isinstance(value, dict) or value.get("operation") != "v2.capabilities+health" or value.get("runtimeLabel") != "usix":
+        return None
+    if value.get("helperExitCode") != 0 or any(type(value.get("health", {}).get(key)) is not bool for key in HEALTH_KEYS):
+        return None
+    if not all(value["health"][key] for key in ("ok", "auth", "paired")):
+        return None
+    return {key: value[key] for key in ("runtimeLabel", "operation", "invocationCwd", "recordedAt", "source", "helperExitCode", "health", "contextSha256", "supportedVersions", "capabilities", "elapsedMs")}
+
+
+def redact(lines, command):
+    events = []; pending = []; ambiguous = False
+    for line in lines:
+        try:
+            value = json.loads(line)
+        except ValueError:
+            continue
+        if not isinstance(value, dict):
+            continue
+        kind = value.get("type")
+        event = {"type": kind, "seq": value.get("seq")}
+        for key in ("call_id", "tool_call_id", "request_id"):
+            if key in value:
+                event[key] = value[key]
+        if kind == "tool_start":
+            exact = value.get("tool") == "bash" and value.get("args") == {"command": command}
+            ambiguous |= bool(pending); pending.append(exact)
+            event.update(tool=value.get("tool"), exactCommand=exact)
+            if exact:
+                event["args"] = value["args"]
+        elif kind == "tool_result":
+            exact = len(pending) == 1 and pending[0] and not ambiguous
+            if pending:
+                pending.pop(0)
+            if not pending:
+                ambiguous = False
+            event.update(exactCommandResult=exact, success=value.get("success"), code=value.get("code"))
+            if exact:
+                try:
+                    observed = witness(json.loads(value.get("output", "")))
+                    if observed:
+                        event["deviceWitness"] = observed
+                except (ValueError, TypeError):
+                    pass
+        elif kind == "done":
+            event.update({key: value[key] for key in DONE_KEYS if key in value})
+        else:
+            continue
+        events.append(event)
+    return events
+
+
+def verified(events, observed, exit_code):
+    return exit_code == 0 and observed is not None and any(e.get("type") == "done" and e.get("finish_reason") == "completed" for e in events) and any(
+        e.get("type") == "tool_result" and e.get("exactCommandResult") and e.get("success") is True and e.get("deviceWitness") == observed for e in events)
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--cwd", required=True, type=Path)
+    parser.add_argument("--profile", required=True, type=Path)
+    parser.add_argument("--witness", required=True, type=Path)
+    parser.add_argument("--output", required=True, type=Path)
+    parser.add_argument("--seconds", type=int, default=180)
+    args = parser.parse_args()
+    if args.witness.exists() or args.output.exists() or not 1 <= args.seconds <= 900:
+        parser.error("fresh evidence paths and bounded runtime required")
+    root = Path(__file__).resolve().parents[1]
+    command = shlex.join(["python3", str(root / "tools/capture_device_v2.py"), "--runtime", "usix", "--profile", str(args.profile.resolve()), "--witness", str(args.witness.resolve())])
+    prompt = ("P2 Companion 실제 모델·기기 v2 검증이다. 기존 bash 도구로 다음 정확한 명령만 한 번 실행하라:\n" + command +
+              "\n프로필 파일을 읽거나 출력하지 마라. 다른 도구, 파일 변경, 메일·알림·화면 조회는 금지한다. 기존 승인 정책을 유지하라. "
+              "기기 출력이 있어야 확인했다고 보고하고 실행하지 못하면 미확인으로 보고하라.")
+    argv = ["usix", "-c", prompt, "--model", "code", "--effort", "high", "--format", "jsonl", "--allowed-tools", "bash(" + command + ")"]
+    raw = root / ".build-tools" / (args.output.stem + "-raw.jsonl")
+    start = time.monotonic()
+    with raw.open("x") as stream:
+        child = subprocess.Popen(argv, cwd=args.cwd.resolve(), stdin=subprocess.DEVNULL, stdout=stream, stderr=subprocess.STDOUT, start_new_session=True)
+        try:
+            code = child.wait(timeout=args.seconds)
+        except subprocess.TimeoutExpired:
+            os.killpg(child.pid, signal.SIGTERM)
+            try:
+                child.wait(timeout=8)
+            except subprocess.TimeoutExpired:
+                os.killpg(child.pid, signal.SIGKILL); child.wait()
+            code = 124
+    events = redact(raw.read_text(errors="replace").splitlines(), command)
+    observed = witness(json.loads(args.witness.read_text())) if args.witness.exists() else None
+    report = {"recordedAt": datetime.now(timezone.utc).isoformat(), "source": "genuine unchanged installed USIX CLI and existing configured model deployment",
+              "permission": "process-scoped exact-command allow rule; existing runtime admission/deployment approval retained; no yolo",
+              "elapsedMs": round((time.monotonic() - start) * 1000), "exitCode": code, "events": events, "deviceWitness": observed,
+              "deviceV2ViaModelVerified": verified(events, observed, code), "redaction": "only controlled v2 health/capabilities, exact command, correlation and model counts; no credentials or reasoning"}
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    with args.output.open("x") as stream:
+        stream.write(json.dumps(report, ensure_ascii=False, indent=2) + "\n")
+    raw.unlink()
+    print(json.dumps(report, ensure_ascii=False))
+    return 0 if report["deviceV2ViaModelVerified"] else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

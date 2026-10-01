@@ -1,0 +1,33 @@
+{
+  "source": "unchanged USIX CLI against the existing configured deployment",
+  "redaction": "only expected health-tool output and model counts; no credentials, account/session IDs or reasoning",
+  "recordedAt": "2026-10-01T11:38:48.514357+00:00",
+  "invocationCwd": "/data/data/com.termux/files/home/usix",
+  "configuration": {
+    "modelRoute": "code",
+    "effort": "xhigh",
+    "wallLimitSeconds": 180,
+    "permission": "process-scoped exact-command allow rule; runtime admission and deployment policy retained"
+  },
+  "elapsedMs": 14890,
+  "exitCode": 0,
+  "rawOutputBytes": 30135,
+  "modelOrToolEventsObserved": true,
+  "events": [
+    {
+      "type": "done",
+      "seq": 265,
+      "model": "qwen3.8-flash-next",
+      "tokens": 359,
+      "prompt_tokens": 13073,
+      "tool_definition_tokens": 8377,
+      "context_used": 8413,
+      "context_window": 221767,
+      "finish_reason": "completed",
+      "coding": true,
+      "verify_profile": "code"
+    }
+  ],
+  "deviceWitness": null,
+  "deviceHealthViaModelVerified": false
+}

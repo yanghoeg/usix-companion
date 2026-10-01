@@ -1,0 +1,27 @@
+{
+  "source": "unchanged USIX CLI against the existing configured deployment",
+  "recordedAt": "2026-10-01T10:56:08.511680+00:00",
+  "runtimeRevision": "b7a9755386a4b5017da7d921516e3c21b67244c2",
+  "configuration": {
+    "modelRoute": "code",
+    "effort": "xhigh",
+    "permission": "unchanged defaults; no per-process allow or skip-permissions override",
+    "wallLimitSeconds": 120
+  },
+  "exitCode": 0,
+  "elapsedMs": 19962,
+  "rawOutputBytes": 63535,
+  "modelOrToolEventsObserved": true,
+  "events": [
+    {
+      "type": "done",
+      "seq": 539,
+      "model": "qwen3.8-flash-next",
+      "tokens": 551,
+      "prompt_tokens": 5736,
+      "tool_definition_tokens": 607,
+      "finish_reason": "completed"
+    }
+  ],
+  "deviceHealthViaModelVerified": false
+}

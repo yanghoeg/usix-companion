@@ -1,0 +1,17 @@
+{
+  "source": "unchanged USIX CLI argument validation; no model invocation",
+  "recordedAt": "2026-10-01T10:40:46.936384+00:00",
+  "runtimeRevision": "b7a9755386a4b5017da7d921516e3c21b67244c2",
+  "configuration": {
+    "modelRoute": "code",
+    "effort": "low (unsupported; rejected before model invocation)",
+    "permission": "process-scoped allow rule for the exact health witness command; all runtime gates retained"
+  },
+  "invocationCwd": "/data/data/com.termux/files/home/usix",
+  "elapsedMs": 251,
+  "exitCode": 2,
+  "events": [],
+  "healthWitnessCreated": false,
+  "modelOrToolEventsObserved": false,
+  "cliError": "-c --effort only accepts xhigh"
+}

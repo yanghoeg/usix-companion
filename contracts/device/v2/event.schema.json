@@ -1,0 +1,201 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usix-companion:device:v2:event",
+  "type": "object",
+  "properties": {
+    "contractVersion": {
+      "const": "usix-companion.device/v2"
+    },
+    "kind": {
+      "const": "event"
+    },
+    "eventId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "deviceId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "cursor": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "createdAt": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+    },
+    "type": {
+      "enum": [
+        "action_updated",
+        "capability_changed",
+        "controller_changed",
+        "gap"
+      ]
+    },
+    "payload": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "contractVersion",
+    "kind",
+    "eventId",
+    "deviceId",
+    "cursor",
+    "createdAt",
+    "type",
+    "payload"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "action_updated"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "context": {
+                "$ref": "urn:usix-companion:device:v2:types#/$defs/context"
+              },
+              "actionId": {
+                "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+              },
+              "receiptId": {
+                "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+              },
+              "receiptRevision": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              }
+            },
+            "required": [
+              "context",
+              "actionId",
+              "receiptId",
+              "receiptRevision"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "capability_changed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "operation": {
+                "$ref": "urn:usix-companion:device:v2:types#/$defs/operation"
+              },
+              "readiness": {
+                "enum": [
+                  "ready",
+                  "permission_required",
+                  "accessibility_disconnected",
+                  "device_locked",
+                  "app_missing",
+                  "unsupported",
+                  "offline",
+                  "busy"
+                ]
+              }
+            },
+            "required": [
+              "operation",
+              "readiness"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "controller_changed"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "runtimeId": {
+                "anyOf": [
+                  {
+                    "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+                  },
+                  {
+                    "type": "null"
+                  }
+                ]
+              },
+              "lease": {
+                "$ref": "urn:usix-companion:device:v2:types#/$defs/lease"
+              }
+            },
+            "required": [
+              "runtimeId",
+              "lease"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "type": {
+            "const": "gap"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "requestedCursor": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 9007199254740991
+              },
+              "oldestAvailableCursor": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 9007199254740991
+              },
+              "resyncRequired": {
+                "const": true
+              }
+            },
+            "required": [
+              "requestedCursor",
+              "oldestAvailableCursor",
+              "resyncRequired"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  ]
+}

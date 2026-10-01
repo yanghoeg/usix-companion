@@ -1,0 +1,13 @@
+// Applied convention scripts use the target project's plugin extensions.
+// Keeping these scripts dynamic avoids a second Kotlin/AGP buildscript classpath.
+tasks.matching { it.name.startsWith('compile') && it.name.endsWith('Kotlin') }.configureEach {
+    kotlinOptions.jvmTarget = '17'
+}
+tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = '17'
+    targetCompatibility = '17'
+}
+tasks.withType(Test).configureEach {
+    useJUnit()
+    systemProperty('companion.contracts', rootProject.file('contracts/device/v2').absolutePath)
+}

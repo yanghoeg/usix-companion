@@ -4,6 +4,12 @@ local.properties
 *.iml
 .idea/
 .kotlin/
+/.build-tools/
+/.venv-contracts/
+/.venv-integration/
+*.egg-info/
+__pycache__/
+*.py[cod]
 
 # Local credentials and private signing material.
 .env

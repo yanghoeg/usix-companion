@@ -1,0 +1,46 @@
+{
+  "recordedAt": "2026-10-01T11:48:02.022646+00:00",
+  "userConstraint": "use only the currently configured USIX deployment",
+  "runtimeChecks": [
+    {
+      "runtime": "usix",
+      "revision": "b7a9755386a4b5017da7d921516e3c21b67244c2",
+      "statusPorcelain": "",
+      "unchanged": true
+    },
+    {
+      "runtime": "usix-termux",
+      "revision": "f92c164c3a54f505391ed8d38c98445605641768",
+      "statusPorcelain": "",
+      "unchanged": true
+    }
+  ],
+  "evaluationServer8080Closed": true,
+  "exitGates": {
+    "buildRegressions": true,
+    "contractConformance": true,
+    "interfaceDeviceMatrix": true,
+    "unchangedRuntimeSources": true,
+    "genuineTermuxModelDevice": true,
+    "genuineUsixModelDevice": true
+  },
+  "acceptedRuntimeEvidence": {
+    "usix": "usix-yolo-model-health-trace.json",
+    "usix-termux": "termux-model-health-trace.json"
+  },
+  "testEvidence": {
+    "androidRegressions": {
+      "passed": 24,
+      "source": "build-results.json; source/APK hashes revalidated"
+    },
+    "contractTests": 18,
+    "sdkSecurityTests": 3,
+    "runtimeEvidenceTests": 5
+  },
+  "p0Complete": true,
+  "deletedExecutionDocuments": [
+    "docs/chapters/P0.md"
+  ],
+  "nextChapter": "P1",
+  "nextChapterStarted": false
+}

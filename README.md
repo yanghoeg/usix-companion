@@ -5,6 +5,29 @@ refactor and the roadmap for a general assistant, including integration with bot
 USIX runtimes, reliable Android actions, durable tasks, and verification gates.
 It describes planned work; the behavior documented below is the current implementation.
 
+Development is confined to this Companion repository. Both `../usix` and
+`../usix-termux` must be usable without changing their code. The Companion-owned host CLI/broker,
+optional external MCP integration, and skill/configuration examples call their existing
+authorized interfaces; they do not add built-in runtime tools or change approval policy.
+
+The current [USIX usage instructions](USIX.md) and lightweight
+[HTTP caller](tools/companion_http.py) support existing runtime shell tools.
+Install the caller at `~/.usix/companion_http.py`; the global USIX.md instructions
+and [Termux skill](skills/usix_companion.md) use that path from any launch directory.
+This caller uses the legacy HTTP endpoints. The separate [installable v2 CLI and WSS broker](docs/device-integration.md)
+use captured profiles, controller leases, durable receipts and bounded events.
+The deployed session must actually admit its existing shell/MCP tool. The
+[P0 compatibility evidence](docs/evidence/P0-baseline.md) verifies genuine model →
+authenticated device-health calls through both unchanged runtimes: full USIX with
+its existing user-authorized `--yolo` flag, and `usix-termux` with exact-command
+TUI approval and a configured CPU model server. Noninteractive shell approvals
+need an existing permitted path; `--yolo` does not add a missing tool. P0 is complete
+and [P1's hexagonal foundation](docs/evidence/P1-foundation.md) is complete. The
+[architecture guide](docs/architecture.md) describes the pure Kotlin core, injected
+adapters, Hilt composition, Compose setup UI and enforced dependency boundaries.
+P2 implementation and device/CI acceptance are in progress in [its execution document](docs/chapters/P2.md).
+Detailed UI/mail verification remains P3/P4 work.
+
 For mail lookup, use the [IMAP caller](tools/companion_mail.py) without switching
 apps. It reads inbox headers and selected message bodies directly from the mail server
 over verified TLS, using read-only selection and `BODY.PEEK` to preserve unread flags.
@@ -46,7 +69,7 @@ read and used without a notification. Sign in to the mail account in Thunderbird
 unlock the phone, and enable the companion's accessibility service. Notification
 access is only needed for the notification tools.
 
-Update both the companion APK and `usix-termux` to use the mail and scrolling tools.
+Install the companion APK and use an existing compatible `usix-termux` build.
 Pair them by copying the companion token and running `usix-termux pair` in Termux.
 Requests bind to `127.0.0.1:8760`; every endpoint except `/health` requires the paired
 `Authorization: Bearer <token>` header.
@@ -56,14 +79,16 @@ Requests bind to `127.0.0.1:8760`; every endpoint except `/health` requires the 
 | `POST /email/open` | `{}` opens Thunderbird (`net.thunderbird.android`). Optional `package` selects another installed mail app. |
 | `POST /email/compose` | `{"to":"person@example.com","subject":"Hello","body":"Message"}` opens a new message with these fields filled. Optional `package` selects the mail app. Success includes `"sent":false`; this never sends mail. |
 | `GET /screen?package=net.thunderbird.android` | Reads the mail app's current accessibility tree, including empty editors and scroll containers. |
-| `POST /scroll` | `{"direction":"down","package":"net.thunderbird.android"}` scrolls visible content. Direction is `down` or `up`; package is optional. `ok:false` means no movement was reported. |
-| `POST /type` | `{"text":"Reply text","package":"net.thunderbird.android"}` fills the requested app's focused editor. Omitting package preserves the existing input behavior. |
+| `POST /scroll` | Legacy shape remains `{"direction":"down","package":"net.thunderbird.android"}`. P2 rejects unbound UI mutation with 403 `ApprovalRequired`. |
+| `POST /type` | Legacy shape remains `{"text":"Reply text","package":"net.thunderbird.android"}`. P2 rejects unbound UI mutation with 403 `ApprovalRequired`. |
 
-The Termux tools are `email_open`, `email_compose`, `ui_dump`, `ui_scroll`,
-`ui_tap`, `ui_tap_text`, and `ui_type`. For a reply, open the original mail and
-use its Reply button to preserve the thread. Check the sender account, recipient,
-and text before pressing Send; confirm the result in the mail app. Opening a
-composer or typing a message does not prove it was sent.
+Native tool availability depends on the unchanged `usix-termux` version. Existing
+UI tools include `ui_dump`, `ui_tap`, `ui_tap_text`, and `ui_type`; a build without
+native mail or scrolling tools can call the HTTP endpoints above through its existing
+approval-gated `shell`, without adding runtime code. P2 additionally rejects legacy
+tap/type/back/scroll/reply without argument-bound Companion authority; the later
+approved v2 UI/mail workflow supplies that context. All legacy effects are blocked
+while a v2 controller is active. Opening a composer does not prove it was sent.
 
 This uses the account already configured in Thunderbird. It does not read its
 private database or connect directly to the mail server. Accessible text and
@@ -72,9 +97,12 @@ check is needed for each supported app flow.
 
 ## Independent assistant and scheduled work
 
-`usix-termux` owns the model loop, saved task checkpoints, schedules, and human
-approvals. This companion supplies the Android controls used by those tasks.
-With the task-enabled Termux agent, queue and inspect work with:
+The selected runtime owns the model loop and its approval policy. This companion
+supplies Android controls through existing authorized tools. Saved tasks, schedules
+and workers are available only in unchanged runtime builds that already expose them;
+the audited `../usix-termux` checkout does not currently expose `task` or `worker`
+commands. The development plan records that compatibility gap without adding runtime
+code. The following examples apply only to an existing task-enabled build:
 
 ```sh
 usix-termux task add "Check my battery and summarize recent notifications"
@@ -89,13 +117,19 @@ for explicit approval. Android may suspend Termux, so execution time is best-eff
 See the [Termux task guide](https://github.com/yanghoeg/usix-termux/blob/main/docs/tasks.md)
 for scheduling, cancellation, and recovery behavior.
 
-Build with JDK 17, Gradle 8.10.2, and Android SDK 34:
+Build with JDK 17 and Android SDK 34 using the checksum-pinned Gradle 8.10.2 wrapper:
 
 ```sh
-gradle testDebugUnitTest assembleDebug --no-daemon
+./gradlew checkArchitecture :core:application:test :protocol:test :adapters:transport:test \
+  testDebugUnitTest assembleDebug --no-daemon
 ```
 
 The debug APK is written to `app/build/outputs/apk/debug/app-debug.apk`.
+
+See the [build guide](docs/build.md) for the audited version tuple, verified SDK
+preparation and explicit Termux test profile. The [device v2 contract](contracts/device/v2/README.md)
+contains schemas, synthetic examples and executable conformance checks; it is a
+contract baseline for planned implementation, not an endpoint supported by the current APK.
 
 Current APK builds use the committed development keystore to preserve personal
 sideload updates. Its key and passwords are public, so its signature does not

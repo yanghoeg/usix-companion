@@ -1,0 +1,309 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usix-companion:device:v2:receipt",
+  "type": "object",
+  "properties": {
+    "contractVersion": {
+      "const": "usix-companion.device/v2"
+    },
+    "kind": {
+      "const": "receipt"
+    },
+    "requestId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "receiptId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "revision": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9007199254740991
+    },
+    "context": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/context"
+    },
+    "actionId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "payloadHash": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/hash"
+    },
+    "state": {
+      "enum": [
+        "Accepted",
+        "Executing",
+        "Dispatched",
+        "Verified",
+        "NeedsVerification",
+        "UnknownEffect",
+        "Failed",
+        "Cancelled"
+      ]
+    },
+    "effect": {
+      "enum": [
+        "none",
+        "possible",
+        "dispatched",
+        "verified"
+      ]
+    },
+    "updatedAt": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+    },
+    "cancellationRequested": {
+      "type": "boolean"
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "$ref": "urn:usix-companion:device:v2:types#/$defs/evidence"
+      },
+      "minItems": 0,
+      "maxItems": 32,
+      "uniqueItems": true
+    },
+    "error": {
+      "anyOf": [
+        {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/error"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "retry": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/retry"
+    }
+  },
+  "required": [
+    "contractVersion",
+    "kind",
+    "requestId",
+    "receiptId",
+    "revision",
+    "context",
+    "actionId",
+    "payloadHash",
+    "state",
+    "effect",
+    "updatedAt",
+    "cancellationRequested",
+    "evidence",
+    "error",
+    "retry"
+  ],
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "Accepted",
+              "Failed",
+              "Cancelled"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "effect": {
+            "const": "none"
+          },
+          "evidence": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "Executing",
+              "UnknownEffect"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "effect": {
+            "const": "possible"
+          },
+          "evidence": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "Dispatched"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "effect": {
+            "const": "dispatched"
+          },
+          "evidence": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "NeedsVerification"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "effect": {
+            "enum": [
+              "possible",
+              "dispatched"
+            ]
+          },
+          "evidence": {
+            "maxItems": 0
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "Verified"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "effect": {
+            "const": "verified"
+          },
+          "evidence": {
+            "minItems": 1
+          },
+          "error": {
+            "type": "null"
+          },
+          "retry": {
+            "properties": {
+              "decision": {
+                "const": "never"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "UnknownEffect",
+              "NeedsVerification"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "retry": {
+            "properties": {
+              "decision": {
+                "const": "reconcile"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "Failed"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "error": {
+            "$ref": "urn:usix-companion:device:v2:types#/$defs/error"
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "state": {
+            "enum": [
+              "Cancelled"
+            ]
+          }
+        },
+        "required": [
+          "state"
+        ]
+      },
+      "then": {
+        "properties": {
+          "retry": {
+            "properties": {
+              "decision": {
+                "const": "never"
+              }
+            }
+          }
+        }
+      }
+    }
+  ]
+}

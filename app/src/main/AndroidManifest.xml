@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- 로컬 브리지 소켓(127.0.0.1:8760)용. 외부 통신은 하지 않는다. -->
+    <!-- 로컬 브리지와 사용자가 구성한 신뢰 엔드포인트로의 outbound WSS. -->
     <uses-permission android:name="android.permission.INTERNET" />
 
     <!-- 프로세스를 포그라운드로 고정해 브리지가 메모리 압박에 안 죽게 한다. -->
@@ -19,6 +19,7 @@
     </queries>
 
     <application
+        android:name=".CompanionApplication"
         android:allowBackup="false"
         android:label="@string/app_name">
 
@@ -28,6 +29,12 @@
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="usix-companion" android:host="control" />
             </intent-filter>
         </activity>
 
@@ -47,7 +54,7 @@
             android:foregroundServiceType="specialUse">
             <property
                 android:name="android.app.PROPERTY_SPECIAL_USE_FGS_SUBTYPE"
-                android:value="local loopback bridge (127.0.0.1:8760) for on-device agent" />
+                android:value="authenticated loopback bridge and user-configured outbound paired device connection" />
         </service>
 
         <service
