@@ -1,0 +1,60 @@
+{
+  "recordedAt": "2026-10-01T16:07:19.287142+00:00",
+  "chapterStatus": "in_progress",
+  "latestApk": {
+    "gitRevision": "51b3b44064d5ba6b436be1f011c9fcb37020acf2",
+    "githubRun": 36885404502,
+    "githubUrl": "https://github.com/yanghoeg/usix-companion/actions/runs/36885404502",
+    "coreJob": "success",
+    "androidJob": "success",
+    "nativeRoomTestTask": "success",
+    "apkSha256": "bf6feaa21ba9f22ecfb89eecaa5b63b7b19e4f5985f6ddb4177850d0094dbc9d",
+    "certificateSha256": "1bf19c9316904bfea9df9f422af589a589dbdb425e4329a56bf473d79eca1ded",
+    "applicationId": "dev.usix.companion",
+    "versionName": "0.2.0",
+    "versionCode": 7,
+    "minSdk": 24,
+    "targetSdk": 34,
+    "phoneFile": "/sdcard/Download/usix-companion-0.2.0-P2-51b3b44.apk"
+  },
+  "checks": {
+    "architecturePython": 6,
+    "contractPython": 18,
+    "integrationPython": 11,
+    "toolsPythonLocal": 25,
+    "actualKotlinRouterOutputsSchemaValidated": 6,
+    "coreApplicationLocal": 27,
+    "protocolLocal": 11,
+    "transportLocal": 14,
+    "androidAdapterLocal": 31,
+    "controlLocal": 2,
+    "appCompositionLocal": 1,
+    "localRoomNativeTests": "4 could not initialize unsupported Robolectric native runtime on Termux aarch64; mandatory Linux CI test task passes"
+  },
+  "installation": {
+    "verified": false,
+    "v2Available": false,
+    "installerIntentRequested": true,
+    "apkCopiedToDownload": true,
+    "pmInstallResult": "Android /system/bin/pm: Operation not permitted; requires phone installer confirmation",
+    "observedAt": "2026-10-01T16:07:19.216746+00:00",
+    "v2ProbeHttpStatus": 404
+  },
+  "genuineModels": {
+    "termuxLegacyHealth": "pass; exact existing shell approval, actual phone response, matching final model report and exit 0",
+    "usixCurrentDefaultProfile": "not verified; actual configured qwen3.8-flash-next returns a completed turn without a tool call in both noninteractive and TTY attempts; no bypass flag used",
+    "bothV2": "pending installed v2 APK"
+  },
+  "runtimeUnchanged": {
+    "usix": true,
+    "usix-termux": true
+  },
+  "evaluationModelServer": "evaluation-owned server stopped; port 8080 closed",
+  "requiredRemaining": [
+    "Verify GitHub APK installation and running v2 response",
+    "Physical loopback and Android outbound WSS contract checks",
+    "Both genuine model -> existing authorized runtime tool -> v2 device traces",
+    "Physical stale-controller/action-conflict/lost-acknowledgement and reboot journal reconciliation"
+  ],
+  "chapterDocumentRetained": "docs/chapters/P2.md"
+}

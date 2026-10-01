@@ -1,0 +1,14 @@
+{
+  "recordedAt": "2026-10-01T15:54:51.022890+00:00",
+  "source": "genuine unchanged installed USIX with existing configured model; legacy health only",
+  "permission": "existing TTY one-time exact-command approval; no yolo",
+  "elapsedMs": 166,
+  "exitCode": 2,
+  "requestedEffort": "high",
+  "failureReason": "Installed USIX supports xhigh/medium/low/ultra, not high; this invocation did not reach a model or device. Corrected through the existing CLI only.",
+  "events": [],
+  "approvalDecisions": [],
+  "deviceWitness": null,
+  "legacyDeviceViaModelVerified": false,
+  "deviceV2ViaModelVerified": false
+}

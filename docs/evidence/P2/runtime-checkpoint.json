@@ -1,0 +1,19 @@
+{
+  "recordedAt": "2026-10-01T15:44:41.284116+00:00",
+  "usix": {
+    "revision": "b7a9755386a4b5017da7d921516e3c21b67244c2",
+    "status": [],
+    "trackedFileCount": 6027,
+    "trackedContentSha256": "94bedb3c0f59834a89d67ad7bbe6f004f864a6927d446a9c801819c14a9c1158",
+    "installedBinary": "/data/data/com.termux/files/home/usix/target/release/usix",
+    "installedBinarySha256": "b2507c33c49efc0a9d8bd1f8e274dfa5804f4ae1d75bc8b8c8c0379503955b99"
+  },
+  "usix-termux": {
+    "revision": "a678eea24e00d5852e1aaf9b460eea88fe68c508",
+    "status": [],
+    "trackedFileCount": 32,
+    "trackedContentSha256": "bbdf7c46a6d3df6e5aa7047332171a7ea71ef70313d82ef96bb7d5febbc035a3",
+    "installedBinary": "/data/data/com.termux/files/usr/bin/usix-termux",
+    "installedBinarySha256": "da42a80b4f65cb97e476beabaf643767cd3de165dea23ccc0dd72ee1c93fd84a"
+  }
+}

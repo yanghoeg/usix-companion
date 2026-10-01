@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-10-01T15:58:21.909774+00:00",
+  "source": "genuine unchanged installed USIX with existing configured model; legacy health only",
+  "configuration": {
+    "modelRoute": "code",
+    "effort": "xhigh",
+    "wallLimitSeconds": 180
+  },
+  "permission": "existing TTY one-time exact-command approval; no yolo",
+  "elapsedMs": 11653,
+  "exitCode": 0,
+  "events": [
+    {
+      "type": "done",
+      "seq": 225,
+      "model": "qwen3.8-flash-next",
+      "tokens": 282,
+      "prompt_tokens": 12884,
+      "tool_definition_tokens": 8377,
+      "context_used": 8461,
+      "context_window": 228774,
+      "finish_reason": "completed",
+      "coding": true,
+      "verify_profile": "code"
+    }
+  ],
+  "approvalDecisions": [],
+  "deviceWitness": null,
+  "legacyDeviceViaModelVerified": false,
+  "deviceV2ViaModelVerified": false
+}

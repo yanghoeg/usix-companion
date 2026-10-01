@@ -1,0 +1,106 @@
+{
+  "recordedAt": "2026-10-01T16:04:29.786Z",
+  "source": "genuine unchanged installed usix-termux TUI with existing llama.cpp and Qwen3.5-2B-Q5_K_M",
+  "sourceCheckoutRevision": "a678eea24e00d5852e1aaf9b460eea88fe68c508",
+  "installedBinarySha256": "da42a80b4f65cb97e476beabaf643767cd3de165dea23ccc0dd72ee1c93fd84a",
+  "model": "Qwen3.5-2B-Q5_K_M",
+  "backend": "existing llama.cpp",
+  "configuration": {
+    "contextTokens": 8192,
+    "parallelSlots": 1,
+    "gpuLayers": 0,
+    "threads": 2,
+    "threadsBatch": 2,
+    "poll": 0,
+    "batchSize": 1024,
+    "ubatchSize": 256,
+    "predictLimit": 256,
+    "warmup": false,
+    "persistentRuntimeSettingsChanged": false
+  },
+  "startedAt": "2026-10-01T15:49:12.481Z",
+  "events": [
+    {
+      "type": "approval",
+      "tool": "shell",
+      "args": {
+        "command": "python3 /data/data/com.termux/files/home/usix-companion/tools/capture_health_baseline.py --runtime usix-termux"
+      },
+      "observedAt": "2026-10-01T15:58:35.575Z"
+    },
+    {
+      "type": "approval_decision",
+      "decision": "once",
+      "command": "python3 /data/data/com.termux/files/home/usix-companion/tools/capture_health_baseline.py --runtime usix-termux",
+      "observedAt": "2026-10-01T16:00:01.862Z"
+    }
+  ],
+  "exactCommandApproved": true,
+  "finalModelReport": "health 상태는 다음과 같습니다:\n• ok: true\n• auth: true\n• paired: true\n• listener: true\n• accessibility: true",
+  "finalModelHealth": {
+    "ok": true,
+    "auth": true,
+    "paired": true,
+    "listener": true,
+    "accessibility": true
+  },
+  "runtimeExitCode": 0,
+  "legacyDeviceViaModelVerified": true,
+  "deviceV2ViaModelVerified": false,
+  "redaction": "controlled legacy health command, approval, five public health booleans and model timings only; no credentials, notifications, screen content or reasoning",
+  "deviceWitness": {
+    "runtimeLabel": "usix-termux",
+    "invocationCwd": "/data/data/com.termux/files/home/usix-termux",
+    "recordedAt": "2026-10-01T16:00:06.336473+00:00",
+    "operation": "v1.health",
+    "helperExitCode": 0,
+    "health": {
+      "ok": true,
+      "auth": true,
+      "paired": true,
+      "listener": true,
+      "accessibility": true
+    },
+    "elapsedMs": 1075
+  },
+  "modelTimings": [
+    {
+      "task": 0,
+      "phase": "prompt eval",
+      "elapsedMs": 466005,
+      "tokens": 4387
+    },
+    {
+      "task": 0,
+      "phase": "eval",
+      "elapsedMs": 10595,
+      "tokens": 51
+    },
+    {
+      "task": 0,
+      "phase": "total",
+      "elapsedMs": 476601,
+      "tokens": 4438
+    },
+    {
+      "task": 59,
+      "phase": "prompt eval",
+      "elapsedMs": 45291,
+      "tokens": 141
+    },
+    {
+      "task": 59,
+      "phase": "eval",
+      "elapsedMs": 7997,
+      "tokens": 40
+    },
+    {
+      "task": 59,
+      "phase": "total",
+      "elapsedMs": 53288,
+      "tokens": 181
+    }
+  ],
+  "modelRequests": 2,
+  "evaluationOwnedServerStopRequested": true
+}
