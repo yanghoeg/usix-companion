@@ -1,0 +1,31 @@
+{
+  "recordedAt": "2026-10-01T22:06:54.163200+00:00",
+  "source": "genuine unchanged installed USIX CLI and existing configured model deployment",
+  "configuration": {
+    "modelRoute": "code",
+    "effort": "xhigh",
+    "interactive": true,
+    "wallLimitSeconds": 300
+  },
+  "permission": "existing TTY one-time approval of the exact controlled read command; no yolo",
+  "approvalDecisions": [],
+  "elapsedMs": 68936,
+  "exitCode": 0,
+  "events": [
+    {
+      "type": "done",
+      "seq": 265,
+      "request_id": "64ccf764-7fac-46f8-a0dd-fdc3eaab9d54",
+      "model": "qwen3.8-flash-next",
+      "tokens": 366,
+      "prompt_tokens": 12994,
+      "tool_definition_tokens": 8377,
+      "context_used": 8580,
+      "context_window": 163840,
+      "finish_reason": "completed"
+    }
+  ],
+  "deviceWitness": null,
+  "deviceV2ViaModelVerified": false,
+  "redaction": "only controlled v2 health/capabilities, exact command, correlation and model counts; no credentials or reasoning"
+}

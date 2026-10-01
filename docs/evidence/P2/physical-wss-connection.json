@@ -1,0 +1,18 @@
+{
+  "recordedAt": "2026-10-01T22:14:56.994159+00:00",
+  "source": "live Android outbound OkHttp TLS/WSS through owning-user broker IPC",
+  "externalNetworkDeployment": false,
+  "samePhysicalPhoneBroker": true,
+  "endpointHost": "localhost",
+  "tlsCertificateSha256": "8215e1d3c341a0d3c23f0437157d5b35c6bfa83c93fe7ed6dd20e32a82fef727",
+  "nativeWssVerified": true,
+  "health": {
+    "accessibility": true,
+    "auth": true,
+    "listener": true,
+    "ok": true,
+    "paired": true
+  },
+  "failureCode": null,
+  "modelEvidence": false
+}

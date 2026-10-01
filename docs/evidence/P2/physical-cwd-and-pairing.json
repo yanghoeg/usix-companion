@@ -1,0 +1,58 @@
+{
+  "recordedAt": "2026-10-01T22:13:06.298420+00:00",
+  "source": "actual installed standalone CLI and live phone v2 health",
+  "modelEvidence": false,
+  "capturedWorkspace": "/data/data/com.termux/files/home/usix-companion/.build-tools/P2-private/workspace",
+  "contextSha256": "2b7039f44a419cd474cd9fdc118a4bdaa50487f6074fcbe3dc0de4ad0e3789dc",
+  "checks": [
+    {
+      "cwd": "/data/data/com.termux/files/home/usix",
+      "exitCode": 0,
+      "capturedContextPreserved": true,
+      "health": {
+        "ok": true,
+        "auth": true,
+        "paired": true,
+        "listener": true,
+        "accessibility": true
+      }
+    },
+    {
+      "cwd": "/data/data/com.termux/files/home/usix-termux",
+      "exitCode": 0,
+      "capturedContextPreserved": true,
+      "health": {
+        "ok": true,
+        "auth": true,
+        "paired": true,
+        "listener": true,
+        "accessibility": true
+      }
+    },
+    {
+      "cwd": "/data/data/com.termux/files/home/usix-companion",
+      "exitCode": 0,
+      "capturedContextPreserved": true,
+      "health": {
+        "ok": true,
+        "auth": true,
+        "paired": true,
+        "listener": true,
+        "accessibility": true
+      }
+    },
+    {
+      "cwd": "/tmp",
+      "exitCode": 0,
+      "capturedContextPreserved": true,
+      "health": {
+        "ok": true,
+        "auth": true,
+        "paired": true,
+        "listener": true,
+        "accessibility": true
+      }
+    }
+  ],
+  "passed": true
+}

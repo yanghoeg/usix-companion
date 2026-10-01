@@ -1,0 +1,130 @@
+{
+  "recordedAt": "2026-10-01T22:29:13.786Z",
+  "source": "genuine unchanged installed usix-termux TUI -> actual Qwen model -> existing approved shell -> live Android v2",
+  "configuration": {
+    "backend": "llama",
+    "model": "Qwen3.5-2B-Q5_K_M",
+    "modelFile": "/data/data/com.termux/files/home/models/Qwen3.5-2B-Q5_K_M.gguf",
+    "gpuLayers": 0,
+    "threads": 2,
+    "batchThreads": 2,
+    "contextWindow": 8192,
+    "predictLimit": 256,
+    "parallel": 1
+  },
+  "invocationCwd": "/data/data/com.termux/files/home/usix-termux",
+  "runtimeIdentity": {
+    "revision": "a678eea24e00d5852e1aaf9b460eea88fe68c508",
+    "status": [],
+    "trackedFileCount": 32,
+    "trackedContentSha256": "bbdf7c46a6d3df6e5aa7047332171a7ea71ef70313d82ef96bb7d5febbc035a3",
+    "installedBinary": "/data/data/com.termux/files/usr/bin/usix-termux",
+    "installedBinarySha256": "da42a80b4f65cb97e476beabaf643767cd3de165dea23ccc0dd72ee1c93fd84a"
+  },
+  "approvedTool": {
+    "tool": "shell",
+    "args": {
+      "command": "python3 /data/data/com.termux/files/home/usix-companion/.build-tools/P2-termux-v2-model-witness.py"
+    },
+    "exactCommand": true,
+    "decision": "once",
+    "recordedAt": "2026-10-01T22:20:44.952Z"
+  },
+  "trustedHelper": "Companion-owned fixed profile wrapper delegates to tools/capture_device_v2.py and the actual installed standalone CLI",
+  "actualModelRequests": [
+    {
+      "serverSlot": 0,
+      "serverTaskId": 0,
+      "prompt": {
+        "elapsedMs": 757653.96,
+        "tokens": 4402
+      },
+      "generation": {
+        "elapsedMs": 11633.97,
+        "tokens": 52
+      },
+      "total": {
+        "elapsedMs": 769287.93,
+        "tokens": 4454
+      }
+    },
+    {
+      "serverSlot": 0,
+      "serverTaskId": 60,
+      "prompt": {
+        "elapsedMs": 44024.46,
+        "tokens": 342
+      },
+      "generation": {
+        "elapsedMs": 7908.54,
+        "tokens": 37
+      },
+      "total": {
+        "elapsedMs": 51933,
+        "tokens": 379
+      }
+    }
+  ],
+  "deviceWitness": {
+    "runtimeLabel": "usix-termux",
+    "operation": "v2.capabilities+health",
+    "invocationCwd": "/data/data/com.termux/files/home/usix-termux",
+    "recordedAt": "2026-10-01T22:20:50.605239+00:00",
+    "source": "real device through standalone CLI; model correlation is separate",
+    "helperExitCode": 0,
+    "health": {
+      "ok": true,
+      "auth": true,
+      "paired": true,
+      "listener": true,
+      "accessibility": true
+    },
+    "contextSha256": "ec5cb0fdb22d6ca7127c554fb00a3708f5ce6667d6dd1cee03ab19808d8db7b7",
+    "supportedVersions": [
+      "usix-companion.device/v1",
+      "usix-companion.device/v2"
+    ],
+    "capabilities": [
+      {
+        "operation": "device.health",
+        "supported": true,
+        "readiness": "ready"
+      },
+      {
+        "operation": "app.open",
+        "supported": true,
+        "readiness": "device_locked"
+      },
+      {
+        "operation": "ui.tap",
+        "supported": false,
+        "readiness": "unsupported"
+      },
+      {
+        "operation": "mail.send",
+        "supported": false,
+        "readiness": "unsupported"
+      },
+      {
+        "operation": "notification.reply",
+        "supported": false,
+        "readiness": "unsupported"
+      }
+    ],
+    "elapsedMs": 1660
+  },
+  "publicModelAnswer": "실행 결과:\n• ok: true\n• auth: true\n• paired: true\n• listener: true\n• accessibility: true",
+  "modelReportedHealth": {
+    "ok": true,
+    "auth": true,
+    "paired": true,
+    "listener": true,
+    "accessibility": true
+  },
+  "modelReportMatchesDeviceWitness": true,
+  "normalTuiExitCode": 0,
+  "elapsedMs": 1295892,
+  "deviceV2ViaModelVerified": true,
+  "effectOrRebootEvidence": false,
+  "redaction": "controlled v2 health/capabilities, exact admitted command, model timings and public final answer; credentials, reasoning and private app data withheld"
+}

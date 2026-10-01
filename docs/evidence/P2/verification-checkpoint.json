@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-01T16:19:56.435244+00:00",
+  "recordedAt": "2026-10-01T22:37:56.625190+00:00",
   "chapterStatus": "in_progress",
   "latestApk": {
     "gitRevision": "b3c853ea342905b6ade6df36ce91e4ade39d7022",
@@ -33,29 +33,63 @@
     "toolsPythonCi": 25
   },
   "installation": {
-    "verified": false,
-    "v2Available": false,
+    "verified": true,
+    "v2Available": true,
     "installerIntentRequested": true,
     "apkCopiedToDownload": true,
     "pmInstallResult": "Android /system/bin/pm: Operation not permitted; requires phone installer confirmation",
-    "observedAt": "2026-10-01T16:07:19.216746+00:00",
-    "v2ProbeHttpStatus": 404
+    "observedAt": "2026-10-01T21:48:13.919919+00:00",
+    "v2ProbeHttpStatus": 401,
+    "verification": "User confirmed installation and live typed v2 route replaces earlier 404",
+    "installedApkBytesReadBack": false,
+    "pairingVerified": true,
+    "pairingState": "Existing usix-termux pair succeeded; owner token file 0600; authenticated v2 health passes",
+    "authenticatedHealthEvidence": "physical-cwd-and-pairing.json",
+    "authenticatedHealthObservedAt": "2026-10-01T22:13:06.298420+00:00"
   },
   "genuineModels": {
     "termuxLegacyHealth": "pass; exact existing shell approval, actual phone response, matching final model report and exit 0",
     "usixCurrentDefaultProfile": "not verified; actual configured qwen3.8-flash-next returns a completed turn without a tool call in both noninteractive and TTY attempts; no bypass flag used",
-    "bothV2": "pending installed v2 APK"
+    "bothV2": "pending USIX",
+    "termuxV2": "pass; two actual Qwen model requests, exact existing shell approval, fresh v2 witness, matching final health report, normal TUI exit 0",
+    "usixV2": "not verified; default TTY no tool, fixed helper timed out with unsuccessful unmatched result and no witness; requested permission for optional existing --yolo is pending"
   },
   "runtimeUnchanged": {
     "usix": true,
     "usix-termux": true
   },
-  "evaluationModelServer": "evaluation-owned server stopped; port 8080 closed",
+  "evaluationModelServer": "evaluation-owned Qwen server stopped; port 8080 closed after genuine v2 trace",
   "requiredRemaining": [
-    "Verify GitHub APK installation and running v2 response",
-    "Physical loopback and Android outbound WSS contract checks",
-    "Both genuine model -> existing authorized runtime tool -> v2 device traces",
-    "Physical stale-controller/action-conflict/lost-acknowledgement and reboot journal reconciliation"
+    "Unlock physical phone and complete full Android WSS controlled effects on fresh evidence",
+    "Verify genuine USIX -> existing authorized runtime tool -> v2 device; optional existing --yolo awaits current user permission",
+    "Reboot physical phone and reconcile receipts/events/stale leases without blind replay"
   ],
-  "chapterDocumentRetained": "docs/chapters/P2.md"
+  "chapterDocumentRetained": "docs/chapters/P2.md",
+  "physicalChecks": {
+    "loopback": {
+      "passed": true,
+      "steps": 30,
+      "evidence": "physical-loopback-scenarios.json"
+    },
+    "cwd": {
+      "passed": true,
+      "directories": 4,
+      "evidence": "physical-cwd-and-pairing.json"
+    },
+    "nativeAndroidWss": {
+      "passed": true,
+      "samePhoneBroker": true,
+      "externalNetworkDeployment": false,
+      "evidence": "physical-wss-connection.json"
+    },
+    "wssFullScenario": {
+      "passed": false,
+      "steps": 8,
+      "rejection": "DeviceLocked",
+      "effect": "none",
+      "evidence": "physical-wss-scenarios.json"
+    },
+    "physicalReboot": "pending"
+  },
+  "runtimeIdentityEvidence": "runtime-after-termux-v2-model.json"
 }

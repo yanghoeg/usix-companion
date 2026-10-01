@@ -1,0 +1,21 @@
+{
+  "recordedAt": "2026-10-01T21:48:13.919919+00:00",
+  "source": "live physical Android loopback",
+  "userReportedInstallation": true,
+  "deliveredApk": {
+    "githubRun": "36890107600",
+    "codeCommit": "b3c853ea342905b6ade6df36ce91e4ade39d7022",
+    "sha256": "0f8cfbccf15feb4f8fc9ed324d501a2c26878699f4065f79b3de0bdc3c11b238"
+  },
+  "probe": {
+    "path": "/v2/pair/challenge",
+    "httpStatus": 401,
+    "contractVersion": "usix-companion.device/v2",
+    "kind": "error",
+    "errorCode": "IdentityMismatch"
+  },
+  "liveV2RouteVerified": true,
+  "installedApkBytesReadBack": false,
+  "pairingVerified": false,
+  "modelEvidence": false
+}

@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-10-01T22:24:19.251599+00:00",
+  "source": "genuine unchanged installed USIX and configured model; fixed trusted v2 helper",
+  "configuration": {
+    "modelRoute": "code",
+    "effort": "xhigh",
+    "interactive": true,
+    "yolo": false,
+    "wallLimitSeconds": 300
+  },
+  "permission": "existing TTY one-time exact-command approval; no yolo",
+  "approvalDecisions": [],
+  "elapsedMs": 300217,
+  "exitCode": 124,
+  "events": [
+    {
+      "type": "tool_result",
+      "seq": 51,
+      "call_id": "chatcmpl-tool-8d70cb426c8d5363",
+      "request_id": "8ba8f568-514f-4b62-a936-b4fb9679b2cb",
+      "exactCommandResult": false,
+      "success": false,
+      "code": null
+    }
+  ],
+  "deviceWitness": null,
+  "publicModelAnswer": "",
+  "deviceV2ViaModelVerified": false,
+  "redaction": "controlled health/capabilities and public answer; credentials and reasoning withheld"
+}

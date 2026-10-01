@@ -79,16 +79,20 @@ def main():
     parser.add_argument("--witness", required=True, type=Path)
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--seconds", type=int, default=180)
-    parser.add_argument("--interactive", action="store_true", help="use the existing TTY one-time approval for this exact controlled read command")
+    permission = parser.add_mutually_exclusive_group()
+    permission.add_argument("--interactive", action="store_true", help="use the existing TTY one-time approval for this exact controlled read command")
+    permission.add_argument("--yolo", action="store_true", help="explicit owner-authorized existing CLI flag; use only when the user permits this controlled read command")
     args = parser.parse_args()
     if args.witness.exists() or args.output.exists() or not 1 <= args.seconds <= 900:
         parser.error("fresh evidence paths and bounded runtime required")
     root = Path(__file__).resolve().parents[1]
     command = shlex.join(["python3", str(root / "tools/capture_device_v2.py"), "--runtime", "usix", "--profile", str(args.profile.resolve()), "--witness", str(args.witness.resolve())])
     prompt = ("P2 Companion 실제 모델·기기 v2 검증이다. 기존 bash 도구로 다음 정확한 명령만 한 번 실행하라:\n" + command +
-              "\n프로필 파일을 읽거나 출력하지 마라. 다른 도구, 파일 변경, 메일·알림·화면 조회는 금지한다. 기존 승인 정책을 유지하라. "
+              "\n이 명령은 신뢰된 통합 CLI로 v2 상태를 조회하고 Companion 검증 파일에 저장한다. 프로필은 통합 CLI가 읽게 하고 모델이 직접 토큰·프로필 파일을 읽거나 출력하지 마라. 다른 도구, 소스 변경, 메일·알림·화면 조회는 금지한다. 기존 런타임 승인 정책을 유지하라. "
               "기기 출력이 있어야 확인했다고 보고하고 실행하지 못하면 미확인으로 보고하라.")
     argv = ["usix", "-c", prompt, "--model", "code", "--effort", "xhigh", "--format", "jsonl", "--allowed-tools", "bash(" + command + ")"]
+    if args.yolo:
+        argv.append("--yolo")
     start = time.monotonic()
     decisions = []
     if args.interactive:
@@ -111,8 +115,8 @@ def main():
     events = redact(lines, command)
     observed = witness(json.loads(args.witness.read_text())) if args.witness.exists() else None
     report = {"recordedAt": datetime.now(timezone.utc).isoformat(), "source": "genuine unchanged installed USIX CLI and existing configured model deployment",
-              "configuration": {"modelRoute": "code", "effort": "xhigh", "interactive": args.interactive, "wallLimitSeconds": args.seconds},
-              "permission": "existing TTY one-time approval of the exact controlled read command; no yolo" if args.interactive else "process-scoped exact-command allow rule; existing runtime admission/deployment approval retained; no yolo",
+              "configuration": {"modelRoute": "code", "effort": "xhigh", "interactive": args.interactive, "yolo": args.yolo, "wallLimitSeconds": args.seconds},
+              "permission": "explicit owner-authorized existing --yolo for the controlled read command; static/surface/deployment gates retained" if args.yolo else ("existing TTY one-time approval of the exact controlled read command; no yolo" if args.interactive else "process-scoped exact-command allow rule; existing runtime admission/deployment approval retained; no yolo"),
               "approvalDecisions": decisions,
               "elapsedMs": round((time.monotonic() - start) * 1000), "exitCode": code, "events": events, "deviceWitness": observed,
               "deviceV2ViaModelVerified": verified(events, observed, code), "redaction": "only controlled v2 health/capabilities, exact command, correlation and model counts; no credentials or reasoning"}

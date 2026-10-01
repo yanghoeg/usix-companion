@@ -1,0 +1,262 @@
+{
+  "recordedAt": "2026-10-01T22:19:49.794110+00:00",
+  "source": "live Android APK through standalone integration",
+  "transportA": "broker",
+  "transportB": "broker",
+  "steps": [
+    {
+      "name": "a_capabilities",
+      "response": {
+        "capabilities": [
+          {
+            "authority": "none",
+            "operation": "device.health",
+            "readiness": "ready",
+            "reason": null,
+            "requiresAccount": false,
+            "requiresController": false,
+            "requiresSnapshot": false,
+            "supported": true
+          },
+          {
+            "authority": "grant",
+            "operation": "app.open",
+            "readiness": "device_locked",
+            "reason": "Unlock the device before opening an app",
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": true
+          },
+          {
+            "authority": "approval",
+            "operation": "ui.tap",
+            "readiness": "unsupported",
+            "reason": "Requires P3 snapshots and P4 action authority",
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": false
+          },
+          {
+            "authority": "approval",
+            "operation": "mail.send",
+            "readiness": "unsupported",
+            "reason": "Requires P4 approved workflow and goal evidence",
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": false
+          },
+          {
+            "authority": "approval",
+            "operation": "notification.reply",
+            "readiness": "unsupported",
+            "reason": "Use supported legacy dispatch or the later approved v2 workflow",
+            "requiresAccount": false,
+            "requiresController": false,
+            "requiresSnapshot": false,
+            "supported": false
+          }
+        ],
+        "contractVersion": "usix-companion.device/v2",
+        "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+        "kind": "capabilities",
+        "limits": {
+          "eventRetentionCount": 512,
+          "maxCommandBytes": 65536,
+          "maxMediaBytes": 0,
+          "maxObservationBytes": 1048576,
+          "maxPageItems": 128
+        },
+        "observedAt": "2026-10-01T22:19:49.815Z",
+        "pagination": true,
+        "requestId": "589b66a0-7a63-4ec0-ab41-a5431e89dcda",
+        "supportedVersions": [
+          "usix-companion.device/v1",
+          "usix-companion.device/v2"
+        ]
+      }
+    },
+    {
+      "name": "a_health",
+      "response": {
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+          "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+          "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+          "taskRevision": 1,
+          "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "health": {
+          "accessibility": true,
+          "auth": true,
+          "listener": true,
+          "ok": true,
+          "paired": true
+        },
+        "kind": "observation",
+        "requestId": "f5acbb82-ba74-4610-adf7-28066f7cd5bb"
+      }
+    },
+    {
+      "name": "b_capabilities",
+      "response": {
+        "capabilities": [
+          {
+            "authority": "none",
+            "operation": "device.health",
+            "readiness": "ready",
+            "reason": null,
+            "requiresAccount": false,
+            "requiresController": false,
+            "requiresSnapshot": false,
+            "supported": true
+          },
+          {
+            "authority": "grant",
+            "operation": "app.open",
+            "readiness": "device_locked",
+            "reason": "Unlock the device before opening an app",
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": true
+          },
+          {
+            "authority": "approval",
+            "operation": "ui.tap",
+            "readiness": "unsupported",
+            "reason": "Requires P3 snapshots and P4 action authority",
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": false
+          },
+          {
+            "authority": "approval",
+            "operation": "mail.send",
+            "readiness": "unsupported",
+            "reason": "Requires P4 approved workflow and goal evidence",
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": false
+          },
+          {
+            "authority": "approval",
+            "operation": "notification.reply",
+            "readiness": "unsupported",
+            "reason": "Use supported legacy dispatch or the later approved v2 workflow",
+            "requiresAccount": false,
+            "requiresController": false,
+            "requiresSnapshot": false,
+            "supported": false
+          }
+        ],
+        "contractVersion": "usix-companion.device/v2",
+        "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+        "kind": "capabilities",
+        "limits": {
+          "eventRetentionCount": 512,
+          "maxCommandBytes": 65536,
+          "maxMediaBytes": 0,
+          "maxObservationBytes": 1048576,
+          "maxPageItems": 128
+        },
+        "observedAt": "2026-10-01T22:19:49.939Z",
+        "pagination": true,
+        "requestId": "0b901fe4-3e0c-4c5f-a282-d55e128e6d51",
+        "supportedVersions": [
+          "usix-companion.device/v1",
+          "usix-companion.device/v2"
+        ]
+      }
+    },
+    {
+      "name": "b_health",
+      "response": {
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "190ddde6-3931-4f00-b96f-d860ec9eed30",
+          "sessionId": "0f3e7c09-3d6c-44a8-9ee2-34db04017516",
+          "taskId": "d4482a01-ccbe-4344-bef1-869fd61aea28",
+          "taskRevision": 1,
+          "workspaceId": "0d1959a3-9145-493d-b7c6-c3fdcfb03aae"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "health": {
+          "accessibility": true,
+          "auth": true,
+          "listener": true,
+          "ok": true,
+          "paired": true
+        },
+        "kind": "observation",
+        "requestId": "551e7f4b-100c-4bde-8665-4ff80a7a5a98"
+      }
+    },
+    {
+      "name": "owner_pause",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "kind": "paused",
+        "requestId": "acbaa20c-6979-40f1-87bc-9e42ddfeae49"
+      }
+    },
+    {
+      "name": "a_acquire",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "expiresAt": "2026-10-01T22:20:50.034Z",
+        "kind": "controller",
+        "lease": {
+          "leaseId": "068894ee-2a8d-469e-9f41-4c089a32aa89",
+          "revision": 5
+        },
+        "requestId": "326190ed-03aa-4bed-b0b2-ee5cd658ac69"
+      }
+    },
+    {
+      "name": "b_controller_conflict",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "ControllerConflict",
+          "message": "Another session controls this device"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "app_open",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "DeviceLocked",
+          "message": "Unlock the device before opening an app"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    }
+  ],
+  "modelEvidence": false,
+  "processRestartOrRebootEvidence": false,
+  "passed": false,
+  "failure": {
+    "class": "AssertionError",
+    "message": "Live device scenario failed; inspect recorded controlled responses; no automatic effect replay"
+  }
+}
