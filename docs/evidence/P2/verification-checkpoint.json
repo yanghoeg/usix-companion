@@ -1,21 +1,21 @@
 {
-  "recordedAt": "2026-10-01T16:07:19.287142+00:00",
+  "recordedAt": "2026-10-01T16:19:56.435244+00:00",
   "chapterStatus": "in_progress",
   "latestApk": {
-    "gitRevision": "51b3b44064d5ba6b436be1f011c9fcb37020acf2",
-    "githubRun": 36885404502,
-    "githubUrl": "https://github.com/yanghoeg/usix-companion/actions/runs/36885404502",
+    "gitRevision": "b3c853ea342905b6ade6df36ce91e4ade39d7022",
+    "githubRun": 36890107600,
+    "githubUrl": "https://github.com/yanghoeg/usix-companion/actions/runs/36890107600",
     "coreJob": "success",
     "androidJob": "success",
     "nativeRoomTestTask": "success",
-    "apkSha256": "bf6feaa21ba9f22ecfb89eecaa5b63b7b19e4f5985f6ddb4177850d0094dbc9d",
+    "apkSha256": "0f8cfbccf15feb4f8fc9ed324d501a2c26878699f4065f79b3de0bdc3c11b238",
     "certificateSha256": "1bf19c9316904bfea9df9f422af589a589dbdb425e4329a56bf473d79eca1ded",
     "applicationId": "dev.usix.companion",
     "versionName": "0.2.0",
     "versionCode": 7,
     "minSdk": 24,
     "targetSdk": 34,
-    "phoneFile": "/sdcard/Download/usix-companion-0.2.0-P2-51b3b44.apk"
+    "phoneFile": "/sdcard/Download/usix-companion-0.2.0-P2-b3c853e.apk"
   },
   "checks": {
     "architecturePython": 6,
@@ -29,7 +29,8 @@
     "androidAdapterLocal": 31,
     "controlLocal": 2,
     "appCompositionLocal": 1,
-    "localRoomNativeTests": "4 could not initialize unsupported Robolectric native runtime on Termux aarch64; mandatory Linux CI test task passes"
+    "localRoomNativeTests": "4 could not initialize unsupported Robolectric native runtime on Termux aarch64; mandatory Linux CI test task passes",
+    "toolsPythonCi": 25
   },
   "installation": {
     "verified": false,

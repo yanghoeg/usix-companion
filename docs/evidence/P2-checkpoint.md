@@ -4,14 +4,14 @@ Date: 2026-10-01 UTC. **P2 remains in progress.** Build/test evidence and legacy
 
 ## GitHub APK
 
-[Run 36885404502](https://github.com/yanghoeg/usix-companion/actions/runs/36885404502) built commit `51b3b44064d5ba6b436be1f011c9fcb37020acf2`. Both core and Android jobs passed, including the mandatory native Room persistence/migration test task, Android regressions/lint and standalone TLS broker checks. [The earlier build](https://github.com/yanghoeg/usix-companion/actions/runs/36882403814) also passed. This branch is `companion/p2-device-contract`; main was not merged or rewritten.
+[Run 36890107600](https://github.com/yanghoeg/usix-companion/actions/runs/36890107600) built commit `b3c853ea342905b6ade6df36ce91e4ade39d7022`. Both core and Android jobs passed, including the mandatory native Room persistence/migration test task, Android regressions/lint and standalone TLS broker checks. [The renewal build](https://github.com/yanghoeg/usix-companion/actions/runs/36885404502) and [initial build](https://github.com/yanghoeg/usix-companion/actions/runs/36882403814) also passed. This branch is `companion/p2-device-contract`; main was not merged or rewritten. Final installation/check-result documentation follows in a metadata-only commit; it changes no APK/evaluator code.
 
 | APK property | Verified value |
 | --- | --- |
 | Application/version | `dev.usix.companion`, `0.2.0`, code `7`, min/target SDK `24/34` |
-| APK SHA-256 | `bf6feaa21ba9f22ecfb89eecaa5b63b7b19e4f5985f6ddb4177850d0094dbc9d` |
+| APK SHA-256 | `0f8cfbccf15feb4f8fc9ed324d501a2c26878699f4065f79b3de0bdc3c11b238` |
 | Signing certificate SHA-256 | `1bf19c9316904bfea9df9f422af589a589dbdb425e4329a56bf473d79eca1ded`; matches existing development signing |
-| Phone installation file | `/sdcard/Download/usix-companion-0.2.0-P2-51b3b44.apk` |
+| Phone installation file | `/sdcard/Download/usix-companion-0.2.0-P2-b3c853e.apk` |
 | Installation state | APK copied and installer intent requested. Installation **unverified**; `/v2/pair/challenge` still responds 404. |
 
 `pm install -r` was attempted for the requested data-preserving update; this Termux environment cannot execute Android `/system/bin/pm` (`Operation not permitted`). No ADB device is connected. The phone installer requires its on-device confirmation. Installer-intent success alone is not installation evidence.
@@ -20,7 +20,7 @@ Date: 2026-10-01 UTC. **P2 remains in progress.** Build/test evidence and legacy
 
 - Local pure JVM application/protocol/transport tests: 27/11/14, all passing. Transport tests include actual TLS, hostname rejection, replay rejection and Kotlin-router outputs; six generated messages pass the unchanged shared schemas.
 - Existing Android adapter/control/composition tests: 31/2/1 pass. Lint and release assembly pass locally. Four native Room tests cannot initialize Robolectric's unsupported Linux aarch64 native runtime on this Termux host; they stay enabled and their mandatory Linux CI task passes. No persistence test was skipped or replaced with a fake.
-- Python: 6 architecture, 18 contract, 11 integration/TLS/CLI tests and 25 local tooling tests pass. The latest published APK run included the previous 23 tooling tests; the two new tests specifically verify the existing TTY approval boundary.
+- Python: 6 architecture, 18 contract, 11 integration/TLS/CLI tests and 25 tooling tests pass in Linux CI. The two new tooling tests specifically verify the existing TTY approval boundary and also pass locally.
 - Trusted session renewal is owner-authenticated and challenge-bound. It rotates bearer/grant, invalidates old controller/credentials, and preserves the exact context, selected package, receipt history, remaining action budget and delivered/acknowledged cursors. Old requests authorized before credential rotation are rejected. Renewal cannot change an existing task/package or replenish its budget.
 
 ## Genuine runtime/device observations
