@@ -39,6 +39,8 @@ def main(argv=None):
     connection.add_argument("--endpoint", default="http://127.0.0.1:8760")
     connection.add_argument("--broker-socket")
     setup.add_argument("--device-id", help="required for the broker profile")
+    renew = commands.add_parser("renew", help="trusted owner renewal of the same captured context and remaining budget")
+    renew.add_argument("--owner-token-file", default=str(Path.home() / ".usix/companion_token"))
     for command in ("health", "capabilities", "acquire", "release", "resync"):
         commands.add_parser(command)
     for command in ("receipt", "cancel", "open"):
@@ -73,11 +75,33 @@ def main(argv=None):
                           packageId=args.package, displayName="USIX" if args.runtime == "usix" else "USIX Termux"))
             if paired.get("kind") != "paired":
                 print(json.dumps(paired, ensure_ascii=False)); return 1
+            if paired.get("context") != context:
+                raise ValueError("Pairing response replaced the captured context")
             profile = {"profileVersion": 2, "connection": connection, "context": context, "workspace": str(workspace), "runtime": args.runtime,
                        "packageId": args.package, "bearer": paired["bearer"], "grantRef": paired["grantRef"], "expiresAt": paired["expiresAt"], "lease": None}
             save_private(profile_path, profile)
             result = {"contractVersion": CONTRACT, "kind": "setup_saved", "profile": str(profile_path), "workspace": str(workspace),
                       "runtime": args.runtime, "expiresAt": paired["expiresAt"], "notice": "Context uses trusted setup correlation IDs; runtime dispatch authority remains separate"}
+        elif args.command == "renew":
+            profile = private_json(profile_path)
+            if profile.get("profileVersion") != 2 or not Path(profile["workspace"]).is_absolute() or not Path(profile["workspace"]).is_dir():
+                raise ValueError("Captured workspace moved or disappeared; explicit rebinding is required")
+            bearer = owner_token(args.owner_token_file)
+            challenge = call(profile["connection"], "/v2/pair/challenge", bearer, packet())
+            if challenge.get("kind") != "pairing_challenge":
+                print(json.dumps(challenge, ensure_ascii=False)); return 1
+            if challenge.get("deviceId") != profile["context"]["deviceId"]:
+                raise ValueError("Renewal selected a different device")
+            paired = call(profile["connection"], "/v2/pair/complete", bearer, packet(challengeId=challenge["challengeId"], nonce=challenge["nonce"],
+                          context=profile["context"], packageId=profile["packageId"], displayName="USIX" if profile["runtime"] == "usix" else "USIX Termux"))
+            if paired.get("kind") != "paired":
+                print(json.dumps(paired, ensure_ascii=False)); return 1
+            if paired.get("context") != profile["context"]:
+                raise ValueError("Renewal response replaced the captured context")
+            profile.update(bearer=paired["bearer"], grantRef=paired["grantRef"], expiresAt=paired["expiresAt"], lease=None)
+            save_private(profile_path, profile)
+            result = {"contractVersion": CONTRACT, "kind": "renewed", "profile": str(profile_path), "expiresAt": paired["expiresAt"],
+                      "notice": "Captured context, receipts, event cursors and remaining action budget preserved; acquire a new controller lease"}
         else:
             profile = private_json(profile_path)
             if profile.get("profileVersion") != 2 or not Path(profile["workspace"]).is_absolute():

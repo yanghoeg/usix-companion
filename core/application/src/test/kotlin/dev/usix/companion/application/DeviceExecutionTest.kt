@@ -139,6 +139,32 @@ class DeviceExecutionTest {
         now = paired.value.session.expiresAtMillis
         assertNull(app.authenticate(paired.value.bearer))
     }
+    @Test fun trustedRenewalPreservesReceiptBudgetAndCursorsAndRotatesAuthority() = runBlocking {
+        val initial = app.challenge()
+        val paired = (app.pair(initial.challengeId, initial.nonce, context(), "dev.usix.companion") as ExecutionResult.Success).value
+        val c = command(paired.session); val done = receipt(app.execute(paired.session, c))
+        val sync = (app.resync(paired.session) as ExecutionResult.Success).value
+        app.acknowledge(paired.session, sync.second)
+        now = paired.session.expiresAtMillis
+        val challenge = app.challenge()
+        val renewed = (app.pair(challenge.challengeId, challenge.nonce, paired.session.context, paired.session.packageId) as ExecutionResult.Success).value
+        assertNull(app.authenticate(paired.bearer)); assertNotNull(app.authenticate(renewed.bearer))
+        assertNotEquals(paired.session.grantId, renewed.session.grantId); assertNull(store.lease())
+        assertEquals(1, renewed.session.actionsUsed); assertEquals(16, renewed.session.maxActions)
+        assertEquals(sync.second, renewed.session.deliveredCursor); assertEquals(sync.second, renewed.session.acknowledgedCursor)
+        assertEquals(done, receipt(app.receipt(renewed.session, c.actionId)))
+        assertEquals(done, receipt(app.execute(renewed.session, c.copy(deadlineMillis = now + 10_000))))
+        assertEquals(ExecutionErrorCode.IdentityMismatch, code(app.receipt(paired.session, c.actionId)))
+        assertEquals(1, dispatches)
+    }
+    @Test fun renewalCannotRebindExistingSessionToAnotherTaskOrPackage() = runBlocking {
+        val s = pair()
+        for ((context, pkg) in listOf(s.context.copy(taskRevision = 2) to s.packageId, s.context to "another.app")) {
+            val challenge = app.challenge()
+            assertEquals(ExecutionErrorCode.IdentityMismatch, code(app.pair(challenge.challengeId, challenge.nonce, context, pkg)))
+        }
+        assertEquals(s, store.session(s.context.sessionId))
+    }
     @Test fun legacyUnboundUiAndReplyCannotCommitConsequentialEffects() = runBlocking {
         listOf(DeviceAction.Tap(10, 20), DeviceAction.Type("synthetic"), DeviceAction.Back, DeviceAction.Scroll("down"), DeviceAction.Reply("synthetic-handle", "synthetic reply")).forEach {
             assertEquals(DeviceErrorCode.APPROVAL_REQUIRED, (app.executeLegacy(it) as DeviceResult.Rejected).error.code)

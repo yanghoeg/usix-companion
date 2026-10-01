@@ -55,6 +55,14 @@ class DeviceV2RouterTest {
         assertNull(router.authorize("/v2/health", paired.bearer))
         assertEquals("401 Unauthorized", router.route("POST", "/v2/health", packet(), auth).status)
     }
+    @Test fun renewalRejectsRequestsAuthorizedBeforeCredentialRotation() = runBlocking {
+        val paired = pair(); val auth = router.authorize("/v2/health", paired.bearer)!!
+        val challenge = execution.challenge()
+        val renewed = (execution.pair(challenge.challengeId, challenge.nonce, paired.session.context, paired.session.packageId) as ExecutionResult.Success).value
+        assertNull(router.authorize("/v2/health", paired.bearer))
+        assertNotNull(router.authorize("/v2/health", renewed.bearer))
+        assertEquals("401 Unauthorized", router.route("POST", "/v2/health", packet(), auth).status)
+    }
     @Test fun unknownOperationsHaveStructuredErrorsAndNoAdapterDispatch() = runBlocking {
         val paired = pair(); val auth = router.authorize("/v2/health", paired.bearer)!!
         val response = router.route("POST", "/v2/nonexistent", packet(), auth)

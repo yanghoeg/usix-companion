@@ -79,6 +79,31 @@ class ContractCliTest(unittest.TestCase):
             with self.assertRaises(ValueError):
                 private_json(linked)
 
+    def test_trusted_renewal_preserves_context_and_omits_rotated_credentials(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory); path = root / "profile.json"; owner = root / "owner"
+            owner.write_text("synthetic-owner-bearer"); owner.chmod(0o600)
+            context = {"deviceId": "00000000-0000-4000-8000-000000000001", "sessionId": "synthetic-session"}
+            original = {"profileVersion": 2, "workspace": str(root), "context": context, "connection": {"transport": "loopback"},
+                        "runtime": "usix-termux", "packageId": "dev.usix.companion", "bearer": "synthetic-old-bearer", "grantRef": "old", "lease": {"revision": 1}}
+            save_private(path, original)
+            requests = []
+            def call(connection, route, bearer, body):
+                requests.append((route, body))
+                self.assertEqual("synthetic-owner-bearer", bearer)
+                if route.endswith("challenge"):
+                    return {"kind": "pairing_challenge", "deviceId": context["deviceId"], "challengeId": "synthetic", "nonce": "synthetic-nonce"}
+                self.assertEqual(context, body["context"]); self.assertEqual(original["packageId"], body["packageId"])
+                return {"kind": "paired", "context": context, "bearer": "synthetic-rotated-bearer", "grantRef": "renewed-grant", "expiresAt": "synthetic-time"}
+            output = io.StringIO()
+            with patch("usix_companion.cli.call", side_effect=call), contextlib.redirect_stdout(output):
+                self.assertEqual(0, main(["--profile", str(path), "renew", "--owner-token-file", str(owner)]))
+            updated = private_json(path)
+            self.assertEqual(context, updated["context"]); self.assertEqual(str(root), updated["workspace"])
+            self.assertIsNone(updated["lease"]); self.assertEqual("synthetic-rotated-bearer", updated["bearer"])
+            self.assertNotIn(updated["bearer"], output.getvalue()); self.assertNotIn(owner.read_text(), output.getvalue())
+            self.assertEqual(2, len(requests))
+
 
 if __name__ == "__main__":
     unittest.main()

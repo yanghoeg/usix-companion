@@ -69,7 +69,7 @@ class DeviceV2Router(
         }
         val session = authorization.session ?: return DeviceV2Codec.failure("IdentityMismatch", "Paired session required", "401 Unauthorized")
         // Refresh admission even if the session was valid before a slow body arrived.
-        if (execution.pairedSessions().none { it.context == session.context && !it.revoked && it.expiresAtMillis > now() })
+        if (execution.pairedSessions().none { it.context == session.context && it.credentialHash == session.credentialHash && !it.revoked && it.expiresAtMillis > now() })
             return DeviceV2Codec.failure("AuthorityRevoked", "Session expired or revoked", "401 Unauthorized")
         when (path) {
             "/v2/capabilities" -> { fields(); DeviceV2Codec.response(capabilities(requestId, session)) }

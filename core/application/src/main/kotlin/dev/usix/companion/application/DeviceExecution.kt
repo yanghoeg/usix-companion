@@ -51,12 +51,18 @@ class DeviceExecution(
             return@withLock reject(ExecutionErrorCode.IdentityMismatch, "Pairing challenge expired or invalid")
         if (context.deviceId != deviceId) return@withLock reject(ExecutionErrorCode.IdentityMismatch, "Selected device does not match")
         val bearer = crypto.newSecret()
-        repository.transaction {
-            if (repository.session(context.sessionId) != null)
-                return@transaction reject(ExecutionErrorCode.IdentityMismatch, "Session ID already exists; renew through trusted setup")
-            val session = ControllerSession(context, crypto.digest(bearer), clock.nowMillis() + 1_800_000, ids.next(), packageId, displayName = displayName)
-            repository.putSession(session)
-            ExecutionResult.Success(PairedSession(session, bearer))
+        controller.withLock {
+            repository.transaction {
+                val old = repository.session(context.sessionId)
+                if (old != null && (old.context != context || old.packageId != packageId))
+                    return@transaction reject(ExecutionErrorCode.IdentityMismatch, "Renewal cannot replace the captured context or package")
+                val session = old?.copy(credentialHash = crypto.digest(bearer), expiresAtMillis = clock.nowMillis() + 1_800_000,
+                    grantId = ids.next(), revoked = false)
+                    ?: ControllerSession(context, crypto.digest(bearer), clock.nowMillis() + 1_800_000, ids.next(), packageId, displayName = displayName)
+                repository.putSession(session)
+                if (repository.lease()?.sessionId == context.sessionId) { repository.putLease(null); controllerEvent(null) }
+                ExecutionResult.Success(PairedSession(session, bearer))
+            }
         }
     }
 
@@ -254,7 +260,7 @@ class DeviceExecution(
         return when {
             current == null || current.context != session.context || current.credentialHash != session.credentialHash -> ExecutionError(ExecutionErrorCode.IdentityMismatch, "Session no longer matches")
             current.revoked -> ExecutionError(ExecutionErrorCode.AuthorityRevoked, "Session revoked by the local user")
-            current.expiresAtMillis <= clock.nowMillis() -> ExecutionError(ExecutionErrorCode.AuthorityExpired, "Session expired; pair again")
+            current.expiresAtMillis <= clock.nowMillis() -> ExecutionError(ExecutionErrorCode.AuthorityExpired, "Session expired; renew through trusted setup")
             else -> null
         }
     }

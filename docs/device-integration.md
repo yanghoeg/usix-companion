@@ -30,6 +30,8 @@ Setup reads the owner token from a private file, consumes a single-use 60-second
 
 `execute --request-file /absolute/command.json` accepts bounded structured commands with the captured context and shared schema/hash validation. `receipt --action-id UUID`, `cancel --action-id UUID`, `events --cursor N`, `ack --cursor N`, `resync`, and `release` provide recovery/control. Effect calls require an explicit action ID. After an uncertain response, fetch that ID's receipt; never create another send attempt. Setup/acquire output omits credentials, which are never CLI arguments.
 
+After session expiry, use `renew --owner-token-file /absolute/private/companion_token` on the same private profile through trusted user setup. Renewal consumes a fresh challenge, rotates the session bearer/grant and invalidates its controller lease. It preserves the exact context, selected package, stored receipts, delivered/acknowledged event cursors and remaining 16-action budget; it cannot rebind an existing session or silently replenish authority. Acquire a new lease before another effect. The owner can explicitly restore a revoked session this way.
+
 ## WSS broker and remote profile
 
 The long-lived broker routes requests; it owns no model, business scheduler or runtime task/session database. Its TLS ingress accepts the configured device ID and device credential. Its local Unix socket is 0600, its directory must be 0700, and peer UID must match the owning user. The phone keeps its HTTP socket at `127.0.0.1:8760`.
