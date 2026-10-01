@@ -5,7 +5,43 @@ refactor and the roadmap for a general assistant, including integration with bot
 USIX runtimes, reliable Android actions, durable tasks, and verification gates.
 It describes planned work; the behavior documented below is the current implementation.
 
-Android bridge for the Termux agent. Thunderbird mail and conversation screens can be
+For mail lookup, use the [IMAP caller](tools/companion_mail.py) without switching
+apps. It reads inbox headers and selected message bodies directly from the mail server
+over verified TLS, using read-only selection and `BODY.PEEK` to preserve unread flags.
+Mail lookup never falls back to opening Thunderbird or another app. An empty notification
+list or accessibility tree does not establish that the mailbox has no new mail.
+
+Install `tools/companion_mail.py` at `~/.usix/companion_mail.py`, then run setup in
+your own terminal with the account and its verified IMAP hostname:
+
+```sh
+python3 "$HOME/.usix/companion_mail.py" setup --email person@example.com --host imap.example.com
+python3 "$HOME/.usix/companion_mail.py" check
+python3 "$HOME/.usix/companion_mail.py" inbox '{"limit":20}'
+python3 "$HOME/.usix/companion_mail.py" read '{"uid":"42","uidvalidity":"123"}'
+```
+
+Setup prompts privately for the IMAP password, verifies inbox access, and creates
+`~/.usix/mail_account.json` with mode 600. It does not overwrite an existing account.
+Use the UID and UID validity returned by your actual inbox listing; the numbers above
+are examples. `status` reports local configuration, while `check` verifies authentication.
+Listings support `unread:true` and pagination through `before_uid`/`next_before_uid`;
+each page contains up to 100 headers. Body reads decode MIME plain text or convert HTML
+to text without loading remote resources. Large messages fetch text MIME sections
+separately so attachment size does not block body reads; text reads have a 10 MiB
+limit. Attachments return names/types. Disappeared/unavailable search entries are
+reported with `complete:false` and `unavailable_uids`, preserving readable entries.
+Unsupported/encrypted
+bodies and missing authentication remain explicit incomplete results. This helper
+uses Python's standard library and the existing runtime shell, independently of the
+APK, accessibility service and notification listener.
+
+For Bizmeka accounts, the official server is `ezmail.bizmeka.com`; its POP3/IMAP
+password is configured separately from the webmail password in webmail settings.
+Company external-mail access must already be enabled. See the
+[official mail settings](https://ezportal.bizmeka.com/help/ko/gw-docs/PRO_000178.html).
+
+Android bridge for the Termux agent. When explicitly requested, Thunderbird mail and conversation screens can be
 read and used without a notification. Sign in to the mail account in Thunderbird,
 unlock the phone, and enable the companion's accessibility service. Notification
 access is only needed for the notification tools.
