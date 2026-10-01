@@ -1,0 +1,147 @@
+{
+  "recordedAt": "2026-10-01T22:58:39.939478+00:00",
+  "source": "genuine unchanged installed USIX CLI and existing configured model deployment",
+  "configuration": {
+    "modelRoute": "code",
+    "effort": "xhigh",
+    "interactive": false,
+    "yolo": true,
+    "wallLimitSeconds": 300
+  },
+  "permission": "explicit owner-authorized existing --yolo for the controlled read command; static/surface/deployment gates retained",
+  "approvalDecisions": [],
+  "elapsedMs": 18783,
+  "exitCode": 0,
+  "events": [
+    {
+      "type": "tool_start",
+      "seq": 51,
+      "call_id": "chatcmpl-tool-b73407e79c6c530f",
+      "request_id": "137f41f9-02e5-4bcd-b802-cccb0f373413",
+      "tool": "bash",
+      "exactCommand": true,
+      "args": {
+        "command": "python3 /data/data/com.termux/files/home/usix-companion/tools/capture_device_v2.py --runtime usix --profile /data/data/com.termux/files/home/usix-companion/.build-tools/P2-private/usix-local.json --witness /data/data/com.termux/files/home/usix-companion/.build-tools/P2-usix-v2-yolo-witness.json"
+      }
+    },
+    {
+      "type": "tool_result",
+      "seq": 53,
+      "call_id": "chatcmpl-tool-b73407e79c6c530f",
+      "request_id": "137f41f9-02e5-4bcd-b802-cccb0f373413",
+      "exactCommandResult": true,
+      "success": true,
+      "code": null,
+      "deviceWitness": {
+        "runtimeLabel": "usix",
+        "operation": "v2.capabilities+health",
+        "invocationCwd": "/data/data/com.termux/files/home/usix",
+        "recordedAt": "2026-10-01T22:58:29.439820+00:00",
+        "source": "real device through standalone CLI; model correlation is separate",
+        "helperExitCode": 0,
+        "health": {
+          "ok": true,
+          "auth": true,
+          "paired": true,
+          "listener": true,
+          "accessibility": true
+        },
+        "contextSha256": "2b7039f44a419cd474cd9fdc118a4bdaa50487f6074fcbe3dc0de4ad0e3789dc",
+        "supportedVersions": [
+          "usix-companion.device/v1",
+          "usix-companion.device/v2"
+        ],
+        "capabilities": [
+          {
+            "operation": "device.health",
+            "supported": true,
+            "readiness": "ready"
+          },
+          {
+            "operation": "app.open",
+            "supported": true,
+            "readiness": "ready"
+          },
+          {
+            "operation": "ui.tap",
+            "supported": false,
+            "readiness": "unsupported"
+          },
+          {
+            "operation": "mail.send",
+            "supported": false,
+            "readiness": "unsupported"
+          },
+          {
+            "operation": "notification.reply",
+            "supported": false,
+            "readiness": "unsupported"
+          }
+        ],
+        "elapsedMs": 2745
+      }
+    },
+    {
+      "type": "done",
+      "seq": 325,
+      "request_id": "137f41f9-02e5-4bcd-b802-cccb0f373413",
+      "model": "qwen3.8-flash-next",
+      "tokens": 425,
+      "prompt_tokens": 13320,
+      "tool_definition_tokens": 8377,
+      "context_used": 8883,
+      "context_window": 229733,
+      "finish_reason": "completed"
+    }
+  ],
+  "deviceWitness": {
+    "runtimeLabel": "usix",
+    "operation": "v2.capabilities+health",
+    "invocationCwd": "/data/data/com.termux/files/home/usix",
+    "recordedAt": "2026-10-01T22:58:29.439820+00:00",
+    "source": "real device through standalone CLI; model correlation is separate",
+    "helperExitCode": 0,
+    "health": {
+      "ok": true,
+      "auth": true,
+      "paired": true,
+      "listener": true,
+      "accessibility": true
+    },
+    "contextSha256": "2b7039f44a419cd474cd9fdc118a4bdaa50487f6074fcbe3dc0de4ad0e3789dc",
+    "supportedVersions": [
+      "usix-companion.device/v1",
+      "usix-companion.device/v2"
+    ],
+    "capabilities": [
+      {
+        "operation": "device.health",
+        "supported": true,
+        "readiness": "ready"
+      },
+      {
+        "operation": "app.open",
+        "supported": true,
+        "readiness": "ready"
+      },
+      {
+        "operation": "ui.tap",
+        "supported": false,
+        "readiness": "unsupported"
+      },
+      {
+        "operation": "mail.send",
+        "supported": false,
+        "readiness": "unsupported"
+      },
+      {
+        "operation": "notification.reply",
+        "supported": false,
+        "readiness": "unsupported"
+      }
+    ],
+    "elapsedMs": 2745
+  },
+  "deviceV2ViaModelVerified": true,
+  "redaction": "only controlled v2 health/capabilities, exact command, correlation and model counts; no credentials or reasoning"
+}

@@ -1,5 +1,5 @@
 {
-  "recordedAt": "2026-10-01T22:37:56.625190+00:00",
+  "recordedAt": "2026-10-01T23:04:14.155730+00:00",
   "chapterStatus": "in_progress",
   "latestApk": {
     "gitRevision": "b3c853ea342905b6ade6df36ce91e4ade39d7022",
@@ -30,7 +30,8 @@
     "controlLocal": 2,
     "appCompositionLocal": 1,
     "localRoomNativeTests": "4 could not initialize unsupported Robolectric native runtime on Termux aarch64; mandatory Linux CI test task passes",
-    "toolsPythonCi": 25
+    "toolsPythonCi": 25,
+    "rebootEvidenceBoundaryPythonLocal": 3
   },
   "installation": {
     "verified": true,
@@ -50,9 +51,11 @@
   "genuineModels": {
     "termuxLegacyHealth": "pass; exact existing shell approval, actual phone response, matching final model report and exit 0",
     "usixCurrentDefaultProfile": "not verified; actual configured qwen3.8-flash-next returns a completed turn without a tool call in both noninteractive and TTY attempts; no bypass flag used",
-    "bothV2": "pending USIX",
+    "bothV2": "pass in recorded authorized profiles; default USIX profile remains unverified",
     "termuxV2": "pass; two actual Qwen model requests, exact existing shell approval, fresh v2 witness, matching final health report, normal TUI exit 0",
-    "usixV2": "not verified; default TTY no tool, fixed helper timed out with unsuccessful unmatched result and no witness; requested permission for optional existing --yolo is pending"
+    "usixV2": "pass; user explicitly authorized existing --yolo for one v2 read; one exact real bash call, matching fresh device witness, done.completed, exit 0",
+    "usixV2Evidence": "usix-v2-authorized-model-health.json",
+    "usixYoloPermission": "one controlled state query only; consumed; no further authorization inferred"
   },
   "runtimeUnchanged": {
     "usix": true,
@@ -60,9 +63,8 @@
   },
   "evaluationModelServer": "evaluation-owned Qwen server stopped; port 8080 closed after genuine v2 trace",
   "requiredRemaining": [
-    "Unlock physical phone and complete full Android WSS controlled effects on fresh evidence",
-    "Verify genuine USIX -> existing authorized runtime tool -> v2 device; optional existing --yolo awaits current user permission",
-    "Reboot physical phone and reconcile receipts/events/stale leases without blind replay"
+    "Reboot physical phone, restart existing broker, verify exact stored receipts/events/acknowledgements and reject stale leases without replay",
+    "After required exits pass, write final acceptance evidence, update plan and delete temporary P2 execution document"
   ],
   "chapterDocumentRetained": "docs/chapters/P2.md",
   "physicalChecks": {
@@ -83,13 +85,37 @@
       "evidence": "physical-wss-connection.json"
     },
     "wssFullScenario": {
+      "passed": true,
+      "steps": 30,
+      "evidence": "physical-wss-unlocked-scenarios.json",
+      "samePhoneBroker": true,
+      "externalNetworkDeployment": false
+    },
+    "physicalReboot": {
+      "passed": false,
+      "prepared": true,
+      "beforeSteps": 17,
+      "beforeEvidence": "physical-reboot-before.json",
+      "savedReceipts": 4,
+      "sameBootNegativeCheck": "pass; rejected before device requests or renewals",
+      "savedEffectsReplayed": 0
+    },
+    "wssFirstLockedAttempt": {
       "passed": false,
       "steps": 8,
       "rejection": "DeviceLocked",
       "effect": "none",
       "evidence": "physical-wss-scenarios.json"
-    },
-    "physicalReboot": "pending"
+    }
   },
-  "runtimeIdentityEvidence": "runtime-after-termux-v2-model.json"
+  "runtimeIdentityEvidence": "runtime-after-usix-v2-model.json",
+  "latestEvaluatorCi": {
+    "gitRevision": "e700516ff6130c2e6773e80849dcecaf921c836d",
+    "githubRun": 36937058592,
+    "githubUrl": "https://github.com/yanghoeg/usix-companion/actions/runs/36937058592",
+    "coreJob": "success",
+    "androidJob": "success",
+    "nativeRoomTestTask": "success",
+    "androidSourceUnchangedFromInstalledCheckpoint": true
+  }
 }

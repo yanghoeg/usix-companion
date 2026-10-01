@@ -1,0 +1,3129 @@
+{
+  "recordedAt": "2026-10-01T23:03:47.796589+00:00",
+  "mode": "before",
+  "source": "physical Android APK through owning-user standalone integration",
+  "steps": [
+    {
+      "name": "loopback_health",
+      "response": {
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+          "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+          "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+          "taskRevision": 1,
+          "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "health": {
+          "accessibility": true,
+          "auth": true,
+          "listener": true,
+          "ok": true,
+          "paired": true
+        },
+        "kind": "observation",
+        "requestId": "62f79b9f-baf2-4eea-83c4-3a065393376b"
+      }
+    },
+    {
+      "name": "loopback_stored_receipt",
+      "response": {
+        "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+        "cancellationRequested": false,
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+          "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+          "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+          "taskRevision": 1,
+          "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "dispatched",
+        "error": null,
+        "evidence": [],
+        "kind": "receipt",
+        "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+        "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+        "requestId": "9b94099d-d9d8-4137-8ebf-834212ee986e",
+        "retry": {
+          "decision": "reconcile",
+          "reason": "Read the stored receipt and refresh observation; do not replay"
+        },
+        "revision": 3,
+        "state": "Dispatched",
+        "updatedAt": "2026-10-01T22:04:59.654Z"
+      }
+    },
+    {
+      "name": "loopback_stored_receipt",
+      "response": {
+        "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+        "cancellationRequested": true,
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+          "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+          "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+          "taskRevision": 1,
+          "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "dispatched",
+        "error": null,
+        "evidence": [],
+        "kind": "receipt",
+        "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+        "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+        "requestId": "494c7513-7655-468c-a951-dbe8e159f719",
+        "retry": {
+          "decision": "reconcile",
+          "reason": "Read the stored receipt and refresh observation; do not replay"
+        },
+        "revision": 4,
+        "state": "Dispatched",
+        "updatedAt": "2026-10-01T22:04:59.744Z"
+      }
+    },
+    {
+      "name": "loopback_ack_backwards_denied",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "InvalidRequest",
+          "message": "Acknowledgement is outside the delivered cursor range"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "loopback_ack_original",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "kind": "acknowledged",
+        "requestId": "f3e8000b-aa80-41f6-9873-0ad59c17580e"
+      }
+    },
+    {
+      "name": "loopback_resync",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "cursor": 32,
+        "kind": "resync",
+        "notice": "Refresh live observations before new effects; resync never replays an action",
+        "receipts": [
+          {
+            "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+            "cancellationRequested": false,
+            "context": {
+              "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+              "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+              "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+              "taskRevision": 1,
+              "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+            },
+            "contractVersion": "usix-companion.device/v2",
+            "effect": "dispatched",
+            "error": null,
+            "evidence": [],
+            "kind": "receipt",
+            "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+            "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+            "requestId": "9b94099d-d9d8-4137-8ebf-834212ee986e",
+            "retry": {
+              "decision": "reconcile",
+              "reason": "Read the stored receipt and refresh observation; do not replay"
+            },
+            "revision": 3,
+            "state": "Dispatched",
+            "updatedAt": "2026-10-01T22:04:59.654Z"
+          },
+          {
+            "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+            "cancellationRequested": true,
+            "context": {
+              "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+              "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+              "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+              "taskRevision": 1,
+              "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+            },
+            "contractVersion": "usix-companion.device/v2",
+            "effect": "dispatched",
+            "error": null,
+            "evidence": [],
+            "kind": "receipt",
+            "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+            "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+            "requestId": "494c7513-7655-468c-a951-dbe8e159f719",
+            "retry": {
+              "decision": "reconcile",
+              "reason": "Read the stored receipt and refresh observation; do not replay"
+            },
+            "revision": 4,
+            "state": "Dispatched",
+            "updatedAt": "2026-10-01T22:04:59.744Z"
+          }
+        ],
+        "requestId": "a33eac8b-403b-4d43-9a1c-f89b40740aaa"
+      }
+    },
+    {
+      "name": "loopback_events_before",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "error": null,
+        "events": [
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.700Z",
+            "cursor": 1,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "c0e9cda8-a669-4a1f-8994-fabc16838c5e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.767Z",
+            "cursor": 2,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "5ffffe9e-a676-4c63-9eec-5e2ac2e31c45",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "bdcb4d62-f6d4-4728-af09-9c356c190d85",
+                "revision": 1
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.905Z",
+            "cursor": 3,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b2334052-04e0-4c0b-9079-c4a1f4841832",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.908Z",
+            "cursor": 4,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "fdc75545-cae9-448f-b45a-d20cd63410a9",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.932Z",
+            "cursor": 5,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "c82d40d3-4e2c-46f4-a3ac-8d780a6fbb08",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.214Z",
+            "cursor": 6,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ae9e5138-caeb-4511-bc38-ff9582f6a7d6",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.310Z",
+            "cursor": 7,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "14a78f04-5c4e-4c2d-95a2-1ef439ecdc9d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "91a00b6e-8a40-4510-9e04-98611328b9dd",
+                "revision": 2
+              },
+              "runtimeId": "669e2f94-4a44-4041-9edb-7a19453ff2de"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.407Z",
+            "cursor": 8,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b3b0e915-c5c0-4f2b-bd99-818c9e3237d3",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.456Z",
+            "cursor": 9,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "28e6072d-b271-4ab1-a9c3-4d085f12501b",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "38e79359-d345-4aa2-9ce3-36b9e75a5416",
+                "revision": 3
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.644Z",
+            "cursor": 10,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "81928f40-f68c-4875-8167-65d0acf2ddd5",
+            "kind": "event",
+            "payload": {
+              "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.645Z",
+            "cursor": 11,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "2928fd24-7466-4da1-8aed-d2768f4da430",
+            "kind": "event",
+            "payload": {
+              "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.654Z",
+            "cursor": 12,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "4e09fb18-13b9-44b1-8578-d79882b5d00e",
+            "kind": "event",
+            "payload": {
+              "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.744Z",
+            "cursor": 13,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "d19c468a-5623-439b-a8f0-ca5ee34c114d",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 4
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.911Z",
+            "cursor": 14,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "3fb1f85f-5a6f-4bab-8aac-df351f54191f",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:05:04.183Z",
+            "cursor": 15,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "53d2bbc6-dfbd-4f2a-8226-897304319325",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "448b9870-adc8-4519-8862-f32f76b5181e",
+                "revision": 4
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.013Z",
+            "cursor": 16,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "004b9123-32cc-4d13-a76f-849e7ded1438",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.035Z",
+            "cursor": 17,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b6a5ed6d-b003-4468-8c9b-fd9bfa6109c8",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "068894ee-2a8d-469e-9f41-4c089a32aa89",
+                "revision": 5
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:54:12.385Z",
+            "cursor": 18,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "194b98c8-e26b-403d-b3e4-d49f9c8806d7",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.197Z",
+            "cursor": 19,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "22a41131-7847-48fc-b667-689d33ab1350",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.222Z",
+            "cursor": 20,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ccd83134-34bb-4ef8-b990-7cfe2cf2efbd",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "e85b1dcd-14d6-481c-8784-46edd6e89c38",
+                "revision": 6
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.432Z",
+            "cursor": 24,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ee672743-7237-4269-b060-49731e533eab",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.470Z",
+            "cursor": 25,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "d10bd7fc-4b4d-463d-8fcd-84b74a504219",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "c7a2dfb6-f3d0-4d86-aa59-8b3936496353",
+                "revision": 7
+              },
+              "runtimeId": "190ddde6-3931-4f00-b96f-d860ec9eed30"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.525Z",
+            "cursor": 26,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "eded11f8-2773-449b-9b80-3970ff80ff0e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.558Z",
+            "cursor": 27,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b812766c-5f3b-45f0-add5-4b7794f7451d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "3a707959-5a4d-4179-9837-1dc5e8564e84",
+                "revision": 8
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:53.007Z",
+            "cursor": 32,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "f2d7ce76-2dc5-48e1-a884-453685a24777",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          }
+        ],
+        "kind": "event_page",
+        "nextCursor": 32,
+        "oldestAvailableCursor": 1,
+        "requestId": "76128d40-e7bb-47e9-904c-4219a656ff84",
+        "resyncRequired": false
+      }
+    },
+    {
+      "name": "wss_health",
+      "response": {
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+          "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+          "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+          "taskRevision": 1,
+          "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "health": {
+          "accessibility": true,
+          "auth": true,
+          "listener": true,
+          "ok": true,
+          "paired": true
+        },
+        "kind": "observation",
+        "requestId": "848deb78-a234-40a2-b20a-423821400f06"
+      }
+    },
+    {
+      "name": "wss_stored_receipt",
+      "response": {
+        "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+        "cancellationRequested": false,
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+          "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+          "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+          "taskRevision": 1,
+          "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "dispatched",
+        "error": null,
+        "evidence": [],
+        "kind": "receipt",
+        "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+        "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+        "requestId": "5f1945d2-56b6-45f6-a243-7caaf848e31e",
+        "retry": {
+          "decision": "reconcile",
+          "reason": "Read the stored receipt and refresh observation; do not replay"
+        },
+        "revision": 3,
+        "state": "Dispatched",
+        "updatedAt": "2026-10-01T22:57:52.653Z"
+      }
+    },
+    {
+      "name": "wss_stored_receipt",
+      "response": {
+        "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+        "cancellationRequested": true,
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+          "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+          "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+          "taskRevision": 1,
+          "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "dispatched",
+        "error": null,
+        "evidence": [],
+        "kind": "receipt",
+        "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+        "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+        "requestId": "d58f4f73-995d-4a6c-a278-66b21783438f",
+        "retry": {
+          "decision": "reconcile",
+          "reason": "Read the stored receipt and refresh observation; do not replay"
+        },
+        "revision": 4,
+        "state": "Dispatched",
+        "updatedAt": "2026-10-01T22:57:52.889Z"
+      }
+    },
+    {
+      "name": "wss_ack_backwards_denied",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "InvalidRequest",
+          "message": "Acknowledgement is outside the delivered cursor range"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "wss_ack_original",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "kind": "acknowledged",
+        "requestId": "f12dbc68-1aa3-495c-9320-ed101c8bc9a7"
+      }
+    },
+    {
+      "name": "wss_resync",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "cursor": 32,
+        "kind": "resync",
+        "notice": "Refresh live observations before new effects; resync never replays an action",
+        "receipts": [
+          {
+            "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+            "cancellationRequested": false,
+            "context": {
+              "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+              "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+              "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+              "taskRevision": 1,
+              "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+            },
+            "contractVersion": "usix-companion.device/v2",
+            "effect": "dispatched",
+            "error": null,
+            "evidence": [],
+            "kind": "receipt",
+            "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+            "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+            "requestId": "5f1945d2-56b6-45f6-a243-7caaf848e31e",
+            "retry": {
+              "decision": "reconcile",
+              "reason": "Read the stored receipt and refresh observation; do not replay"
+            },
+            "revision": 3,
+            "state": "Dispatched",
+            "updatedAt": "2026-10-01T22:57:52.653Z"
+          },
+          {
+            "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+            "cancellationRequested": true,
+            "context": {
+              "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+              "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+              "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+              "taskRevision": 1,
+              "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+            },
+            "contractVersion": "usix-companion.device/v2",
+            "effect": "dispatched",
+            "error": null,
+            "evidence": [],
+            "kind": "receipt",
+            "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+            "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+            "requestId": "d58f4f73-995d-4a6c-a278-66b21783438f",
+            "retry": {
+              "decision": "reconcile",
+              "reason": "Read the stored receipt and refresh observation; do not replay"
+            },
+            "revision": 4,
+            "state": "Dispatched",
+            "updatedAt": "2026-10-01T22:57:52.889Z"
+          }
+        ],
+        "requestId": "b1d172a7-7421-4146-89fa-97406907f330"
+      }
+    },
+    {
+      "name": "wss_events_before",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "error": null,
+        "events": [
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.700Z",
+            "cursor": 1,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "c0e9cda8-a669-4a1f-8994-fabc16838c5e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.767Z",
+            "cursor": 2,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "5ffffe9e-a676-4c63-9eec-5e2ac2e31c45",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "bdcb4d62-f6d4-4728-af09-9c356c190d85",
+                "revision": 1
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.214Z",
+            "cursor": 6,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ae9e5138-caeb-4511-bc38-ff9582f6a7d6",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.310Z",
+            "cursor": 7,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "14a78f04-5c4e-4c2d-95a2-1ef439ecdc9d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "91a00b6e-8a40-4510-9e04-98611328b9dd",
+                "revision": 2
+              },
+              "runtimeId": "669e2f94-4a44-4041-9edb-7a19453ff2de"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.407Z",
+            "cursor": 8,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b3b0e915-c5c0-4f2b-bd99-818c9e3237d3",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.456Z",
+            "cursor": 9,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "28e6072d-b271-4ab1-a9c3-4d085f12501b",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "38e79359-d345-4aa2-9ce3-36b9e75a5416",
+                "revision": 3
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.911Z",
+            "cursor": 14,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "3fb1f85f-5a6f-4bab-8aac-df351f54191f",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:05:04.183Z",
+            "cursor": 15,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "53d2bbc6-dfbd-4f2a-8226-897304319325",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "448b9870-adc8-4519-8862-f32f76b5181e",
+                "revision": 4
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.013Z",
+            "cursor": 16,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "004b9123-32cc-4d13-a76f-849e7ded1438",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.035Z",
+            "cursor": 17,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b6a5ed6d-b003-4468-8c9b-fd9bfa6109c8",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "068894ee-2a8d-469e-9f41-4c089a32aa89",
+                "revision": 5
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:54:12.385Z",
+            "cursor": 18,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "194b98c8-e26b-403d-b3e4-d49f9c8806d7",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.197Z",
+            "cursor": 19,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "22a41131-7847-48fc-b667-689d33ab1350",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.222Z",
+            "cursor": 20,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ccd83134-34bb-4ef8-b990-7cfe2cf2efbd",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "e85b1dcd-14d6-481c-8784-46edd6e89c38",
+                "revision": 6
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.279Z",
+            "cursor": 21,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "a762b4cd-d7ae-4a52-85c1-469f13dff8a2",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.286Z",
+            "cursor": 22,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "f6b0db64-91d3-45a5-8c90-086e57f0916d",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.322Z",
+            "cursor": 23,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "608a3629-ca97-4913-8ee9-37410fbeaa88",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.432Z",
+            "cursor": 24,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ee672743-7237-4269-b060-49731e533eab",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.470Z",
+            "cursor": 25,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "d10bd7fc-4b4d-463d-8fcd-84b74a504219",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "c7a2dfb6-f3d0-4d86-aa59-8b3936496353",
+                "revision": 7
+              },
+              "runtimeId": "190ddde6-3931-4f00-b96f-d860ec9eed30"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.525Z",
+            "cursor": 26,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "eded11f8-2773-449b-9b80-3970ff80ff0e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.558Z",
+            "cursor": 27,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b812766c-5f3b-45f0-add5-4b7794f7451d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "3a707959-5a4d-4179-9837-1dc5e8564e84",
+                "revision": 8
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.644Z",
+            "cursor": 28,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "60456c38-fb36-435b-9adf-fce15e25f07b",
+            "kind": "event",
+            "payload": {
+              "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.648Z",
+            "cursor": 29,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "24be8628-0167-4157-b9e5-b37231776ecd",
+            "kind": "event",
+            "payload": {
+              "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.654Z",
+            "cursor": 30,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "771876dd-f790-48fc-93bf-9bd1bd2b8494",
+            "kind": "event",
+            "payload": {
+              "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.889Z",
+            "cursor": 31,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "92a00f9c-41be-42c2-b69c-0a573ffa8273",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 4
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:53.007Z",
+            "cursor": 32,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "f2d7ce76-2dc5-48e1-a884-453685a24777",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          }
+        ],
+        "kind": "event_page",
+        "nextCursor": 32,
+        "oldestAvailableCursor": 1,
+        "requestId": "497e1ca6-c4ad-4331-acee-f39b1767ec86",
+        "resyncRequired": false
+      }
+    },
+    {
+      "name": "owner_pause_before_checkpoint",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "kind": "paused",
+        "requestId": "239ff443-be73-4a96-8097-cf686afe0f9a"
+      }
+    },
+    {
+      "name": "wss_controller_before_reboot",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "expiresAt": "2026-10-01T23:04:48.354Z",
+        "kind": "controller",
+        "lease": {
+          "leaseId": "55774c80-04be-48ff-b553-dafeff554e97",
+          "revision": 9
+        },
+        "requestId": "a1f3620d-487e-47d9-a173-9f79208df16b"
+      }
+    },
+    {
+      "name": "events_at_reboot_checkpoint",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "error": null,
+        "events": [
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.700Z",
+            "cursor": 1,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "c0e9cda8-a669-4a1f-8994-fabc16838c5e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.767Z",
+            "cursor": 2,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "5ffffe9e-a676-4c63-9eec-5e2ac2e31c45",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "bdcb4d62-f6d4-4728-af09-9c356c190d85",
+                "revision": 1
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.905Z",
+            "cursor": 3,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b2334052-04e0-4c0b-9079-c4a1f4841832",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.908Z",
+            "cursor": 4,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "fdc75545-cae9-448f-b45a-d20cd63410a9",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.932Z",
+            "cursor": 5,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "c82d40d3-4e2c-46f4-a3ac-8d780a6fbb08",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.214Z",
+            "cursor": 6,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ae9e5138-caeb-4511-bc38-ff9582f6a7d6",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.310Z",
+            "cursor": 7,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "14a78f04-5c4e-4c2d-95a2-1ef439ecdc9d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "91a00b6e-8a40-4510-9e04-98611328b9dd",
+                "revision": 2
+              },
+              "runtimeId": "669e2f94-4a44-4041-9edb-7a19453ff2de"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.407Z",
+            "cursor": 8,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b3b0e915-c5c0-4f2b-bd99-818c9e3237d3",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.456Z",
+            "cursor": 9,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "28e6072d-b271-4ab1-a9c3-4d085f12501b",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "38e79359-d345-4aa2-9ce3-36b9e75a5416",
+                "revision": 3
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.644Z",
+            "cursor": 10,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "81928f40-f68c-4875-8167-65d0acf2ddd5",
+            "kind": "event",
+            "payload": {
+              "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.645Z",
+            "cursor": 11,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "2928fd24-7466-4da1-8aed-d2768f4da430",
+            "kind": "event",
+            "payload": {
+              "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.654Z",
+            "cursor": 12,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "4e09fb18-13b9-44b1-8578-d79882b5d00e",
+            "kind": "event",
+            "payload": {
+              "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.744Z",
+            "cursor": 13,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "d19c468a-5623-439b-a8f0-ca5ee34c114d",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 4
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.911Z",
+            "cursor": 14,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "3fb1f85f-5a6f-4bab-8aac-df351f54191f",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:05:04.183Z",
+            "cursor": 15,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "53d2bbc6-dfbd-4f2a-8226-897304319325",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "448b9870-adc8-4519-8862-f32f76b5181e",
+                "revision": 4
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.013Z",
+            "cursor": 16,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "004b9123-32cc-4d13-a76f-849e7ded1438",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.035Z",
+            "cursor": 17,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b6a5ed6d-b003-4468-8c9b-fd9bfa6109c8",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "068894ee-2a8d-469e-9f41-4c089a32aa89",
+                "revision": 5
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:54:12.385Z",
+            "cursor": 18,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "194b98c8-e26b-403d-b3e4-d49f9c8806d7",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.197Z",
+            "cursor": 19,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "22a41131-7847-48fc-b667-689d33ab1350",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.222Z",
+            "cursor": 20,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ccd83134-34bb-4ef8-b990-7cfe2cf2efbd",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "e85b1dcd-14d6-481c-8784-46edd6e89c38",
+                "revision": 6
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.432Z",
+            "cursor": 24,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ee672743-7237-4269-b060-49731e533eab",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.470Z",
+            "cursor": 25,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "d10bd7fc-4b4d-463d-8fcd-84b74a504219",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "c7a2dfb6-f3d0-4d86-aa59-8b3936496353",
+                "revision": 7
+              },
+              "runtimeId": "190ddde6-3931-4f00-b96f-d860ec9eed30"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.525Z",
+            "cursor": 26,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "eded11f8-2773-449b-9b80-3970ff80ff0e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.558Z",
+            "cursor": 27,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b812766c-5f3b-45f0-add5-4b7794f7451d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "3a707959-5a4d-4179-9837-1dc5e8564e84",
+                "revision": 8
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:53.007Z",
+            "cursor": 32,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "f2d7ce76-2dc5-48e1-a884-453685a24777",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T23:03:48.337Z",
+            "cursor": 33,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "6b332780-80b1-4790-beef-df09c3b565db",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T23:03:48.354Z",
+            "cursor": 34,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "0c56c206-bd0d-4fdb-a03a-5c919018cdf9",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "55774c80-04be-48ff-b553-dafeff554e97",
+                "revision": 9
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          }
+        ],
+        "kind": "event_page",
+        "nextCursor": 34,
+        "oldestAvailableCursor": 1,
+        "requestId": "02f452af-d00d-4d0d-a8b3-126561485e96",
+        "resyncRequired": false
+      }
+    }
+  ],
+  "passed": true,
+  "physicalRebootVerified": false,
+  "modelEvidence": false,
+  "savedEffectsReplayed": 0,
+  "bootIdSha256": "c857c6351b3e7ab457a535d3d0f3512d8cda1a4067cddf92bfc6925eead7f44f",
+  "profiles": [
+    {
+      "name": "loopback",
+      "profilePath": "/data/data/com.termux/files/home/usix-companion/.build-tools/P2-private/usix-local.json",
+      "context": {
+        "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+        "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+        "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+        "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+        "taskRevision": 1,
+        "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+      },
+      "scenarioEvidence": "/data/data/com.termux/files/home/usix-companion/docs/evidence/P2/physical-loopback-scenarios.json",
+      "receipts": [
+        {
+          "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+          "cancellationRequested": false,
+          "context": {
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+            "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+            "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+            "taskRevision": 1,
+            "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+          },
+          "contractVersion": "usix-companion.device/v2",
+          "effect": "dispatched",
+          "error": null,
+          "evidence": [],
+          "kind": "receipt",
+          "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+          "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+          "requestId": "9b94099d-d9d8-4137-8ebf-834212ee986e",
+          "retry": {
+            "decision": "reconcile",
+            "reason": "Read the stored receipt and refresh observation; do not replay"
+          },
+          "revision": 3,
+          "state": "Dispatched",
+          "updatedAt": "2026-10-01T22:04:59.654Z"
+        },
+        {
+          "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+          "cancellationRequested": true,
+          "context": {
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+            "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+            "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+            "taskRevision": 1,
+            "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+          },
+          "contractVersion": "usix-companion.device/v2",
+          "effect": "dispatched",
+          "error": null,
+          "evidence": [],
+          "kind": "receipt",
+          "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+          "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+          "requestId": "494c7513-7655-468c-a951-dbe8e159f719",
+          "retry": {
+            "decision": "reconcile",
+            "reason": "Read the stored receipt and refresh observation; do not replay"
+          },
+          "revision": 4,
+          "state": "Dispatched",
+          "updatedAt": "2026-10-01T22:04:59.744Z"
+        }
+      ],
+      "acknowledgedCursor": 13,
+      "eventPage": {
+        "contractVersion": "usix-companion.device/v2",
+        "error": null,
+        "events": [
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.700Z",
+            "cursor": 1,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "c0e9cda8-a669-4a1f-8994-fabc16838c5e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.767Z",
+            "cursor": 2,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "5ffffe9e-a676-4c63-9eec-5e2ac2e31c45",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "bdcb4d62-f6d4-4728-af09-9c356c190d85",
+                "revision": 1
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.905Z",
+            "cursor": 3,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b2334052-04e0-4c0b-9079-c4a1f4841832",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.908Z",
+            "cursor": 4,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "fdc75545-cae9-448f-b45a-d20cd63410a9",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.932Z",
+            "cursor": 5,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "c82d40d3-4e2c-46f4-a3ac-8d780a6fbb08",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.214Z",
+            "cursor": 6,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ae9e5138-caeb-4511-bc38-ff9582f6a7d6",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.310Z",
+            "cursor": 7,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "14a78f04-5c4e-4c2d-95a2-1ef439ecdc9d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "91a00b6e-8a40-4510-9e04-98611328b9dd",
+                "revision": 2
+              },
+              "runtimeId": "669e2f94-4a44-4041-9edb-7a19453ff2de"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.407Z",
+            "cursor": 8,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b3b0e915-c5c0-4f2b-bd99-818c9e3237d3",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.456Z",
+            "cursor": 9,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "28e6072d-b271-4ab1-a9c3-4d085f12501b",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "38e79359-d345-4aa2-9ce3-36b9e75a5416",
+                "revision": 3
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.644Z",
+            "cursor": 10,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "81928f40-f68c-4875-8167-65d0acf2ddd5",
+            "kind": "event",
+            "payload": {
+              "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.645Z",
+            "cursor": 11,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "2928fd24-7466-4da1-8aed-d2768f4da430",
+            "kind": "event",
+            "payload": {
+              "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.654Z",
+            "cursor": 12,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "4e09fb18-13b9-44b1-8578-d79882b5d00e",
+            "kind": "event",
+            "payload": {
+              "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.744Z",
+            "cursor": 13,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "d19c468a-5623-439b-a8f0-ca5ee34c114d",
+            "kind": "event",
+            "payload": {
+              "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+                "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+                "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+                "taskRevision": 1,
+                "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+              },
+              "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+              "receiptRevision": 4
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.911Z",
+            "cursor": 14,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "3fb1f85f-5a6f-4bab-8aac-df351f54191f",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:05:04.183Z",
+            "cursor": 15,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "53d2bbc6-dfbd-4f2a-8226-897304319325",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "448b9870-adc8-4519-8862-f32f76b5181e",
+                "revision": 4
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.013Z",
+            "cursor": 16,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "004b9123-32cc-4d13-a76f-849e7ded1438",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.035Z",
+            "cursor": 17,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b6a5ed6d-b003-4468-8c9b-fd9bfa6109c8",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "068894ee-2a8d-469e-9f41-4c089a32aa89",
+                "revision": 5
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:54:12.385Z",
+            "cursor": 18,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "194b98c8-e26b-403d-b3e4-d49f9c8806d7",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.197Z",
+            "cursor": 19,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "22a41131-7847-48fc-b667-689d33ab1350",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.222Z",
+            "cursor": 20,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ccd83134-34bb-4ef8-b990-7cfe2cf2efbd",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "e85b1dcd-14d6-481c-8784-46edd6e89c38",
+                "revision": 6
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.432Z",
+            "cursor": 24,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ee672743-7237-4269-b060-49731e533eab",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.470Z",
+            "cursor": 25,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "d10bd7fc-4b4d-463d-8fcd-84b74a504219",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "c7a2dfb6-f3d0-4d86-aa59-8b3936496353",
+                "revision": 7
+              },
+              "runtimeId": "190ddde6-3931-4f00-b96f-d860ec9eed30"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.525Z",
+            "cursor": 26,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "eded11f8-2773-449b-9b80-3970ff80ff0e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.558Z",
+            "cursor": 27,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b812766c-5f3b-45f0-add5-4b7794f7451d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "3a707959-5a4d-4179-9837-1dc5e8564e84",
+                "revision": 8
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:53.007Z",
+            "cursor": 32,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "f2d7ce76-2dc5-48e1-a884-453685a24777",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          }
+        ],
+        "kind": "event_page",
+        "nextCursor": 32,
+        "oldestAvailableCursor": 1,
+        "requestId": "76128d40-e7bb-47e9-904c-4219a656ff84",
+        "resyncRequired": false
+      }
+    },
+    {
+      "name": "wss",
+      "profilePath": "/data/data/com.termux/files/home/usix-companion/.build-tools/P2-private/usix-wss.json",
+      "context": {
+        "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+        "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+        "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+        "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+        "taskRevision": 1,
+        "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+      },
+      "scenarioEvidence": "/data/data/com.termux/files/home/usix-companion/docs/evidence/P2/physical-wss-unlocked-scenarios.json",
+      "receipts": [
+        {
+          "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+          "cancellationRequested": false,
+          "context": {
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+            "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+            "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+            "taskRevision": 1,
+            "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+          },
+          "contractVersion": "usix-companion.device/v2",
+          "effect": "dispatched",
+          "error": null,
+          "evidence": [],
+          "kind": "receipt",
+          "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+          "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+          "requestId": "5f1945d2-56b6-45f6-a243-7caaf848e31e",
+          "retry": {
+            "decision": "reconcile",
+            "reason": "Read the stored receipt and refresh observation; do not replay"
+          },
+          "revision": 3,
+          "state": "Dispatched",
+          "updatedAt": "2026-10-01T22:57:52.653Z"
+        },
+        {
+          "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+          "cancellationRequested": true,
+          "context": {
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+            "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+            "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+            "taskRevision": 1,
+            "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+          },
+          "contractVersion": "usix-companion.device/v2",
+          "effect": "dispatched",
+          "error": null,
+          "evidence": [],
+          "kind": "receipt",
+          "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+          "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+          "requestId": "d58f4f73-995d-4a6c-a278-66b21783438f",
+          "retry": {
+            "decision": "reconcile",
+            "reason": "Read the stored receipt and refresh observation; do not replay"
+          },
+          "revision": 4,
+          "state": "Dispatched",
+          "updatedAt": "2026-10-01T22:57:52.889Z"
+        }
+      ],
+      "acknowledgedCursor": 31,
+      "eventPage": {
+        "contractVersion": "usix-companion.device/v2",
+        "error": null,
+        "events": [
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.700Z",
+            "cursor": 1,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "c0e9cda8-a669-4a1f-8994-fabc16838c5e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.767Z",
+            "cursor": 2,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "5ffffe9e-a676-4c63-9eec-5e2ac2e31c45",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "bdcb4d62-f6d4-4728-af09-9c356c190d85",
+                "revision": 1
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.214Z",
+            "cursor": 6,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ae9e5138-caeb-4511-bc38-ff9582f6a7d6",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.310Z",
+            "cursor": 7,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "14a78f04-5c4e-4c2d-95a2-1ef439ecdc9d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "91a00b6e-8a40-4510-9e04-98611328b9dd",
+                "revision": 2
+              },
+              "runtimeId": "669e2f94-4a44-4041-9edb-7a19453ff2de"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.407Z",
+            "cursor": 8,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b3b0e915-c5c0-4f2b-bd99-818c9e3237d3",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.456Z",
+            "cursor": 9,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "28e6072d-b271-4ab1-a9c3-4d085f12501b",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "38e79359-d345-4aa2-9ce3-36b9e75a5416",
+                "revision": 3
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.911Z",
+            "cursor": 14,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "3fb1f85f-5a6f-4bab-8aac-df351f54191f",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:05:04.183Z",
+            "cursor": 15,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "53d2bbc6-dfbd-4f2a-8226-897304319325",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "448b9870-adc8-4519-8862-f32f76b5181e",
+                "revision": 4
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.013Z",
+            "cursor": 16,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "004b9123-32cc-4d13-a76f-849e7ded1438",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.035Z",
+            "cursor": 17,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b6a5ed6d-b003-4468-8c9b-fd9bfa6109c8",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "068894ee-2a8d-469e-9f41-4c089a32aa89",
+                "revision": 5
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:54:12.385Z",
+            "cursor": 18,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "194b98c8-e26b-403d-b3e4-d49f9c8806d7",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.197Z",
+            "cursor": 19,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "22a41131-7847-48fc-b667-689d33ab1350",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.222Z",
+            "cursor": 20,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ccd83134-34bb-4ef8-b990-7cfe2cf2efbd",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "e85b1dcd-14d6-481c-8784-46edd6e89c38",
+                "revision": 6
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.279Z",
+            "cursor": 21,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "a762b4cd-d7ae-4a52-85c1-469f13dff8a2",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.286Z",
+            "cursor": 22,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "f6b0db64-91d3-45a5-8c90-086e57f0916d",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.322Z",
+            "cursor": 23,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "608a3629-ca97-4913-8ee9-37410fbeaa88",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.432Z",
+            "cursor": 24,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ee672743-7237-4269-b060-49731e533eab",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.470Z",
+            "cursor": 25,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "d10bd7fc-4b4d-463d-8fcd-84b74a504219",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "c7a2dfb6-f3d0-4d86-aa59-8b3936496353",
+                "revision": 7
+              },
+              "runtimeId": "190ddde6-3931-4f00-b96f-d860ec9eed30"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.525Z",
+            "cursor": 26,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "eded11f8-2773-449b-9b80-3970ff80ff0e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.558Z",
+            "cursor": 27,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b812766c-5f3b-45f0-add5-4b7794f7451d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "3a707959-5a4d-4179-9837-1dc5e8564e84",
+                "revision": 8
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.644Z",
+            "cursor": 28,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "60456c38-fb36-435b-9adf-fce15e25f07b",
+            "kind": "event",
+            "payload": {
+              "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.648Z",
+            "cursor": 29,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "24be8628-0167-4157-b9e5-b37231776ecd",
+            "kind": "event",
+            "payload": {
+              "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.654Z",
+            "cursor": 30,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "771876dd-f790-48fc-93bf-9bd1bd2b8494",
+            "kind": "event",
+            "payload": {
+              "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.889Z",
+            "cursor": 31,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "92a00f9c-41be-42c2-b69c-0a573ffa8273",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 4
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:53.007Z",
+            "cursor": 32,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "f2d7ce76-2dc5-48e1-a884-453685a24777",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          }
+        ],
+        "kind": "event_page",
+        "nextCursor": 32,
+        "oldestAvailableCursor": 1,
+        "requestId": "497e1ca6-c4ad-4331-acee-f39b1767ec86",
+        "resyncRequired": false
+      }
+    }
+  ],
+  "controllerBefore": {
+    "contractVersion": "usix-companion.device/v2",
+    "expiresAt": "2026-10-01T23:04:48.354Z",
+    "kind": "controller",
+    "lease": {
+      "leaseId": "55774c80-04be-48ff-b553-dafeff554e97",
+      "revision": 9
+    },
+    "requestId": "a1f3620d-487e-47d9-a173-9f79208df16b"
+  },
+  "eventCursorBefore": 34,
+  "eventsAtCheckpoint": [
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:58.700Z",
+      "cursor": 1,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "c0e9cda8-a669-4a1f-8994-fabc16838c5e",
+      "kind": "event",
+      "payload": {
+        "lease": null,
+        "runtimeId": null
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:58.767Z",
+      "cursor": 2,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "5ffffe9e-a676-4c63-9eec-5e2ac2e31c45",
+      "kind": "event",
+      "payload": {
+        "lease": {
+          "leaseId": "bdcb4d62-f6d4-4728-af09-9c356c190d85",
+          "revision": 1
+        },
+        "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:58.905Z",
+      "cursor": 3,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "b2334052-04e0-4c0b-9079-c4a1f4841832",
+      "kind": "event",
+      "payload": {
+        "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+          "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+          "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+          "taskRevision": 1,
+          "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+        },
+        "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+        "receiptRevision": 1
+      },
+      "type": "action_updated"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:58.908Z",
+      "cursor": 4,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "fdc75545-cae9-448f-b45a-d20cd63410a9",
+      "kind": "event",
+      "payload": {
+        "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+          "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+          "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+          "taskRevision": 1,
+          "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+        },
+        "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+        "receiptRevision": 2
+      },
+      "type": "action_updated"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:58.932Z",
+      "cursor": 5,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "c82d40d3-4e2c-46f4-a3ac-8d780a6fbb08",
+      "kind": "event",
+      "payload": {
+        "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+          "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+          "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+          "taskRevision": 1,
+          "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+        },
+        "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+        "receiptRevision": 3
+      },
+      "type": "action_updated"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:59.214Z",
+      "cursor": 6,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "ae9e5138-caeb-4511-bc38-ff9582f6a7d6",
+      "kind": "event",
+      "payload": {
+        "lease": null,
+        "runtimeId": null
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:59.310Z",
+      "cursor": 7,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "14a78f04-5c4e-4c2d-95a2-1ef439ecdc9d",
+      "kind": "event",
+      "payload": {
+        "lease": {
+          "leaseId": "91a00b6e-8a40-4510-9e04-98611328b9dd",
+          "revision": 2
+        },
+        "runtimeId": "669e2f94-4a44-4041-9edb-7a19453ff2de"
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:59.407Z",
+      "cursor": 8,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "b3b0e915-c5c0-4f2b-bd99-818c9e3237d3",
+      "kind": "event",
+      "payload": {
+        "lease": null,
+        "runtimeId": null
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:59.456Z",
+      "cursor": 9,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "28e6072d-b271-4ab1-a9c3-4d085f12501b",
+      "kind": "event",
+      "payload": {
+        "lease": {
+          "leaseId": "38e79359-d345-4aa2-9ce3-36b9e75a5416",
+          "revision": 3
+        },
+        "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:59.644Z",
+      "cursor": 10,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "81928f40-f68c-4875-8167-65d0acf2ddd5",
+      "kind": "event",
+      "payload": {
+        "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+          "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+          "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+          "taskRevision": 1,
+          "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+        },
+        "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+        "receiptRevision": 1
+      },
+      "type": "action_updated"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:59.645Z",
+      "cursor": 11,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "2928fd24-7466-4da1-8aed-d2768f4da430",
+      "kind": "event",
+      "payload": {
+        "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+          "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+          "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+          "taskRevision": 1,
+          "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+        },
+        "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+        "receiptRevision": 2
+      },
+      "type": "action_updated"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:59.654Z",
+      "cursor": 12,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "4e09fb18-13b9-44b1-8578-d79882b5d00e",
+      "kind": "event",
+      "payload": {
+        "actionId": "c058bba4-ea91-486d-a5ae-0c279bba0d46",
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+          "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+          "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+          "taskRevision": 1,
+          "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+        },
+        "receiptId": "fd1b1f9b-863a-4532-98eb-d3c3c3151c66",
+        "receiptRevision": 3
+      },
+      "type": "action_updated"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:59.744Z",
+      "cursor": 13,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "d19c468a-5623-439b-a8f0-ca5ee34c114d",
+      "kind": "event",
+      "payload": {
+        "actionId": "1a284c1d-6795-46b1-a20e-e692344e2f99",
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2",
+          "sessionId": "92b88260-1f03-4c14-97a5-1098ce465550",
+          "taskId": "aa68669f-bf8a-4e6b-a990-f1511afd77ff",
+          "taskRevision": 1,
+          "workspaceId": "7f3dffd8-edc5-4cbd-8f1a-0c66d957c280"
+        },
+        "receiptId": "2b62cb10-d5e2-4f65-94f4-d5d00fa18146",
+        "receiptRevision": 4
+      },
+      "type": "action_updated"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:04:59.911Z",
+      "cursor": 14,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "3fb1f85f-5a6f-4bab-8aac-df351f54191f",
+      "kind": "event",
+      "payload": {
+        "lease": null,
+        "runtimeId": null
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:05:04.183Z",
+      "cursor": 15,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "53d2bbc6-dfbd-4f2a-8226-897304319325",
+      "kind": "event",
+      "payload": {
+        "lease": {
+          "leaseId": "448b9870-adc8-4519-8862-f32f76b5181e",
+          "revision": 4
+        },
+        "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:19:50.013Z",
+      "cursor": 16,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "004b9123-32cc-4d13-a76f-849e7ded1438",
+      "kind": "event",
+      "payload": {
+        "lease": null,
+        "runtimeId": null
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:19:50.035Z",
+      "cursor": 17,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "b6a5ed6d-b003-4468-8c9b-fd9bfa6109c8",
+      "kind": "event",
+      "payload": {
+        "lease": {
+          "leaseId": "068894ee-2a8d-469e-9f41-4c089a32aa89",
+          "revision": 5
+        },
+        "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:54:12.385Z",
+      "cursor": 18,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "194b98c8-e26b-403d-b3e4-d49f9c8806d7",
+      "kind": "event",
+      "payload": {
+        "lease": null,
+        "runtimeId": null
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:57:52.197Z",
+      "cursor": 19,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "22a41131-7847-48fc-b667-689d33ab1350",
+      "kind": "event",
+      "payload": {
+        "lease": null,
+        "runtimeId": null
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:57:52.222Z",
+      "cursor": 20,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "ccd83134-34bb-4ef8-b990-7cfe2cf2efbd",
+      "kind": "event",
+      "payload": {
+        "lease": {
+          "leaseId": "e85b1dcd-14d6-481c-8784-46edd6e89c38",
+          "revision": 6
+        },
+        "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:57:52.432Z",
+      "cursor": 24,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "ee672743-7237-4269-b060-49731e533eab",
+      "kind": "event",
+      "payload": {
+        "lease": null,
+        "runtimeId": null
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:57:52.470Z",
+      "cursor": 25,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "d10bd7fc-4b4d-463d-8fcd-84b74a504219",
+      "kind": "event",
+      "payload": {
+        "lease": {
+          "leaseId": "c7a2dfb6-f3d0-4d86-aa59-8b3936496353",
+          "revision": 7
+        },
+        "runtimeId": "190ddde6-3931-4f00-b96f-d860ec9eed30"
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:57:52.525Z",
+      "cursor": 26,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "eded11f8-2773-449b-9b80-3970ff80ff0e",
+      "kind": "event",
+      "payload": {
+        "lease": null,
+        "runtimeId": null
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:57:52.558Z",
+      "cursor": 27,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "b812766c-5f3b-45f0-add5-4b7794f7451d",
+      "kind": "event",
+      "payload": {
+        "lease": {
+          "leaseId": "3a707959-5a4d-4179-9837-1dc5e8564e84",
+          "revision": 8
+        },
+        "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T22:57:53.007Z",
+      "cursor": 32,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "f2d7ce76-2dc5-48e1-a884-453685a24777",
+      "kind": "event",
+      "payload": {
+        "lease": null,
+        "runtimeId": null
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T23:03:48.337Z",
+      "cursor": 33,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "6b332780-80b1-4790-beef-df09c3b565db",
+      "kind": "event",
+      "payload": {
+        "lease": null,
+        "runtimeId": null
+      },
+      "type": "controller_changed"
+    },
+    {
+      "contractVersion": "usix-companion.device/v2",
+      "createdAt": "2026-10-01T23:03:48.354Z",
+      "cursor": 34,
+      "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+      "eventId": "0c56c206-bd0d-4fdb-a03a-5c919018cdf9",
+      "kind": "event",
+      "payload": {
+        "lease": {
+          "leaseId": "55774c80-04be-48ff-b553-dafeff554e97",
+          "revision": 9
+        },
+        "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+      },
+      "type": "controller_changed"
+    }
+  ],
+  "readyForPhysicalReboot": true
+}

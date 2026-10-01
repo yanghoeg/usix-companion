@@ -1,0 +1,1084 @@
+{
+  "recordedAt": "2026-10-01T22:57:52.083604+00:00",
+  "source": "live Android APK through standalone integration",
+  "transportA": "broker",
+  "transportB": "broker",
+  "steps": [
+    {
+      "name": "a_capabilities",
+      "response": {
+        "capabilities": [
+          {
+            "authority": "none",
+            "operation": "device.health",
+            "readiness": "ready",
+            "reason": null,
+            "requiresAccount": false,
+            "requiresController": false,
+            "requiresSnapshot": false,
+            "supported": true
+          },
+          {
+            "authority": "grant",
+            "operation": "app.open",
+            "readiness": "ready",
+            "reason": null,
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": true
+          },
+          {
+            "authority": "approval",
+            "operation": "ui.tap",
+            "readiness": "unsupported",
+            "reason": "Requires P3 snapshots and P4 action authority",
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": false
+          },
+          {
+            "authority": "approval",
+            "operation": "mail.send",
+            "readiness": "unsupported",
+            "reason": "Requires P4 approved workflow and goal evidence",
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": false
+          },
+          {
+            "authority": "approval",
+            "operation": "notification.reply",
+            "readiness": "unsupported",
+            "reason": "Use supported legacy dispatch or the later approved v2 workflow",
+            "requiresAccount": false,
+            "requiresController": false,
+            "requiresSnapshot": false,
+            "supported": false
+          }
+        ],
+        "contractVersion": "usix-companion.device/v2",
+        "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+        "kind": "capabilities",
+        "limits": {
+          "eventRetentionCount": 512,
+          "maxCommandBytes": 65536,
+          "maxMediaBytes": 0,
+          "maxObservationBytes": 1048576,
+          "maxPageItems": 128
+        },
+        "observedAt": "2026-10-01T22:57:52.111Z",
+        "pagination": true,
+        "requestId": "c548e173-f620-409d-b2fd-c34d6bc143e8",
+        "supportedVersions": [
+          "usix-companion.device/v1",
+          "usix-companion.device/v2"
+        ]
+      }
+    },
+    {
+      "name": "a_health",
+      "response": {
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+          "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+          "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+          "taskRevision": 1,
+          "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "health": {
+          "accessibility": true,
+          "auth": true,
+          "listener": true,
+          "ok": true,
+          "paired": true
+        },
+        "kind": "observation",
+        "requestId": "5ce21f70-e415-4eae-a11d-f12583dc216a"
+      }
+    },
+    {
+      "name": "b_capabilities",
+      "response": {
+        "capabilities": [
+          {
+            "authority": "none",
+            "operation": "device.health",
+            "readiness": "ready",
+            "reason": null,
+            "requiresAccount": false,
+            "requiresController": false,
+            "requiresSnapshot": false,
+            "supported": true
+          },
+          {
+            "authority": "grant",
+            "operation": "app.open",
+            "readiness": "ready",
+            "reason": null,
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": true
+          },
+          {
+            "authority": "approval",
+            "operation": "ui.tap",
+            "readiness": "unsupported",
+            "reason": "Requires P3 snapshots and P4 action authority",
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": false
+          },
+          {
+            "authority": "approval",
+            "operation": "mail.send",
+            "readiness": "unsupported",
+            "reason": "Requires P4 approved workflow and goal evidence",
+            "requiresAccount": false,
+            "requiresController": true,
+            "requiresSnapshot": false,
+            "supported": false
+          },
+          {
+            "authority": "approval",
+            "operation": "notification.reply",
+            "readiness": "unsupported",
+            "reason": "Use supported legacy dispatch or the later approved v2 workflow",
+            "requiresAccount": false,
+            "requiresController": false,
+            "requiresSnapshot": false,
+            "supported": false
+          }
+        ],
+        "contractVersion": "usix-companion.device/v2",
+        "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+        "kind": "capabilities",
+        "limits": {
+          "eventRetentionCount": 512,
+          "maxCommandBytes": 65536,
+          "maxMediaBytes": 0,
+          "maxObservationBytes": 1048576,
+          "maxPageItems": 128
+        },
+        "observedAt": "2026-10-01T22:57:52.155Z",
+        "pagination": true,
+        "requestId": "4293a2b0-a612-4b00-b506-8984030c769f",
+        "supportedVersions": [
+          "usix-companion.device/v1",
+          "usix-companion.device/v2"
+        ]
+      }
+    },
+    {
+      "name": "b_health",
+      "response": {
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "190ddde6-3931-4f00-b96f-d860ec9eed30",
+          "sessionId": "0f3e7c09-3d6c-44a8-9ee2-34db04017516",
+          "taskId": "d4482a01-ccbe-4344-bef1-869fd61aea28",
+          "taskRevision": 1,
+          "workspaceId": "0d1959a3-9145-493d-b7c6-c3fdcfb03aae"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "health": {
+          "accessibility": true,
+          "auth": true,
+          "listener": true,
+          "ok": true,
+          "paired": true
+        },
+        "kind": "observation",
+        "requestId": "1c3e285b-9a9a-4f06-8856-b3046d08c197"
+      }
+    },
+    {
+      "name": "owner_pause",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "kind": "paused",
+        "requestId": "914658cd-95b6-419f-85bd-017bb09c4b2f"
+      }
+    },
+    {
+      "name": "a_acquire",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "expiresAt": "2026-10-01T22:58:52.222Z",
+        "kind": "controller",
+        "lease": {
+          "leaseId": "e85b1dcd-14d6-481c-8784-46edd6e89c38",
+          "revision": 6
+        },
+        "requestId": "d5fba845-be89-4b25-a220-2151f3490811"
+      }
+    },
+    {
+      "name": "b_controller_conflict",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "ControllerConflict",
+          "message": "Another session controls this device"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "app_open",
+      "response": {
+        "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+        "cancellationRequested": false,
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+          "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+          "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+          "taskRevision": 1,
+          "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "dispatched",
+        "error": null,
+        "evidence": [],
+        "kind": "receipt",
+        "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+        "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+        "requestId": "d58f4f73-995d-4a6c-a278-66b21783438f",
+        "retry": {
+          "decision": "reconcile",
+          "reason": "Read the stored receipt and refresh observation; do not replay"
+        },
+        "revision": 3,
+        "state": "Dispatched",
+        "updatedAt": "2026-10-01T22:57:52.322Z"
+      }
+    },
+    {
+      "name": "identical_duplicate",
+      "response": {
+        "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+        "cancellationRequested": false,
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+          "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+          "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+          "taskRevision": 1,
+          "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "dispatched",
+        "error": null,
+        "evidence": [],
+        "kind": "receipt",
+        "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+        "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+        "requestId": "d58f4f73-995d-4a6c-a278-66b21783438f",
+        "retry": {
+          "decision": "reconcile",
+          "reason": "Read the stored receipt and refresh observation; do not replay"
+        },
+        "revision": 3,
+        "state": "Dispatched",
+        "updatedAt": "2026-10-01T22:57:52.322Z"
+      }
+    },
+    {
+      "name": "payload_conflict",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "ActionConflict",
+          "message": "Action ID is bound to different context or arguments"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "scope_conflict",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "ActionConflict",
+          "message": "Action ID is bound to different context or arguments"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "cross_session_receipt_denied",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "IdentityMismatch",
+          "message": "Receipt belongs to a different setup context"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "owner_pause",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "kind": "paused",
+        "requestId": "00683714-49e3-4447-8465-d2f37cfd19ce"
+      }
+    },
+    {
+      "name": "paused_lease_denied",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "ControllerConflict",
+          "message": "Controller lease missing, expired or replaced"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "b_acquire_after_pause",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "expiresAt": "2026-10-01T22:58:52.470Z",
+        "kind": "controller",
+        "lease": {
+          "leaseId": "c7a2dfb6-f3d0-4d86-aa59-8b3936496353",
+          "revision": 7
+        },
+        "requestId": "2a553a8a-5ae6-4ece-9be5-d761866fdaf6"
+      }
+    },
+    {
+      "name": "replaced_controller_denied",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "ControllerConflict",
+          "message": "Controller lease missing, expired or replaced"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "b_release",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "kind": "controller_released",
+        "requestId": "a8f73dfc-7e31-483f-962b-35b2ac7c783d"
+      }
+    },
+    {
+      "name": "a_acquire_new_revision",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "expiresAt": "2026-10-01T22:58:52.558Z",
+        "kind": "controller",
+        "lease": {
+          "leaseId": "3a707959-5a4d-4179-9837-1dc5e8564e84",
+          "revision": 8
+        },
+        "requestId": "d8fe066c-27ca-4660-a745-918e8517d940"
+      }
+    },
+    {
+      "name": "stale_same_session_lease_denied",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "ControllerConflict",
+          "message": "Controller lease missing, expired or replaced"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "deadline_denied",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "DeadlineExceeded",
+          "message": "Action deadline passed"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "unsupported_effect_denied",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "UnsupportedCapability",
+          "message": "Operation is not implemented by this APK"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "client_acknowledgement_dropped",
+      "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+      "sends": 1,
+      "effectBeforeReconciliation": "possible"
+    },
+    {
+      "name": "lost_ack_receipt_reconciled",
+      "response": {
+        "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+        "cancellationRequested": false,
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+          "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+          "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+          "taskRevision": 1,
+          "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "dispatched",
+        "error": null,
+        "evidence": [],
+        "kind": "receipt",
+        "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+        "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+        "requestId": "5f1945d2-56b6-45f6-a243-7caaf848e31e",
+        "retry": {
+          "decision": "reconcile",
+          "reason": "Read the stored receipt and refresh observation; do not replay"
+        },
+        "revision": 3,
+        "state": "Dispatched",
+        "updatedAt": "2026-10-01T22:57:52.653Z"
+      }
+    },
+    {
+      "name": "reconciled_duplicate",
+      "response": {
+        "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+        "cancellationRequested": false,
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+          "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+          "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+          "taskRevision": 1,
+          "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "dispatched",
+        "error": null,
+        "evidence": [],
+        "kind": "receipt",
+        "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+        "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+        "requestId": "5f1945d2-56b6-45f6-a243-7caaf848e31e",
+        "retry": {
+          "decision": "reconcile",
+          "reason": "Read the stored receipt and refresh observation; do not replay"
+        },
+        "revision": 3,
+        "state": "Dispatched",
+        "updatedAt": "2026-10-01T22:57:52.653Z"
+      }
+    },
+    {
+      "name": "cancel_after_dispatch",
+      "response": {
+        "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+        "cancellationRequested": true,
+        "context": {
+          "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+          "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+          "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+          "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+          "taskRevision": 1,
+          "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+        },
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "dispatched",
+        "error": null,
+        "evidence": [],
+        "kind": "receipt",
+        "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+        "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+        "requestId": "d58f4f73-995d-4a6c-a278-66b21783438f",
+        "retry": {
+          "decision": "reconcile",
+          "reason": "Read the stored receipt and refresh observation; do not replay"
+        },
+        "revision": 4,
+        "state": "Dispatched",
+        "updatedAt": "2026-10-01T22:57:52.889Z"
+      }
+    },
+    {
+      "name": "events",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "error": null,
+        "events": [
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.700Z",
+            "cursor": 1,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "c0e9cda8-a669-4a1f-8994-fabc16838c5e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:58.767Z",
+            "cursor": 2,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "5ffffe9e-a676-4c63-9eec-5e2ac2e31c45",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "bdcb4d62-f6d4-4728-af09-9c356c190d85",
+                "revision": 1
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.214Z",
+            "cursor": 6,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ae9e5138-caeb-4511-bc38-ff9582f6a7d6",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.310Z",
+            "cursor": 7,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "14a78f04-5c4e-4c2d-95a2-1ef439ecdc9d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "91a00b6e-8a40-4510-9e04-98611328b9dd",
+                "revision": 2
+              },
+              "runtimeId": "669e2f94-4a44-4041-9edb-7a19453ff2de"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.407Z",
+            "cursor": 8,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b3b0e915-c5c0-4f2b-bd99-818c9e3237d3",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.456Z",
+            "cursor": 9,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "28e6072d-b271-4ab1-a9c3-4d085f12501b",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "38e79359-d345-4aa2-9ce3-36b9e75a5416",
+                "revision": 3
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:04:59.911Z",
+            "cursor": 14,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "3fb1f85f-5a6f-4bab-8aac-df351f54191f",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:05:04.183Z",
+            "cursor": 15,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "53d2bbc6-dfbd-4f2a-8226-897304319325",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "448b9870-adc8-4519-8862-f32f76b5181e",
+                "revision": 4
+              },
+              "runtimeId": "4b457437-8eb3-4b48-afc6-0b2b01f637d2"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.013Z",
+            "cursor": 16,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "004b9123-32cc-4d13-a76f-849e7ded1438",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:19:50.035Z",
+            "cursor": 17,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b6a5ed6d-b003-4468-8c9b-fd9bfa6109c8",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "068894ee-2a8d-469e-9f41-4c089a32aa89",
+                "revision": 5
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:54:12.385Z",
+            "cursor": 18,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "194b98c8-e26b-403d-b3e4-d49f9c8806d7",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.197Z",
+            "cursor": 19,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "22a41131-7847-48fc-b667-689d33ab1350",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.222Z",
+            "cursor": 20,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ccd83134-34bb-4ef8-b990-7cfe2cf2efbd",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "e85b1dcd-14d6-481c-8784-46edd6e89c38",
+                "revision": 6
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.279Z",
+            "cursor": 21,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "a762b4cd-d7ae-4a52-85c1-469f13dff8a2",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.286Z",
+            "cursor": 22,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "f6b0db64-91d3-45a5-8c90-086e57f0916d",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.322Z",
+            "cursor": 23,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "608a3629-ca97-4913-8ee9-37410fbeaa88",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.432Z",
+            "cursor": 24,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "ee672743-7237-4269-b060-49731e533eab",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.470Z",
+            "cursor": 25,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "d10bd7fc-4b4d-463d-8fcd-84b74a504219",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "c7a2dfb6-f3d0-4d86-aa59-8b3936496353",
+                "revision": 7
+              },
+              "runtimeId": "190ddde6-3931-4f00-b96f-d860ec9eed30"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.525Z",
+            "cursor": 26,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "eded11f8-2773-449b-9b80-3970ff80ff0e",
+            "kind": "event",
+            "payload": {
+              "lease": null,
+              "runtimeId": null
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.558Z",
+            "cursor": 27,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "b812766c-5f3b-45f0-add5-4b7794f7451d",
+            "kind": "event",
+            "payload": {
+              "lease": {
+                "leaseId": "3a707959-5a4d-4179-9837-1dc5e8564e84",
+                "revision": 8
+              },
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3"
+            },
+            "type": "controller_changed"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.644Z",
+            "cursor": 28,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "60456c38-fb36-435b-9adf-fce15e25f07b",
+            "kind": "event",
+            "payload": {
+              "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+              "receiptRevision": 1
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.648Z",
+            "cursor": 29,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "24be8628-0167-4157-b9e5-b37231776ecd",
+            "kind": "event",
+            "payload": {
+              "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+              "receiptRevision": 2
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.654Z",
+            "cursor": 30,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "771876dd-f790-48fc-93bf-9bd1bd2b8494",
+            "kind": "event",
+            "payload": {
+              "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+              "receiptRevision": 3
+            },
+            "type": "action_updated"
+          },
+          {
+            "contractVersion": "usix-companion.device/v2",
+            "createdAt": "2026-10-01T22:57:52.889Z",
+            "cursor": 31,
+            "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+            "eventId": "92a00f9c-41be-42c2-b69c-0a573ffa8273",
+            "kind": "event",
+            "payload": {
+              "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+              "context": {
+                "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+                "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+                "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+                "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+                "taskRevision": 1,
+                "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+              },
+              "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+              "receiptRevision": 4
+            },
+            "type": "action_updated"
+          }
+        ],
+        "kind": "event_page",
+        "nextCursor": 31,
+        "oldestAvailableCursor": 1,
+        "requestId": "95769dbd-c246-47ed-91cc-882e53140a81",
+        "resyncRequired": false
+      }
+    },
+    {
+      "name": "resync",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "cursor": 31,
+        "kind": "resync",
+        "notice": "Refresh live observations before new effects; resync never replays an action",
+        "receipts": [
+          {
+            "actionId": "7604c3de-7a81-4641-804a-63a3a21c17fa",
+            "cancellationRequested": false,
+            "context": {
+              "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+              "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+              "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+              "taskRevision": 1,
+              "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+            },
+            "contractVersion": "usix-companion.device/v2",
+            "effect": "dispatched",
+            "error": null,
+            "evidence": [],
+            "kind": "receipt",
+            "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+            "receiptId": "bebd20b3-5d0e-42e1-86ae-4b55d67f5b39",
+            "requestId": "5f1945d2-56b6-45f6-a243-7caaf848e31e",
+            "retry": {
+              "decision": "reconcile",
+              "reason": "Read the stored receipt and refresh observation; do not replay"
+            },
+            "revision": 3,
+            "state": "Dispatched",
+            "updatedAt": "2026-10-01T22:57:52.653Z"
+          },
+          {
+            "actionId": "086160ba-587f-46ba-a4f0-8e609de35228",
+            "cancellationRequested": true,
+            "context": {
+              "deviceId": "aac3b1c9-08a0-4687-9854-7fe4dd9cd8b5",
+              "runtimeId": "7c4c8366-f236-4dc4-a318-0e693e6dabf3",
+              "sessionId": "5551ac74-e2e5-4c29-9911-b9a55a6f4a44",
+              "taskId": "544b0d05-943e-42b6-9745-3c96884e70f9",
+              "taskRevision": 1,
+              "workspaceId": "83800bda-c358-4609-9de7-5fcb270f57a5"
+            },
+            "contractVersion": "usix-companion.device/v2",
+            "effect": "dispatched",
+            "error": null,
+            "evidence": [],
+            "kind": "receipt",
+            "payloadHash": "sha256:f9e6ec4a5000a90ba96021705f56ad0be6cc9080f6a3fe30149487952bdafb53",
+            "receiptId": "a23528d4-cac3-4c42-adba-1be2269d6641",
+            "requestId": "d58f4f73-995d-4a6c-a278-66b21783438f",
+            "retry": {
+              "decision": "reconcile",
+              "reason": "Read the stored receipt and refresh observation; do not replay"
+            },
+            "revision": 4,
+            "state": "Dispatched",
+            "updatedAt": "2026-10-01T22:57:52.889Z"
+          }
+        ],
+        "requestId": "cd3c3144-6d00-4904-bc9d-a3596c3fbe9e"
+      }
+    },
+    {
+      "name": "acknowledge_delivered",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "kind": "acknowledged",
+        "requestId": "c8df964d-ddb5-4fae-a998-79baa0635205"
+      }
+    },
+    {
+      "name": "acknowledge_undelivered_denied",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "effect": "none",
+        "error": {
+          "code": "InvalidRequest",
+          "message": "Acknowledgement is outside the delivered cursor range"
+        },
+        "kind": "error",
+        "retry": {
+          "decision": "never",
+          "reason": "Correct the request or refresh trusted setup; do not replay effects"
+        }
+      }
+    },
+    {
+      "name": "a_release",
+      "response": {
+        "contractVersion": "usix-companion.device/v2",
+        "kind": "controller_released",
+        "requestId": "e248313e-fcdc-48dc-b2ef-976f6c901443"
+      }
+    }
+  ],
+  "modelEvidence": false,
+  "processRestartOrRebootEvidence": false,
+  "passed": true,
+  "recoveryActionIds": [
+    "086160ba-587f-46ba-a4f0-8e609de35228",
+    "7604c3de-7a81-4641-804a-63a3a21c17fa"
+  ],
+  "acknowledgedCursor": 31
+}
