@@ -17,9 +17,9 @@ android {
         versionName = appVersionName
     }
 
-    // 저장소에 커밋한 고정 debug 키로 서명한다. CI 가 매 빌드 debug 키를 새로 만들어 서명이 바뀌면
-    // 기기에서 덮어쓰기 업데이트가 거부되는데(매번 삭제 후 재설치), 이렇게 고정하면 그 문제가 사라진다.
-    // 개인용 사이드로드 앱의 debug 서명이라 비밀번호가 노출돼도 무방하다(배포/Play 용 키 아님).
+    // Retain the public development key for compatible personal sideload updates.
+    // It provides no private publisher identity. Controlled release signing needs
+    // a tested migration for existing installations.
     signingConfigs {
         getByName("debug") {
             storeFile = file("usix-debug.keystore")
@@ -32,7 +32,7 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            // 개인용 사이드로드 앱이라 기존 설치본과 같은 안정적인 키를 사용한다.
+            // Preserve existing APK upgrade compatibility until signing migration.
             signingConfig = signingConfigs.getByName("debug")
         }
     }

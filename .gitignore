@@ -4,3 +4,46 @@ local.properties
 *.iml
 .idea/
 .kotlin/
+
+# Local credentials and private signing material.
+.env
+.env.*
+!.env.example
+!.env.sample
+!.env.template
+*.jks
+*.keystore
+*.p12
+*.pfx
+*.key
+*.pem
+keystore.properties
+signing.properties
+/companion_token
+/credentials.json
+/token.json
+
+# Intentional public development key for existing sideload updates.
+!/app/usix-debug.keystore
+
+# Local agent state and device diagnostics.
+/.codex/
+/.usix/
+/memory/
+/sessions/
+/MEMORY.md
+/artifacts/
+/captures/
+/diagnostics/
+*.log
+*.hprof
+*.har
+*.apk
+*.aab
+*.apks
+
+# Editor and OS temporary files.
+.DS_Store
+*.swp
+*.swo
+*~

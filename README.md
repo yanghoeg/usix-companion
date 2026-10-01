@@ -1,5 +1,10 @@
 # usix companion
 
+The [agent development plan](docs/agent-development-plan.md) defines the hexagonal
+refactor and the roadmap for a general assistant, including integration with both
+USIX runtimes, reliable Android actions, durable tasks, and verification gates.
+It describes planned work; the behavior documented below is the current implementation.
+
 Android bridge for the Termux agent. Thunderbird mail and conversation screens can be
 read and used without a notification. Sign in to the mail account in Thunderbird,
 unlock the phone, and enable the companion's accessibility service. Notification
@@ -55,3 +60,8 @@ gradle testDebugUnitTest assembleDebug --no-daemon
 ```
 
 The debug APK is written to `app/build/outputs/apk/debug/app-debug.apk`.
+
+Current APK builds use the committed development keystore to preserve personal
+sideload updates. Its key and passwords are public, so its signature does not
+establish publisher authenticity. Controlled release signing and an installed-app
+upgrade migration are included in the development plan.
