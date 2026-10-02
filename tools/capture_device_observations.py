@@ -327,7 +327,7 @@ class Qualification:
         self.check("wait deadline is explicit", deadline.get("error", {}).get("code") == "DeadlineExceeded" and deadline.get("effect") == "none")
         outside, _ = self.action("ui.tap", {"x": 32768, "y": 32768}, self.observe()["snapshotRef"])
         self.check("coordinates outside the app rejected", outside.get("effect") == "none" and outside.get("error", {}).get("code") == "InvalidRequest")
-        home, _ = self.action("ui.home", {}, self.observe()["snapshotRef"])
+        home, _, _ = self.fresh_action("ui.home", {})
         self.check("home remains dispatch-only", home.get("state") == "Dispatched")
         missing = self.read("/v2/observe", scope=scope(self.profile), selector=None, offset=0, limit=128)
         if missing.get("kind") == "snapshot":
