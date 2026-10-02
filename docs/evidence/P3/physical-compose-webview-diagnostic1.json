@@ -1,0 +1,110 @@
+{
+  "recordedAt": "2026-10-02T03:58:12.348988+00:00",
+  "source": "direct physical fixture diagnostic subset; not full P3/model acceptance",
+  "passed": false,
+  "errorType": "ValueError",
+  "checks": [
+    {
+      "check": "P3 supported by the real APK",
+      "passed": true
+    },
+    {
+      "check": "selected controller acquired",
+      "passed": true
+    },
+    {
+      "check": "fixture launch is dispatched",
+      "passed": true,
+      "state": "Dispatched"
+    },
+    {
+      "check": "foreground package retained",
+      "passed": true,
+      "packageId": "dev.usix.companion.fixture",
+      "accountRef": "d8959a4f-6b6c-4720-912a-0261a985fe5a"
+    },
+    {
+      "check": "compose mode dispatched",
+      "passed": true
+    },
+    {
+      "check": "compose rich metadata",
+      "passed": true,
+      "totalNodes": 26
+    },
+    {
+      "check": "compose duplicate labels rejected",
+      "passed": true,
+      "state": "Failed"
+    },
+    {
+      "check": "effect acknowledged for Applied compose",
+      "passed": true,
+      "actionId": "d73a0d11-5c4b-4aec-a24e-a7e8a5a72c1f",
+      "state": "Verified",
+      "effect": "verified"
+    },
+    {
+      "check": "observed UI state Applied compose",
+      "passed": true,
+      "receiptId": "5636f2fd-e210-4104-97e1-1c789968b91e",
+      "state": "Verified",
+      "evidence": [
+        {
+          "evidenceRef": "6a8c6c15-e5f4-4b00-920e-efd49b561e8d",
+          "goalId": "74432c41-3d0b-4b74-b537-8ec889a62845",
+          "method": "observed_state",
+          "purpose": "ui_state",
+          "snapshotRef": "b91fac84-3275-471f-b42d-302e61797084",
+          "verifiedAt": "2026-10-02T03:58:17.064Z"
+        }
+      ],
+      "observationRef": "b91fac84-3275-471f-b42d-302e61797084"
+    },
+    {
+      "check": "compose durable verified receipt",
+      "passed": true
+    },
+    {
+      "check": "compose criterion substitution rejected",
+      "passed": true
+    },
+    {
+      "check": "compose dispatch is not verification",
+      "passed": true,
+      "observationRef": "b0293e0b-345d-4014-a1e2-00f6412f616f"
+    },
+    {
+      "check": "compose stale node rejected",
+      "passed": true
+    },
+    {
+      "check": "compose event-driven asynchronous observation",
+      "passed": true,
+      "elapsedMs": 710
+    },
+    {
+      "check": "webview mode dispatched",
+      "passed": true
+    },
+    {
+      "check": "webview rich metadata",
+      "passed": true,
+      "totalNodes": 20
+    },
+    {
+      "check": "webview duplicate labels rejected",
+      "passed": true,
+      "state": "Failed"
+    },
+    {
+      "check": "effect acknowledged for Applied webview",
+      "passed": false,
+      "actionId": "2d3ec204-b14f-4803-a6d2-e73e032e9e07",
+      "state": "Failed",
+      "effect": "none"
+    }
+  ],
+  "deviceCalls": 29,
+  "lastDeviceErrorCode": "ExpiredReference"
+}

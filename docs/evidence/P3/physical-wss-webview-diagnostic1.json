@@ -1,0 +1,47 @@
+{
+  "recordedAt": "2026-10-02T04:09:10.090630+00:00",
+  "source": "direct physical native WSS diagnostic subset; not full/model acceptance",
+  "passed": false,
+  "errorType": "ValueError",
+  "checks": [
+    {
+      "check": "P3 supported by the real APK",
+      "passed": true
+    },
+    {
+      "check": "selected controller acquired",
+      "passed": true
+    },
+    {
+      "check": "fixture launch is dispatched",
+      "passed": true,
+      "state": "Dispatched"
+    },
+    {
+      "check": "foreground package retained",
+      "passed": true,
+      "packageId": "dev.usix.companion.fixture",
+      "accountRef": "11eb1108-69f1-48d4-9ec2-9db11969f2c0"
+    },
+    {
+      "check": "fresh admission after known stale rejection",
+      "passed": true,
+      "actionId": "e796b07b-0c7b-43a6-b077-d2be1806b2b8",
+      "effect": "none"
+    },
+    {
+      "check": "fresh admission after known stale rejection",
+      "passed": true,
+      "actionId": "2f7a3c82-e9f7-4517-ac96-a2c62676f851",
+      "effect": "none"
+    },
+    {
+      "check": "fresh admission after known stale rejection",
+      "passed": true,
+      "actionId": "9824be92-82ef-45a2-ae9b-a1a41fb0a382",
+      "effect": "none"
+    }
+  ],
+  "deviceCalls": 11,
+  "lastDeviceErrorCode": "StaleSnapshot"
+}

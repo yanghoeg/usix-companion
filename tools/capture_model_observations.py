@@ -164,9 +164,11 @@ def main():
         args.yolo and args.runtime != "usix" or not args.physical.resolve().is_relative_to(ROOT) or not args.output.resolve().is_relative_to(ROOT)):
         parser.error("Fresh Companion evidence paths and bounded authorized runtime required")
     wrapper = ROOT / ".build-tools" / (args.output.stem + "-fixed-helper.py")
-    wrapper.write_text("from pathlib import Path\nimport runpy, sys\nhelper = Path(" + repr(str(ROOT / "tools/capture_device_observations.py")) + ")\n" +
-        "sys.argv = [str(helper), '--runtime', " + repr(args.runtime) + ", '--profile', " + repr(str(args.profile.resolve())) +
-        ", '--output', " + repr(str(args.physical.resolve())) + ", '--suite', 'all']\nrunpy.run_path(str(helper), run_name='__main__')\n")
+    interpreter = ROOT / ".venv-integration/bin/python"
+    if not interpreter.is_file(): parser.error("Install Companion's isolated integration environment first")
+    fixed_args = [str(interpreter), str(ROOT / "tools/capture_device_observations.py"), "--runtime", args.runtime,
+                  "--profile", str(args.profile.resolve()), "--output", str(args.physical.resolve()), "--suite", "all"]
+    wrapper.write_text("import os\nargv = " + repr(fixed_args) + "\nos.execv(argv[0], argv)\n")
     command = shlex.join(["python3", str(wrapper)])
     started = time.time(); monotonic = time.monotonic()
     if args.runtime == "usix":

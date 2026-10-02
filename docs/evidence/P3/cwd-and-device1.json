@@ -1,0 +1,52 @@
+{
+  "recordedAt": "2026-10-02T04:48:19.724213+00:00",
+  "source": "installed absolute external CLI over native Android WSS; same captured fixture/account/workspace; no model claim",
+  "device": {
+    "ro.product.manufacturer": "samsung",
+    "ro.product.model": "SM-F956N",
+    "ro.build.version.release": "16",
+    "ro.build.version.sdk": "36"
+  },
+  "transport": "phone-initiated native WSS to same-phone TLS broker, Unix IPC host client",
+  "calls": [
+    {
+      "cwd": "/data/data/com.termux/files/home/usix",
+      "contextSha256": "d777bfbd3b255831361fd0ec92fb26059e70e4e4a5488a3c3931ba7e3f469b66",
+      "workspace": "/data/data/com.termux/files/home/usix-companion/.build-tools/P3-private/workspace",
+      "exitCode": 1,
+      "kind": "error",
+      "errorCode": "ExpiredReference",
+      "passed": false
+    },
+    {
+      "cwd": "/data/data/com.termux/files/home/usix-termux",
+      "contextSha256": "d777bfbd3b255831361fd0ec92fb26059e70e4e4a5488a3c3931ba7e3f469b66",
+      "workspace": "/data/data/com.termux/files/home/usix-companion/.build-tools/P3-private/workspace",
+      "exitCode": 1,
+      "kind": "error",
+      "errorCode": "ExpiredReference",
+      "passed": false
+    },
+    {
+      "cwd": "/data/data/com.termux/files/home/usix-companion",
+      "contextSha256": "d777bfbd3b255831361fd0ec92fb26059e70e4e4a5488a3c3931ba7e3f469b66",
+      "workspace": "/data/data/com.termux/files/home/usix-companion/.build-tools/P3-private/workspace",
+      "exitCode": 1,
+      "kind": "error",
+      "errorCode": "ExpiredReference",
+      "passed": false
+    },
+    {
+      "cwd": "/tmp",
+      "contextSha256": "d777bfbd3b255831361fd0ec92fb26059e70e4e4a5488a3c3931ba7e3f469b66",
+      "workspace": "/data/data/com.termux/files/home/usix-companion/.build-tools/P3-private/workspace",
+      "exitCode": 1,
+      "kind": "error",
+      "errorCode": "ExpiredReference",
+      "passed": false
+    }
+  ],
+  "privateProfileUnchanged": true,
+  "passed": false,
+  "redaction": "no bearer, raw screen, node text, PNG or OCR content"
+}

@@ -49,7 +49,13 @@
   "routerOutputs": 9,
   "pureCoreWithoutSdk": "passed",
   "lint": "passed",
-  "nativeRoom": "pending supported-host CI",
+  "nativeRoom": {
+    "status": "passed",
+    "requiredTask": ":adapters:persistence:testDebugUnitTest",
+    "executionDatabaseCases": 5,
+    "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36961254575",
+    "revision": "4c426ac89b7ccc0012f8eb00582523db61623a40"
+  },
   "apks": {
     "app": {
       "path": "app/build/outputs/apk/release/app-release.apk",
@@ -74,5 +80,5 @@
       ]
     }
   },
-  "physicalInstallation": "first Companion and fixture confirmed; latest exact-text boundary APK update pending"
+  "physicalInstallation": "User confirmed delivered latest Companion update, fixture installation, accessibility and unlock; installed bytes not read back"
 }

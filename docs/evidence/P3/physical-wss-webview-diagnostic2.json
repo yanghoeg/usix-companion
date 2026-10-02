@@ -1,0 +1,101 @@
+{
+  "recordedAt": "2026-10-02T04:19:32.686191+00:00",
+  "source": "direct physical native WSS remaining-capability diagnostic; not full/model acceptance",
+  "passed": false,
+  "errorType": "ValueError",
+  "checks": [
+    {
+      "check": "P3 supported by the real APK",
+      "passed": true
+    },
+    {
+      "check": "selected controller acquired",
+      "passed": true
+    },
+    {
+      "check": "fixture launch is dispatched",
+      "passed": true,
+      "state": "Dispatched"
+    },
+    {
+      "check": "foreground package retained",
+      "passed": true,
+      "packageId": "dev.usix.companion.fixture",
+      "accountRef": "11eb1108-69f1-48d4-9ec2-9db11969f2c0"
+    },
+    {
+      "check": "webview mode dispatched",
+      "passed": true
+    },
+    {
+      "check": "webview rich metadata",
+      "passed": true,
+      "totalNodes": 20
+    },
+    {
+      "check": "webview duplicate labels rejected",
+      "passed": true,
+      "state": "Failed"
+    },
+    {
+      "check": "effect acknowledged for Applied webview",
+      "passed": true,
+      "actionId": "802c9a5c-a105-4419-be0b-bd80cc2dc20c",
+      "state": "Verified",
+      "effect": "verified"
+    },
+    {
+      "check": "observed UI state Applied webview",
+      "passed": true,
+      "receiptId": "69850bfa-c098-4110-a679-b973318d473e",
+      "state": "Verified",
+      "evidence": [
+        {
+          "evidenceRef": "d878b475-c58e-45f6-a625-98975b7c8ba1",
+          "goalId": "c1f978cc-e372-47b2-9652-3f423818441b",
+          "method": "observed_state",
+          "purpose": "ui_state",
+          "snapshotRef": "cba3bc65-3909-49cb-9614-b665b90de671",
+          "verifiedAt": "2026-10-02T04:19:36.810Z"
+        }
+      ],
+      "observationRef": "cba3bc65-3909-49cb-9614-b665b90de671"
+    },
+    {
+      "check": "webview durable verified receipt",
+      "passed": true
+    },
+    {
+      "check": "webview criterion substitution rejected",
+      "passed": true
+    },
+    {
+      "check": "webview dispatch is not verification",
+      "passed": true,
+      "observationRef": "80a0cdd1-f092-4592-a015-5ed187f17ab8"
+    },
+    {
+      "check": "webview stale node rejected",
+      "passed": true
+    },
+    {
+      "check": "webview event-driven asynchronous observation",
+      "passed": true,
+      "elapsedMs": 1389
+    },
+    {
+      "check": "image-only fixture dispatched",
+      "passed": true
+    },
+    {
+      "check": "bundled latin OCR on physical image",
+      "passed": false,
+      "contentHash": null,
+      "width": null,
+      "height": null,
+      "recognizedControlledText": false
+    }
+  ],
+  "deviceCalls": 25,
+  "lastDeviceErrorCode": "StaleSnapshot"
+}

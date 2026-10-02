@@ -38,10 +38,12 @@ class Qualification:
         self.checks = []
         self.calls = 0
         self.last_error_code = None
+        self.last_operation = None
         self.lease_refreshed = None
 
     def read(self, route, **data):
         self.calls += 1
+        self.last_operation = route
         value = call(self.profile["connection"], route, self.profile["bearer"], packet(**data))
         if value.get("error"): self.last_error_code = value["error"].get("code")
         if value.get("kind") in ("snapshot", "visual", "receipt", "capabilities"):
@@ -58,17 +60,30 @@ class Qualification:
             raise ValueError("Controlled qualification check failed: " + name)
 
     def observe(self, selector=None, snapshot=None, offset=0, limit=128):
-        value = self.read("/v2/observe", scope=scope(self.profile, snapshot), selector=selector, offset=offset, limit=limit)
-        if value.get("kind") != "snapshot":
-            raise ValueError("Foreground fixture observation unavailable: " + value.get("error", {}).get("code", "InvalidRequest"))
-        return value
+        for _ in range(3):
+            value = self.read("/v2/observe", scope=scope(self.profile, snapshot), selector=selector, offset=offset, limit=limit)
+            if value.get("kind") == "snapshot": return value
+            if snapshot is not None or value.get("error", {}).get("code") != "ExpiredReference" or value.get("effect") != "none": break
+            self.window()
+        raise ValueError("Foreground fixture observation unavailable: " + value.get("error", {}).get("code", "InvalidRequest"))
 
     def wait(self, text, milliseconds=5000):
-        value = self.read("/v2/wait", scope=scope(self.profile), waitKind="text", selector={"text": text},
-                          deadline=utc(int(time.time() * 1000) + milliseconds), cancellationId=str(uuid.uuid4()))
-        if value.get("kind") != "snapshot":
-            raise ValueError("Expected controlled state unavailable: " + value.get("error", {}).get("code", "InvalidRequest"))
-        return value
+        deadline = utc(int(time.time() * 1000) + milliseconds)
+        for _ in range(6):
+            value = self.read("/v2/wait", scope=scope(self.profile), waitKind="text", selector={"text": text},
+                              deadline=deadline, cancellationId=str(uuid.uuid4()))
+            if value.get("kind") == "snapshot": return value
+            if value.get("error", {}).get("code") != "ExpiredReference" or value.get("effect") != "none": break
+            # A rotation/recreation may remove the foreground window between
+            # reads. Await its event before retrying this read-only predicate;
+            # preserve the original deadline and never replay a UI effect.
+            window = self.read("/v2/wait", scope=scope(self.profile), waitKind="window", selector=None,
+                               deadline=deadline, cancellationId=str(uuid.uuid4()))
+            if window.get("kind") != "snapshot":
+                value = window
+                break
+            self.check("selected window restored before text wait", window["packageId"] == PACKAGE)
+        raise ValueError("Expected controlled state unavailable: " + value.get("error", {}).get("code", "InvalidRequest"))
 
     def action(self, operation, payload, snapshot=None, cancellation=None):
         if self.lease_refreshed is not None and time.monotonic() - self.lease_refreshed >= 40:
@@ -82,6 +97,7 @@ class Qualification:
         body["payloadHash"] = payload_hash(body)
         self.contracts.validate("command", body)
         self.calls += 1
+        self.last_operation = operation
         value = call(self.profile["connection"], "/v2/execute", self.profile["bearer"], body)
         if value.get("error"): self.last_error_code = value["error"].get("code")
         if value.get("kind") == "receipt": self.contracts.validate("receipt", value)
@@ -90,7 +106,7 @@ class Qualification:
     def click(self, selector, goal=None):
         # A rejected stale snapshot with effect:none permits a new freshly admitted
         # attempt. Dispatched/possible effects are never retried here.
-        for _ in range(3):
+        for _ in range(6):
             observed = self.observe()
             payload = {"target": selector, **({"goal": goal} if goal else {})}
             receipt, command = self.action("ui.click", payload, observed["snapshotRef"])
@@ -104,6 +120,12 @@ class Qualification:
         value = self.read("/v2/wait", scope=scope(self.profile, baseline), waitKind="changed", selector=None,
                           deadline=utc(int(time.time() * 1000) + 5000), cancellationId=str(uuid.uuid4()))
         if value.get("kind") != "snapshot": raise ValueError("Controlled state-change wait unavailable")
+        return value
+
+    def window(self):
+        value = self.read("/v2/wait", scope=scope(self.profile), waitKind="window", selector=None,
+                          deadline=utc(int(time.time() * 1000) + 5000), cancellationId=str(uuid.uuid4()))
+        if value.get("kind") != "snapshot": raise ValueError("Controlled foreground window unavailable")
         return value
 
     def keyboard(self, visible, observed):
@@ -156,9 +178,9 @@ class Qualification:
             # Android's native Button theme exposes its transformed ALL CAPS
             # text. Use that exact observed string; never substring/case folding.
             duplicate_label = labels[0]
-        duplicate, _ = self.action("ui.click", {"target": {"text": duplicate_label}}, observed["snapshotRef"])
+        duplicate, _ = self.click({"text": duplicate_label})
         self.check(mode + " duplicate labels rejected", duplicate.get("effect") == "none" and duplicate.get("error", {}).get("code") == "AmbiguousTarget", state=duplicate.get("state"))
-        selector = {"resourceId": PACKAGE + ":id/apply"} if mode == "native" else {"resourceId": "compose_apply"} if mode == "compose" else {"text": "Apply webview", "role": "button"}
+        selector = {"resourceId": PACKAGE + ":id/apply"} if mode == "native" else {"resourceId": "compose_apply"} if mode == "compose" else {"description": "Apply webview", "role": "button"}
         goal = self.goal("Applied " + mode)
         receipt, command = self.click(selector, goal)
         verified = self.verified(receipt, command, goal, "Applied " + mode)
@@ -167,13 +189,16 @@ class Qualification:
         altered = {**goal, "expectedText": "not the bound criterion"}
         conflict = self.read("/v2/verify", actionId=command["actionId"], goal=altered)
         self.check(mode + " criterion substitution rejected", conflict.get("error", {}).get("code") == "ActionConflict" and conflict.get("effect") == "none")
-        async_target = {"resourceId": PACKAGE + ":id/async"} if mode == "native" else {"resourceId": "compose_async"} if mode == "compose" else {"text": "Async webview", "role": "button"}
-        dispatched, _ = self.click(async_target)
+        async_target = {"resourceId": PACKAGE + ":id/async"} if mode == "native" else {"resourceId": "compose_async"} if mode == "compose" else {"description": "Async webview", "role": "button"}
+        start = time.monotonic()
+        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+            pending = executor.submit(self.wait, "Async ready " + mode)
+            dispatched, _ = self.click(async_target)
+            asynchronous = pending.result(timeout=6)
         self.check(mode + " dispatch is not verification", dispatched.get("state") == "Dispatched" and dispatched.get("evidence") == [], observationRef=dispatched.get("observationRef"))
         changed, _ = self.action("ui.click", {"target": selector}, observed["snapshotRef"])
         self.check(mode + " stale node rejected", changed.get("effect") == "none" and changed.get("error", {}).get("code") == "StaleSnapshot")
-        start = time.monotonic(); self.wait("Async ready " + mode)
-        self.check(mode + " event-driven asynchronous observation", True, elapsedMs=round((time.monotonic() - start) * 1000))
+        self.check(mode + " event-driven asynchronous observation", asynchronous["generation"] > observed["generation"], elapsedMs=round((time.monotonic() - start) * 1000))
         if mode == "native":
             self.native_checks()
 
@@ -199,17 +224,23 @@ class Qualification:
         cancelled = self.read("/v2/cancel", actionId=command["actionId"])
         self.check("post-dispatch cancellation preserves effect", cancelled.get("state") == "Dispatched" and cancelled.get("cancellationRequested") is True)
         self.native_operations()
+
+    def rotation(self):
+        # Run recreation last so the next UI mode cannot be replaced by Android
+        # restoring the previous Activity's saved state during rotation.
         before = self.observe()
-        self.click({"resourceId": PACKAGE + ":id/rotate"})
-        rotated = self.changed(before["snapshotRef"])
+        receipt, _ = self.click({"resourceId": PACKAGE + ":id/rotate"})
+        self.check("rotation request dispatched", receipt.get("state") == "Dispatched")
+        # Activity recreation can temporarily remove its accessible window. A
+        # selected-window predicate handles that gap without reading another app.
+        rotated = self.window()
         for _ in range(4):
             if rotated["rotation"] != before["rotation"]: break
-            rotated = self.changed(rotated["snapshotRef"])
+            self.changed(rotated["snapshotRef"])
+            rotated = self.window()
         self.check("physical rotation observed", rotated["rotation"] != before["rotation"], before=before["rotation"], after=rotated["rotation"])
         stale, _ = self.action("ui.tap", {"x": 30, "y": 30}, before["snapshotRef"])
         self.check("rotation rejects stale coordinates", stale.get("effect") == "none" and stale.get("error", {}).get("code") == "StaleSnapshot")
-        self.click({"resourceId": PACKAGE + ":id/rotate"})
-        self.wait("Fixture native")
 
     def native_operations(self):
         scroll_target = {"resourceId": PACKAGE + ":id/scroll"}
@@ -285,18 +316,26 @@ class Qualification:
         self.read("/v2/wait", scope=scope(self.profile), waitKind="window", selector=None,
                   deadline=utc(int(time.time() * 1000) + 5000), cancellationId=str(uuid.uuid4()))
 
+    def capture(self, language):
+        for _ in range(6):
+            snapshot = self.observe()
+            captured = self.read("/v2/capture", scope=scope(self.profile, snapshot["snapshotRef"]), language=language)
+            if captured.get("kind") == "visual" or captured.get("error", {}).get("code") not in ("StaleSnapshot", "Busy"):
+                return captured
+            self.check("fresh capture after rejected read", captured.get("effect") == "none", errorCode=captured["error"]["code"])
+        return captured
+
     def visual(self):
         receipt, _ = self.click({"resourceId": PACKAGE + ":id/mode_canvas"})
         self.check("image-only fixture dispatched", receipt.get("state") == "Dispatched")
         for language, expected in (("latin", "Offline OCR 1234"), ("korean", "안녕하세요")):
-            snapshot = self.observe()
-            captured = self.read("/v2/capture", scope=scope(self.profile, snapshot["snapshotRef"]), language=language)
+            captured = self.capture(language)
             texts = " ".join(block["text"] for block in captured.get("blocks", []))
             self.check("bundled " + language + " OCR on physical image", captured.get("kind") == "visual" and expected in texts,
                        contentHash=captured.get("contentHash"), width=captured.get("width"), height=captured.get("height"), recognizedControlledText=expected in texts)
-        self.click({"resourceId": PACKAGE + ":id/mode_secure"})
-        snapshot = self.observe()
-        protected = self.read("/v2/capture", scope=scope(self.profile, snapshot["snapshotRef"]), language=None)
+        receipt, _ = self.click({"resourceId": PACKAGE + ":id/mode_secure"})
+        self.check("protected fixture dispatched", receipt.get("state") == "Dispatched")
+        protected = self.capture(None)
         self.check("protected capture rejected", protected.get("error", {}).get("code") == "PermissionRequired" and protected.get("effect") == "none")
         self.click({"resourceId": PACKAGE + ":id/mode_native"})
 
@@ -320,9 +359,11 @@ def main():
         for mode in ("native", "compose", "webview"): evaluation.mode(mode)
         evaluation.safety()
         if args.suite == "all": evaluation.visual()
+        evaluation.rotation()
         report["passed"] = True
-    except Exception:
-        report.update(passed=False, error="Qualification incomplete; inspect controlled checks and current readiness. Credentials omitted.")
+    except Exception as error:
+        report.update(passed=False, exceptionType=type(error).__name__, lastOperation=evaluation.last_operation if evaluation else None,
+                      error="Qualification incomplete; inspect controlled checks and current readiness. Credentials omitted.")
     finally:
         if evaluation:
             try: evaluation.read("/v2/controller/release")
