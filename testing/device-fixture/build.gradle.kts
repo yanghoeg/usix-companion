@@ -9,8 +9,8 @@ android {
         applicationId = "dev.usix.companion.fixture"
         minSdk = 24
         targetSdk = 34
-        versionCode = 1
-        versionName = "P3.1"
+        versionCode = 2
+        versionName = "P3.2"
     }
     compileOptions { sourceCompatibility = JavaVersion.VERSION_17; targetCompatibility = JavaVersion.VERSION_17 }
     kotlinOptions.jvmTarget = "17"

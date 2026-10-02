@@ -35,6 +35,10 @@ class FixtureActivity : ComponentActivity() {
     private fun button(value: String, resource: Int, action: () -> Unit) = Button(this).apply { id = resource; text = value; setOnClickListener { action() } }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // A foreground qualification must not depend on the user's screen-off
+        // timeout. Android releases this when the fixture leaves the foreground;
+        // explicit locking and device readiness protections still apply.
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         val root = LinearLayout(this).apply { orientation = LinearLayout.VERTICAL }
         val modes = LinearLayout(this)
         listOf(Triple("Native", R.id.mode_native, "native"), Triple("Compose", R.id.mode_compose, "compose"), Triple("WebView", R.id.mode_webview, "webview")).forEach { (name, id, mode) ->

@@ -71,16 +71,17 @@
     "fixture": {
       "path": "testing/device-fixture/build/outputs/apk/debug/device-fixture-debug.apk",
       "bytes": 7883817,
-      "sha256": "99d7a7f48ae80ea621b4102b718998143d6a2e5153bcc2037412d45e8d08b870",
+      "sha256": "bc3e6a57fb866f984e6ef6121622aed4d52895b3b39e36e82546bc43a9f8baf4",
       "signingCertificateSha256": "1bf19c9316904bfea9df9f422af589a589dbdb425e4329a56bf473d79eca1ded",
-      "package": "package: name='dev.usix.companion.fixture' versionCode='1' versionName='P3.1' platformBuildVersionName='14' platformBuildVersionCode='34' compileSdkVersion='34' compileSdkVersionCodename='14'",
+      "package": "package: name='dev.usix.companion.fixture' versionCode='2' versionName='P3.2' platformBuildVersionName='14' platformBuildVersionCode='34' compileSdkVersion='34' compileSdkVersionCodename='14'",
       "sdk": [
         "minSdkVersion:'24'",
         "targetSdkVersion:'34'"
-      ]
+      ],
+      "foregroundBehavior": "FLAG_KEEP_SCREEN_ON while fixture foreground; Android releases it in background; explicit locking still respected"
     }
   },
-  "physicalInstallation": "User confirmed delivered latest Companion update, fixture installation, accessibility and unlock; installed bytes not read back",
+  "physicalInstallation": "Companion functional installation and P3.1 fixture confirmed; updated P3.2 fixture installation remains pending",
   "finalCi": {
     "status": "passed previous helper; current recovery deadline awaits CI",
     "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36973915265",
@@ -89,5 +90,19 @@
     "allEvaluatorSourceChecksIncluded": false,
     "evidence": "ci-final.json"
   },
-  "toolingRetestedAt": "2026-10-02T06:15:07.044909+00:00"
+  "toolingRetestedAt": "2026-10-02T07:49:23.188897+00:00",
+  "historicalFixtureApks": [
+    {
+      "path": "testing/device-fixture/build/outputs/apk/debug/device-fixture-debug.apk",
+      "bytes": 7883817,
+      "sha256": "99d7a7f48ae80ea621b4102b718998143d6a2e5153bcc2037412d45e8d08b870",
+      "signingCertificateSha256": "1bf19c9316904bfea9df9f422af589a589dbdb425e4329a56bf473d79eca1ded",
+      "package": "package: name='dev.usix.companion.fixture' versionCode='1' versionName='P3.1' platformBuildVersionName='14' platformBuildVersionCode='34' compileSdkVersion='34' compileSdkVersionCodename='14'",
+      "sdk": [
+        "minSdkVersion:'24'",
+        "targetSdkVersion:'34'"
+      ]
+    }
+  ],
+  "fixtureRebuiltAt": "2026-10-02T07:49:23.188876+00:00"
 }
