@@ -1,15 +1,15 @@
 {
-  "recordedAt": "2026-10-02T06:51:26.163863+00:00",
+  "recordedAt": "2026-10-02T08:00:25.211355+00:00",
   "source": "GitHub Actions API and complete job log",
-  "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36973915265",
-  "revision": "20b8faaaf0df733b57e43a8c9c9c7a6f1dcc1632",
+  "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36980789477",
+  "revision": "574201cf4f79f491ffc671acc6de22ce089b394f",
   "status": "completed",
   "conclusion": "success",
   "requiredJobs": [
     {
       "name": "core",
       "conclusion": "success",
-      "url": "https://github.com/yanghoeg/usix-companion/actions/runs/36973915265/job/110733519842",
+      "url": "https://github.com/yanghoeg/usix-companion/actions/runs/36980789477/job/110754605818",
       "steps": [
         {
           "name": "Set up job",
@@ -60,7 +60,7 @@
     {
       "name": "build",
       "conclusion": "success",
-      "url": "https://github.com/yanghoeg/usix-companion/actions/runs/36973915265/job/110733860340",
+      "url": "https://github.com/yanghoeg/usix-companion/actions/runs/36980789477/job/110755037985",
       "steps": [
         {
           "name": "Set up job",
@@ -140,9 +140,9 @@
   "nativeRoomTaskExecuted": true,
   "nativeRoomTask": ":adapters:persistence:testDebugUnitTest",
   "nativeRoomDatabaseCases": 5,
-  "toolingTests": 32,
+  "toolingTests": 33,
   "integrationTests": 19,
-  "logSha256": "9f67afcc3ca2f7e4a6cf86a692ffcbf9a72093d9ac65dd400f89d34c564288c9",
-  "productionSourceMatchesDeliveredCheckpoint": "git diff a393058..20b8faa over app/core/adapters/protocol/feature/fixture/integration/contracts is empty; APK bytes are recorded separately",
+  "logSha256": "35b6f83a7fe98ea8966fd3bf9b06992d4bc43c50fe66e155af0c12addc18bcdd",
+  "productionSourceMatchesDeliveredCheckpoint": "git diff a393058..574201c over app/core/adapters/protocol/feature/integration/contracts is empty; fixture P3.2 has only foreground screen retention/version changes and its APK hash is recorded separately",
   "releaseJob": "Skipped as expected for a branch push; no release/tag publication."
 }

@@ -53,8 +53,8 @@
     "status": "passed",
     "requiredTask": ":adapters:persistence:testDebugUnitTest",
     "executionDatabaseCases": 5,
-    "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36973915265",
-    "revision": "20b8faaaf0df733b57e43a8c9c9c7a6f1dcc1632"
+    "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36980789477",
+    "revision": "574201cf4f79f491ffc671acc6de22ce089b394f"
   },
   "apks": {
     "app": {
@@ -83,11 +83,11 @@
   },
   "physicalInstallation": "Companion functional installation and P3.1 fixture confirmed; updated P3.2 fixture installation remains pending",
   "finalCi": {
-    "status": "passed previous helper; current recovery deadline awaits CI",
-    "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36973915265",
-    "revision": "20b8faaaf0df733b57e43a8c9c9c7a6f1dcc1632",
+    "status": "passed",
+    "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36980789477",
+    "revision": "574201cf4f79f491ffc671acc6de22ce089b394f",
     "productionCodeMatchesDeliveredApk": true,
-    "allEvaluatorSourceChecksIncluded": false,
+    "allEvaluatorSourceChecksIncluded": true,
     "evidence": "ci-final.json"
   },
   "toolingRetestedAt": "2026-10-02T07:49:23.188897+00:00",
