@@ -1,0 +1,32 @@
+{
+  "recordedAt": "2026-10-02T05:15:11.728587+00:00",
+  "runtimeLabel": "usix",
+  "operation": "P3.controlled-observation",
+  "invocationCwd": "/data/data/com.termux/files/home/usix",
+  "source": "physical authenticated Companion fixture; no mock device/model",
+  "suite": "all",
+  "runtimeSourceWrites": 0,
+  "contextSha256": "d3a9497cb3adcb996fabca961cbb9280cc070f15e62d3b8f086d8722ba609731",
+  "passed": false,
+  "exceptionType": "ValueError",
+  "lastOperation": "app.open",
+  "error": "Qualification incomplete; inspect controlled checks and current readiness. Credentials omitted.",
+  "checks": [
+    {
+      "check": "P3 supported by the real APK",
+      "passed": true
+    },
+    {
+      "check": "selected controller acquired",
+      "passed": true
+    },
+    {
+      "check": "fixture launch is dispatched",
+      "passed": false,
+      "state": null
+    }
+  ],
+  "deviceCalls": 4,
+  "lastDeviceErrorCode": "DeviceLocked",
+  "elapsedMs": 201
+}

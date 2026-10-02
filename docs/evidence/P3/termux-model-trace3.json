@@ -1,0 +1,38 @@
+{
+  "recordedAt": "2026-10-02T04:50:56.005090+00:00",
+  "runtime": "usix-termux",
+  "invocationCwd": "/data/data/com.termux/files/home/usix-termux",
+  "source": "genuine unchanged installed runtime and existing model; exact admitted tool invokes physical controlled fixture",
+  "command": "python3 /data/data/com.termux/files/home/usix-companion/.build-tools/termux-model-trace3-fixed-helper.py",
+  "permission": "existing TTY one-time exact-command approval",
+  "approvalDecisions": [
+    {
+      "tool": "shell",
+      "exactCommand": true,
+      "decision": "once",
+      "args": {
+        "command": "python3 /data/data/com.termux/files/home/usix-companion/.build-tools/termux-model-trace3-fixed-helper.py"
+      },
+      "recordedAt": "2026-10-02T04:49:20.110402+00:00"
+    }
+  ],
+  "physicalEvidence": "docs/evidence/P3/termux-model-physical3.json",
+  "deviceWitness": null,
+  "exitCode": 0,
+  "elapsedMs": 122478,
+  "deviceObservationsViaModelVerified": false,
+  "redaction": "only exact command, approvals, controlled fixture summary, correlation and model counts; no credentials or hidden reasoning",
+  "normalTuiExit": true,
+  "publicModelSummary": {
+    "status": "failed",
+    "checkCount": 41,
+    "passedChecks": 41,
+    "evidenceSha256": "b35bd589098da91bcbff7c0bab590ed7498419081d729d5a4335f14a684cb9c3"
+  },
+  "modelReportMatchesPhysicalEvidence": false,
+  "configuration": {
+    "backend": "existing llama-server on loopback:8080",
+    "model": "existing Qwen3.5-2B-Q5_K_M",
+    "interactive": true
+  }
+}

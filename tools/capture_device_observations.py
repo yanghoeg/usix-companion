@@ -104,16 +104,20 @@ class Qualification:
         return value, body
 
     def click(self, selector, goal=None):
+        receipt, command, _ = self.fresh_action("ui.click", {"target": selector, **({"goal": goal} if goal else {})})
+        return receipt, command
+
+    def fresh_action(self, operation, payload, selector=None):
         # A rejected stale snapshot with effect:none permits a new freshly admitted
         # attempt. Dispatched/possible effects are never retried here.
         for _ in range(6):
-            observed = self.observe()
-            payload = {"target": selector, **({"goal": goal} if goal else {})}
-            receipt, command = self.action("ui.click", payload, observed["snapshotRef"])
+            observed = self.observe(selector=selector)
+            current_payload = payload(observed) if callable(payload) else payload
+            receipt, command = self.action(operation, current_payload, observed["snapshotRef"])
             if receipt.get("state") == "Failed" and receipt.get("effect") == "none" and receipt.get("error", {}).get("code") == "StaleSnapshot":
                 self.checks.append({"check": "fresh admission after known stale rejection", "passed": True, "actionId": command["actionId"], "effect": "none"})
                 continue
-            return receipt, command
+            return receipt, command, observed
         raise ValueError("Fixture keeps changing; no unambiguous dispatch")
 
     def changed(self, baseline):
@@ -215,10 +219,9 @@ class Qualification:
         stale, _ = self.action("ui.tap", {"x": 30, "y": 30}, first["snapshotRef"])
         self.check("focus/keyboard invalidate old coordinates", stale.get("effect") == "none" and stale.get("error", {}).get("code") == "StaleSnapshot")
         goal = self.goal("한글 English 123", {"resourceId": PACKAGE + ":id/edit_text"})
-        observed = self.observe()
-        receipt, command = self.action("ui.set_text", {"target": {"resourceId": PACKAGE + ":id/edit_text"}, "text": goal["expectedText"], "goal": goal}, observed["snapshotRef"])
+        receipt, command, _ = self.fresh_action("ui.set_text", {"target": {"resourceId": PACKAGE + ":id/edit_text"}, "text": goal["expectedText"], "goal": goal})
         self.verified(receipt, command, goal, goal["expectedText"])
-        dispatched, command = self.action("ui.back", {}, self.observe()["snapshotRef"])
+        dispatched, command, _ = self.fresh_action("ui.back", {})
         self.check("keyboard back dispatched", dispatched.get("state") == "Dispatched")
         self.keyboard(False, self.observe())
         cancelled = self.read("/v2/cancel", actionId=command["actionId"])
@@ -245,8 +248,7 @@ class Qualification:
     def native_operations(self):
         scroll_target = {"resourceId": PACKAGE + ":id/scroll"}
         def scroll(forward):
-            observed = self.observe()
-            receipt, _ = self.action("ui.scroll", {"target": scroll_target, "forward": forward}, observed["snapshotRef"])
+            receipt, _, observed = self.fresh_action("ui.scroll", {"target": scroll_target, "forward": forward})
             self.check("semantic scroll " + str(forward), receipt.get("state") == "Dispatched", state=receipt.get("state"))
             self.changed(observed["snapshotRef"])
         for operation, resource, expected in (("ui.long_press", "long_press", "Long pressed native"), ("ui.select", "select", "Selected native")):
@@ -257,7 +259,7 @@ class Qualification:
                 scroll(True)
             self.check(operation + " has one visible controlled target", sum(node["visible"] for node in observed["nodes"]) == 1)
             goal = self.goal(expected, {"resourceId": PACKAGE + ":id/status"})
-            receipt, command = self.action(operation, {"target": target, "goal": goal}, observed["snapshotRef"])
+            receipt, command, _ = self.fresh_action(operation, {"target": target, "goal": goal})
             # The status may be above the viewport after target discovery. Scroll
             # back through the same scope before reading the stored criterion.
             for _ in range(4):
@@ -270,14 +272,18 @@ class Qualification:
         stale, _ = self.action("ui.tap", {"x": 30, "y": 30}, baseline["snapshotRef"])
         self.check("scroll rejects stale coordinates", stale.get("effect") == "none" and stale.get("error", {}).get("code") == "StaleSnapshot")
         scroll(False)
-        observed = self.observe(selector={"resourceId": PACKAGE + ":id/apply"})
-        node = next(node for node in observed["nodes"] if node["visible"])
-        b = node["bounds"]; goal = self.goal("Applied native")
-        receipt, command = self.action("ui.tap", {"x": (b["left"] + b["right"]) // 2, "y": (b["top"] + b["bottom"]) // 2, "goal": goal}, observed["snapshotRef"])
+        goal = self.goal("Applied native")
+        def tap_payload(observed):
+            b = next(node for node in observed["nodes"] if node["visible"])["bounds"]
+            return {"x": (b["left"] + b["right"]) // 2, "y": (b["top"] + b["bottom"]) // 2, "goal": goal}
+        receipt, command, _ = self.fresh_action("ui.tap", tap_payload, {"resourceId": PACKAGE + ":id/apply"})
         self.verified(receipt, command, goal, "Applied native")
-        observed = self.observe(selector=scroll_target)
-        b = observed["nodes"][0]["bounds"]; x = (b["left"] + b["right"]) // 2
-        receipt, _ = self.action("ui.swipe", {"x": x, "y": b["bottom"] - 50, "endX": x, "endY": b["bottom"] - 200, "durationMillis": 250}, observed["snapshotRef"])
+        def swipe_payload(observed):
+            b = observed["nodes"][0]["bounds"]; x = (b["left"] + b["right"]) // 2
+            # Exercise the app viewport away from Android's navigation edge.
+            y = (b["top"] + b["bottom"]) // 2
+            return {"x": x, "y": y, "endX": x, "endY": max(b["top"] + 20, y - 150), "durationMillis": 250}
+        receipt, _, _ = self.fresh_action("ui.swipe", swipe_payload, scroll_target)
         self.check("bounded swipe acknowledged", receipt.get("state") == "Dispatched" and receipt.get("evidence") == [], state=receipt.get("state"))
         scroll(False)
 

@@ -1,0 +1,43 @@
+"""Fixture evaluator safety boundaries; these do not qualify a real device."""
+import importlib.util
+from pathlib import Path
+import unittest
+from unittest.mock import Mock
+
+SPEC = importlib.util.spec_from_file_location("device_observations", Path(__file__).resolve().parents[2] / "tools/capture_device_observations.py")
+MODULE = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(MODULE)
+
+
+class FreshAdmissionTest(unittest.TestCase):
+    def evaluator(self):
+        value = MODULE.Qualification.__new__(MODULE.Qualification)
+        value.checks = []
+        return value
+
+    def test_acknowledged_or_uncertain_effect_and_other_failures_are_never_replayed(self):
+        for state, effect, code in (("Dispatched", "acknowledged", "StaleSnapshot"),
+                                   ("UnknownEffect", "possible", "StaleSnapshot"),
+                                   ("Failed", "none", "ExpiredReference")):
+            with self.subTest(state=state):
+                q = self.evaluator()
+                q.observe = Mock(return_value={"snapshotRef": "first"})
+                receipt = {"state": state, "effect": effect, "error": {"code": code}}
+                q.action = Mock(return_value=(receipt, {"actionId": "one"}))
+                self.assertEqual(q.fresh_action("ui.back", {})[0], receipt)
+                q.action.assert_called_once()
+                q.observe.assert_called_once()
+
+    def test_known_none_stale_requires_new_snapshot_and_recomputed_coordinates(self):
+        q = self.evaluator()
+        q.observe = Mock(side_effect=[{"snapshotRef": "old", "x": 10}, {"snapshotRef": "new", "x": 200}])
+        q.action = Mock(side_effect=[({"state": "Failed", "effect": "none", "error": {"code": "StaleSnapshot"}}, {"actionId": "rejected"}),
+                                    ({"state": "Dispatched", "effect": "acknowledged"}, {"actionId": "fresh"})])
+        receipt, command, observed = q.fresh_action("ui.tap", lambda snapshot: {"x": snapshot["x"], "y": 30})
+        self.assertEqual(receipt["state"], "Dispatched")
+        self.assertEqual(command["actionId"], "fresh")
+        self.assertEqual(observed["snapshotRef"], "new")
+        self.assertEqual([call.args for call in q.action.call_args_list],
+                         [("ui.tap", {"x": 10, "y": 30}, "old"), ("ui.tap", {"x": 200, "y": 30}, "new")])
+        self.assertEqual(q.checks[0]["actionId"], "rejected")
+        self.assertEqual(q.checks[0]["effect"], "none")

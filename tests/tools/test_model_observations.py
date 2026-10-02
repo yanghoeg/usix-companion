@@ -12,6 +12,20 @@ SPEC.loader.exec_module(MODULE)
 
 
 class ModelObservationEvidenceTest(unittest.TestCase):
+    def test_client_tool_execute_without_start_requires_matching_call_and_request(self):
+        command = "python3 /companion/fixed-helper.py"
+        witness = {"operation": "P3.controlled-observation", "passed": True, "evidenceSha256": "a" * 64}
+        execute = {"type": "tool_execute", "tool": "bash", "args": {"command": command}, "call_id": "call-1", "request_id": "request-1"}
+        result = {"type": "tool_result", "success": True, "output": json.dumps(witness), "call_id": "call-1", "request_id": "request-1"}
+        done = {"type": "done", "finish_reason": "completed"}
+        def verify(messages):
+            return MODULE.verified_usix(MODULE.redact_usix([json.dumps(m) for m in messages], command), witness, 0)
+        self.assertTrue(verify([execute, result, done]))
+        self.assertTrue(verify([{**execute, "type": "tool_start"}, execute, result, done]))
+        self.assertFalse(verify([execute, {**result, "call_id": "another-call"}, done]))
+        self.assertFalse(verify([execute, {**result, "request_id": "another-request"}, done]))
+        self.assertFalse(verify([{**execute, "type": "tool_start", "args": {"command": "another command"}}, execute, result, done]))
+
     def test_partial_or_old_device_report_is_never_a_passing_witness(self):
         with tempfile.TemporaryDirectory() as directory:
             root = Path(directory); path = root / "physical.json"

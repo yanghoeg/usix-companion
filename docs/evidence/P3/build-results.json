@@ -42,7 +42,7 @@
   "pythonTests": {
     "architecture": 6,
     "contract": 18,
-    "tools": 28,
+    "tools": 31,
     "integration": 19
   },
   "schemas": 9,

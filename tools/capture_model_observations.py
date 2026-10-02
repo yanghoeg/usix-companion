@@ -50,7 +50,7 @@ def summary(path, runtime, cwd, started, finished):
 
 
 def redact_usix(lines, command):
-    events = []; pending = []; ambiguous = False
+    events = []; pending = []; identified = {}; ambiguous = False
     for line in lines:
         try:
             value = json.loads(line)
@@ -60,15 +60,23 @@ def redact_usix(lines, command):
             continue
         kind = value.get("type")
         event = {"type": kind, "seq": value.get("seq")}
-        if kind == "tool_start":
+        call_id = value.get("call_id") or value.get("tool_call_id")
+        key = (value.get("request_id"), call_id) if isinstance(call_id, str) else None
+        if kind in ("tool_start", "tool_execute"):
             exact = value.get("tool") == "bash" and value.get("args") == {"command": command}
-            ambiguous |= bool(pending); pending.append(exact)
+            if key is not None:
+                identified[key] = identified.get(key, True) and exact
+            else:
+                ambiguous |= bool(pending); pending.append(exact)
             event.update(tool=value.get("tool"), exactCommand=exact)
             if exact: event["args"] = value["args"]
         elif kind == "tool_result":
-            exact = len(pending) == 1 and pending[0] and not ambiguous
-            if pending: pending.pop(0)
-            if not pending: ambiguous = False
+            if key is not None:
+                exact = identified.pop(key, False)
+            else:
+                exact = len(pending) == 1 and pending[0] and not ambiguous
+                if pending: pending.pop(0)
+                if not pending: ambiguous = False
             event.update(exactCommandResult=exact, success=value.get("success"), code=value.get("code"))
             if exact:
                 try:
