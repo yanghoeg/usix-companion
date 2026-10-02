@@ -64,7 +64,7 @@ class Qualification:
             value = self.read("/v2/observe", scope=scope(self.profile, snapshot), selector=selector, offset=offset, limit=limit)
             if value.get("kind") == "snapshot": return value
             if snapshot is not None or value.get("error", {}).get("code") != "ExpiredReference" or value.get("effect") != "none": break
-            self.window()
+            self.window(milliseconds=20000)
         raise ValueError("Foreground fixture observation unavailable: " + value.get("error", {}).get("code", "InvalidRequest"))
 
     def wait(self, text, milliseconds=5000):
@@ -142,10 +142,25 @@ class Qualification:
         if value.get("kind") != "snapshot": raise ValueError("Controlled state-change wait unavailable")
         return value
 
-    def window(self):
+    def window(self, milliseconds=5000):
         value = self.read("/v2/wait", scope=scope(self.profile), waitKind="window", selector=None,
-                          deadline=utc(int(time.time() * 1000) + 5000), cancellationId=str(uuid.uuid4()))
-        if value.get("kind") != "snapshot": raise ValueError("Controlled foreground window unavailable")
+                          deadline=utc(int(time.time() * 1000) + milliseconds), cancellationId=str(uuid.uuid4()))
+        if value.get("kind") != "snapshot":
+            error_code = (value.get("error") or {}).get("code", "InvalidRequest")
+            self.window_failure = {"errorCode": error_code, "deadlineMillis": milliseconds}
+            # A diagnostic is read-only and cannot turn this failed predicate
+            # into a pass. Retain only metadata for the selected fixture.
+            try:
+                observed = self.read("/v2/observe", scope=scope(self.profile), selector=None, offset=0, limit=128)
+                self.window_failure.update(kind=observed.get("kind"),
+                                           observationErrorCode=(observed.get("error") or {}).get("code"),
+                                           generation=observed.get("generation"), rotation=observed.get("rotation"),
+                                           complete=observed.get("complete"), totalNodes=observed.get("totalNodes"))
+            except Exception as error:
+                self.window_failure["diagnosticExceptionType"] = type(error).__name__
+            self.last_error_code = error_code
+            self.last_operation = "/v2/wait"
+            raise ValueError("Controlled foreground window unavailable")
         return value
 
     def keyboard(self, visible, observed):
@@ -389,6 +404,7 @@ def main():
         report.update(passed=False, exceptionType=type(error).__name__, lastOperation=evaluation.last_operation if evaluation else None,
                       error="Qualification incomplete; inspect controlled checks and current readiness. Credentials omitted.")
         if evaluation and getattr(evaluation, "wait_failure", None): report["waitFailure"] = evaluation.wait_failure
+        if evaluation and getattr(evaluation, "window_failure", None): report["windowFailure"] = evaluation.window_failure
     finally:
         if evaluation:
             try: evaluation.read("/v2/controller/release")

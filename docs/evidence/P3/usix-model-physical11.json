@@ -1,0 +1,54 @@
+{
+  "recordedAt": "2026-10-02T07:37:20.639438+00:00",
+  "runtimeLabel": "usix",
+  "operation": "P3.controlled-observation",
+  "invocationCwd": "/data/data/com.termux/files/home/usix-companion",
+  "source": "physical authenticated Companion fixture; no mock device/model",
+  "suite": "all",
+  "runtimeSourceWrites": 0,
+  "contextSha256": "6dc544b3e89ba5d062ef95b5b0e2fa58ef39a5a31c84b3cbec2e399331fcffe0",
+  "passed": false,
+  "exceptionType": "ValueError",
+  "lastOperation": "/v2/wait",
+  "error": "Qualification incomplete; inspect controlled checks and current readiness. Credentials omitted.",
+  "windowFailure": {
+    "errorCode": "DeviceLocked",
+    "deadlineMillis": 20000,
+    "kind": "error",
+    "observationErrorCode": "DeviceLocked",
+    "generation": null,
+    "rotation": null,
+    "complete": null,
+    "totalNodes": null
+  },
+  "checks": [
+    {
+      "check": "P3 supported by the real APK",
+      "passed": true
+    },
+    {
+      "check": "selected controller acquired",
+      "passed": true
+    },
+    {
+      "check": "fixture launch is dispatched",
+      "passed": true,
+      "state": "Dispatched"
+    },
+    {
+      "check": "foreground package retained",
+      "passed": true,
+      "packageId": "dev.usix.companion.fixture",
+      "accountRef": "c2d3eebb-4de4-4578-b3e7-6a7f61a29d3c"
+    },
+    {
+      "check": "fresh admission after known stale rejection",
+      "passed": true,
+      "actionId": "48b7eee4-0308-475f-8a87-34c728dcef0d",
+      "effect": "none"
+    }
+  ],
+  "deviceCalls": 10,
+  "lastDeviceErrorCode": "DeviceLocked",
+  "elapsedMs": 7005
+}

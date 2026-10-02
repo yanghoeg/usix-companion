@@ -1,0 +1,28 @@
+{
+  "recordedAt": "2026-10-02T07:24:38.333393+00:00",
+  "source": "read-only selected-fixture comparison; list-form v1 decoded; no UI effect or other package requested",
+  "rich": {
+    "kind": "error",
+    "windowId": null,
+    "generation": null,
+    "totalNodes": null,
+    "errorCode": "DeviceLocked"
+  },
+  "legacy": {
+    "responseType": "list",
+    "fieldNames": null,
+    "nodeCount": 0,
+    "controlledTitles": {
+      "Fixture native": 0,
+      "Fixture compose": 0,
+      "Fixture webview": 0
+    }
+  },
+  "health": {
+    "ok": true,
+    "auth": true,
+    "paired": true,
+    "listener": true,
+    "accessibility": true
+  }
+}

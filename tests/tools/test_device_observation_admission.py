@@ -57,3 +57,20 @@ class FreshAdmissionTest(unittest.TestCase):
         diagnostic = str(q.wait_failure)
         self.assertNotIn("PRIVATE_CREDENTIAL", diagnostic)
         self.assertNotIn("PRIVATE_SCREEN_TEXT", diagnostic)
+
+    def test_window_deadline_remains_failed_after_late_recovery_without_effect_or_private_data(self):
+        q = self.evaluator()
+        q.profile = {"packageId": MODULE.PACKAGE, "accountRef": None}
+        q.read = Mock(side_effect=[{"kind": "error", "error": {"code": "DeadlineExceeded"}, "effect": "none"},
+                                  {"kind": "snapshot", "generation": 3, "rotation": 1, "complete": True, "totalNodes": 1,
+                                   "bearer": "PRIVATE_CREDENTIAL", "nodes": [{"text": "PRIVATE_SCREEN_TEXT"}]}])
+        q.action = Mock()
+        with self.assertRaises(ValueError): q.window(milliseconds=20000)
+        self.assertEqual([call.args[0] for call in q.read.call_args_list], ["/v2/wait", "/v2/observe"])
+        q.action.assert_not_called()
+        self.assertEqual(q.last_error_code, "DeadlineExceeded")
+        self.assertEqual(q.last_operation, "/v2/wait")
+        self.assertEqual(q.window_failure["deadlineMillis"], 20000)
+        self.assertEqual(q.window_failure["kind"], "snapshot")
+        self.assertNotIn("PRIVATE_CREDENTIAL", str(q.window_failure))
+        self.assertNotIn("PRIVATE_SCREEN_TEXT", str(q.window_failure))

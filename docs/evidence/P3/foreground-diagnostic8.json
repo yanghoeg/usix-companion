@@ -1,0 +1,25 @@
+{
+  "recordedAt": "2026-10-02T07:17:34.506153+00:00",
+  "source": "read-only selected-fixture comparison; no UI effect and no other package requested",
+  "rich": {
+    "kind": "error",
+    "errorCode": "ExpiredReference",
+    "windowId": null,
+    "generation": null,
+    "totalNodes": null,
+    "controlledTitles": {
+      "Fixture native": 0,
+      "Fixture compose": 0,
+      "Fixture webview": 0
+    }
+  },
+  "legacy": {
+    "ok": true,
+    "nodeCount": 0,
+    "controlledTitles": {
+      "Fixture native": 0,
+      "Fixture compose": 0,
+      "Fixture webview": 0
+    }
+  }
+}

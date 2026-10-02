@@ -1,0 +1,150 @@
+{
+  "recordedAt": "2026-10-02T07:29:36.148258+00:00",
+  "source": "controlled fixture only; one Compose transition; v1 and v2 reads; raw nodes and credentials omitted",
+  "samples": [
+    {
+      "stage": "before-launch",
+      "elapsedMs": 91,
+      "rich": {
+        "kind": "error",
+        "errorCode": "ExpiredReference",
+        "totalNodes": null,
+        "generation": null,
+        "rotation": null,
+        "controlledTitles": {
+          "Fixture native": 0,
+          "Fixture compose": 0,
+          "Fixture webview": 0
+        }
+      },
+      "legacy": {
+        "responseType": "list",
+        "nodeCount": 0,
+        "controlledTitles": {
+          "Fixture native": 0,
+          "Fixture compose": 0,
+          "Fixture webview": 0
+        }
+      }
+    },
+    {
+      "stage": "before-compose",
+      "elapsedMs": 763,
+      "rich": {
+        "kind": "snapshot",
+        "errorCode": null,
+        "totalNodes": 26,
+        "generation": 14843,
+        "rotation": 0,
+        "controlledTitles": {
+          "Fixture native": 0,
+          "Fixture compose": 1,
+          "Fixture webview": 0
+        }
+      },
+      "legacy": {
+        "responseType": "list",
+        "nodeCount": 19,
+        "controlledTitles": {
+          "Fixture native": 0,
+          "Fixture compose": 1,
+          "Fixture webview": 0
+        }
+      }
+    },
+    {
+      "stage": "after-compose-dispatch",
+      "elapsedMs": 1556,
+      "rich": {
+        "kind": "snapshot",
+        "errorCode": null,
+        "totalNodes": 26,
+        "generation": 14852,
+        "rotation": 1,
+        "controlledTitles": {
+          "Fixture native": 0,
+          "Fixture compose": 1,
+          "Fixture webview": 0
+        }
+      },
+      "legacy": {
+        "responseType": "list",
+        "nodeCount": 19,
+        "controlledTitles": {
+          "Fixture native": 0,
+          "Fixture compose": 1,
+          "Fixture webview": 0
+        }
+      }
+    },
+    {
+      "stage": "after-compose-text-wait",
+      "elapsedMs": 1700,
+      "rich": {
+        "kind": "snapshot",
+        "errorCode": null,
+        "totalNodes": 26,
+        "generation": 14857,
+        "rotation": 1,
+        "controlledTitles": {
+          "Fixture native": 0,
+          "Fixture compose": 1,
+          "Fixture webview": 0
+        }
+      },
+      "legacy": {
+        "responseType": "list",
+        "nodeCount": 19,
+        "controlledTitles": {
+          "Fixture native": 0,
+          "Fixture compose": 1,
+          "Fixture webview": 0
+        }
+      }
+    }
+  ],
+  "passed": true,
+  "elapsedMs": 1817,
+  "checks": [
+    {
+      "check": "P3 supported by the real APK",
+      "passed": true
+    },
+    {
+      "check": "selected controller acquired",
+      "passed": true
+    },
+    {
+      "check": "fixture launch is dispatched",
+      "passed": true,
+      "state": "Dispatched"
+    },
+    {
+      "check": "foreground package retained",
+      "passed": true,
+      "packageId": "dev.usix.companion.fixture",
+      "accountRef": "c2d3eebb-4de4-4578-b3e7-6a7f61a29d3c"
+    },
+    {
+      "check": "fresh admission after known stale rejection",
+      "passed": true,
+      "actionId": "1f466388-0f4a-45c0-8fd0-24a2dda9c29e",
+      "effect": "none"
+    },
+    {
+      "check": "fresh admission after known stale rejection",
+      "passed": true,
+      "actionId": "a33a3111-5566-4856-9a06-5c270c8d07fd",
+      "effect": "none"
+    },
+    {
+      "check": "compose dispatched",
+      "passed": true
+    },
+    {
+      "check": "compose foreground rich tree",
+      "passed": true
+    }
+  ],
+  "deviceCalls": 17
+}

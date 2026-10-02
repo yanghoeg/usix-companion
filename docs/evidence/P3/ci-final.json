@@ -1,0 +1,148 @@
+{
+  "recordedAt": "2026-10-02T06:51:26.163863+00:00",
+  "source": "GitHub Actions API and complete job log",
+  "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36973915265",
+  "revision": "20b8faaaf0df733b57e43a8c9c9c7a6f1dcc1632",
+  "status": "completed",
+  "conclusion": "success",
+  "requiredJobs": [
+    {
+      "name": "core",
+      "conclusion": "success",
+      "url": "https://github.com/yanghoeg/usix-companion/actions/runs/36973915265/job/110733519842",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Check architecture and build without an Android SDK",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    },
+    {
+      "name": "build",
+      "conclusion": "success",
+      "url": "https://github.com/yanghoeg/usix-companion/actions/runs/36973915265/job/110733860340",
+      "steps": [
+        {
+          "name": "Set up job",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run gradle/actions/setup-gradle@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Validate device contracts",
+          "conclusion": "success"
+        },
+        {
+          "name": "Validate standalone integration and TLS broker",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build release APK",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run regression tests",
+          "conclusion": "success"
+        },
+        {
+          "name": "Validate APK-router wire output",
+          "conclusion": "success"
+        },
+        {
+          "name": "Build controlled native, Compose and WebView device fixture",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Run actions/upload-artifact@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-python@v5",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run gradle/actions/setup-gradle@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/setup-java@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "conclusion": "success"
+        },
+        {
+          "name": "Complete job",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "nativeRoomTaskExecuted": true,
+  "nativeRoomTask": ":adapters:persistence:testDebugUnitTest",
+  "nativeRoomDatabaseCases": 5,
+  "toolingTests": 32,
+  "integrationTests": 19,
+  "logSha256": "9f67afcc3ca2f7e4a6cf86a692ffcbf9a72093d9ac65dd400f89d34c564288c9",
+  "productionSourceMatchesDeliveredCheckpoint": "git diff a393058..20b8faa over app/core/adapters/protocol/feature/fixture/integration/contracts is empty; APK bytes are recorded separately",
+  "releaseJob": "Skipped as expected for a branch push; no release/tag publication."
+}

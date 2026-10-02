@@ -1,0 +1,26 @@
+{
+  "recordedAt": "2026-10-02T07:31:41.622070+00:00",
+  "source": "read-only selected-fixture comparison immediately after USIX attempt 10; no UI effect or other package requested",
+  "rich": {
+    "kind": "snapshot",
+    "windowId": 411,
+    "generation": 14948,
+    "rotation": 1,
+    "totalNodes": 26,
+    "errorCode": null,
+    "controlledTitles": {
+      "Fixture native": 0,
+      "Fixture compose": 1,
+      "Fixture webview": 0
+    }
+  },
+  "legacy": {
+    "responseType": "list",
+    "nodeCount": 19,
+    "controlledTitles": {
+      "Fixture native": 0,
+      "Fixture compose": 1,
+      "Fixture webview": 0
+    }
+  }
+}
