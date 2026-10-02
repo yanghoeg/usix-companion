@@ -41,3 +41,19 @@ class FreshAdmissionTest(unittest.TestCase):
                          [("ui.tap", {"x": 10, "y": 30}, "old"), ("ui.tap", {"x": 200, "y": 30}, "new")])
         self.assertEqual(q.checks[0]["actionId"], "rejected")
         self.assertEqual(q.checks[0]["effect"], "none")
+
+    def test_failed_wait_stays_failed_when_late_diagnostic_matches_and_omits_raw_data(self):
+        q = self.evaluator()
+        q.profile = {"packageId": MODULE.PACKAGE, "accountRef": None}
+        q.read = Mock(side_effect=[{"kind": "error", "error": {"code": "DeadlineExceeded"}, "effect": "none"},
+                                  {"kind": "snapshot", "generation": 2, "rotation": 1, "complete": True, "totalNodes": 2,
+                                   "bearer": "PRIVATE_CREDENTIAL", "nodes": [{"text": "Expected", "visible": True},
+                                                                             {"text": "PRIVATE_SCREEN_TEXT", "visible": False}]}])
+        with self.assertRaises(ValueError): q.wait("Expected", milliseconds=20)
+        self.assertEqual([call.args[0] for call in q.read.call_args_list], ["/v2/wait", "/v2/observe"])
+        self.assertEqual(q.last_error_code, "DeadlineExceeded")
+        self.assertEqual(q.last_operation, "/v2/wait")
+        self.assertEqual(q.wait_failure["expectedVisible"], 1)
+        diagnostic = str(q.wait_failure)
+        self.assertNotIn("PRIVATE_CREDENTIAL", diagnostic)
+        self.assertNotIn("PRIVATE_SCREEN_TEXT", diagnostic)

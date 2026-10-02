@@ -1,0 +1,8 @@
+{
+  "recordedAt": "2026-10-02T06:00:07.581679+00:00",
+  "evaluationOwnedPid": 27084,
+  "identityMatched": true,
+  "processExited": true,
+  "loopback8080Closed": true,
+  "scope": "Only the evaluation-owned llama-server was stopped; Companion broker is retained."
+}

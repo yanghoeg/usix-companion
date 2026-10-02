@@ -1,0 +1,46 @@
+{
+  "recordedAt": "2026-10-02T05:51:33.703121+00:00",
+  "runtime": "usix",
+  "invocationCwd": "/data/data/com.termux/files/home/usix",
+  "source": "genuine unchanged installed runtime and existing model; exact admitted tool invokes physical controlled fixture",
+  "command": "python3 /data/data/com.termux/files/home/usix-companion/.build-tools/usix-model-trace3-fixed-helper.py",
+  "permission": "new explicit user-approved USIX --yolo",
+  "approvalDecisions": [],
+  "physicalEvidence": "docs/evidence/P3/usix-model-physical3.json",
+  "deviceWitness": null,
+  "exitCode": 0,
+  "elapsedMs": 88341,
+  "deviceObservationsViaModelVerified": false,
+  "redaction": "only exact command, approvals, controlled fixture summary, correlation and model counts; no credentials or hidden reasoning",
+  "events": [
+    {
+      "type": "tool_execute",
+      "seq": 121,
+      "tool": "bash",
+      "exactCommand": true,
+      "args": {
+        "command": "python3 /data/data/com.termux/files/home/usix-companion/.build-tools/usix-model-trace3-fixed-helper.py"
+      },
+      "call_id": "chatcmpl-tool-a5c50ca70c88708b",
+      "request_id": "3506649f-62e8-422e-b9e3-933ca096cfaf"
+    },
+    {
+      "type": "tool_result",
+      "seq": 122,
+      "exactCommandResult": true,
+      "success": false,
+      "code": null,
+      "call_id": "chatcmpl-tool-a5c50ca70c88708b",
+      "request_id": "3506649f-62e8-422e-b9e3-933ca096cfaf"
+    },
+    {
+      "type": "done",
+      "seq": 434,
+      "model": "qwen3.8-flash-next",
+      "tokens": 499,
+      "prompt_tokens": 13128,
+      "finish_reason": "completed",
+      "request_id": "3506649f-62e8-422e-b9e3-933ca096cfaf"
+    }
+  ]
+}

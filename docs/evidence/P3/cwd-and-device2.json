@@ -1,0 +1,144 @@
+{
+  "recordedAt": "2026-10-02T05:35:04.699698+00:00",
+  "source": "installed absolute external CLI; captured fixture/account/workspace; no model claim",
+  "device": {
+    "ro.product.manufacturer": "samsung",
+    "ro.product.model": "SM-F956N",
+    "ro.build.version.release": "16",
+    "ro.build.version.sdk": "36"
+  },
+  "transport": "broker",
+  "calls": [
+    {
+      "cwd": "/data/data/com.termux/files/home/usix",
+      "contextSha256": "571ee491781a740ba5991d948f769a9ea8e7a9ee10a23d88d65cee29ffe9958c",
+      "workspace": "/data/data/com.termux/files/home/usix-companion/.build-tools/P3-private/workspace",
+      "exitCode": 0,
+      "kind": "snapshot",
+      "errorCode": null,
+      "scope": {
+        "accountRef": "9bf88228-fc75-41dd-b6f5-4f97a3b92ce4",
+        "packageId": "dev.usix.companion.fixture",
+        "resourceRefs": [],
+        "snapshotRef": null
+      },
+      "snapshotRef": "348a2938-9834-47ec-8438-d40e88eeca90",
+      "generation": 2940,
+      "rotation": 1,
+      "displayBounds": {
+        "bottom": 1856,
+        "left": 0,
+        "right": 2160,
+        "top": 0
+      },
+      "windowBounds": {
+        "bottom": 1856,
+        "left": 0,
+        "right": 2160,
+        "top": 0
+      },
+      "complete": true,
+      "totalNodes": 169,
+      "passed": true
+    },
+    {
+      "cwd": "/data/data/com.termux/files/home/usix-termux",
+      "contextSha256": "571ee491781a740ba5991d948f769a9ea8e7a9ee10a23d88d65cee29ffe9958c",
+      "workspace": "/data/data/com.termux/files/home/usix-companion/.build-tools/P3-private/workspace",
+      "exitCode": 0,
+      "kind": "snapshot",
+      "errorCode": null,
+      "scope": {
+        "accountRef": "9bf88228-fc75-41dd-b6f5-4f97a3b92ce4",
+        "packageId": "dev.usix.companion.fixture",
+        "resourceRefs": [],
+        "snapshotRef": null
+      },
+      "snapshotRef": "7c475fe8-33d6-4a1e-aa0c-f2028ee46813",
+      "generation": 2940,
+      "rotation": 1,
+      "displayBounds": {
+        "bottom": 1856,
+        "left": 0,
+        "right": 2160,
+        "top": 0
+      },
+      "windowBounds": {
+        "bottom": 1856,
+        "left": 0,
+        "right": 2160,
+        "top": 0
+      },
+      "complete": true,
+      "totalNodes": 169,
+      "passed": true
+    },
+    {
+      "cwd": "/data/data/com.termux/files/home/usix-companion",
+      "contextSha256": "571ee491781a740ba5991d948f769a9ea8e7a9ee10a23d88d65cee29ffe9958c",
+      "workspace": "/data/data/com.termux/files/home/usix-companion/.build-tools/P3-private/workspace",
+      "exitCode": 0,
+      "kind": "snapshot",
+      "errorCode": null,
+      "scope": {
+        "accountRef": "9bf88228-fc75-41dd-b6f5-4f97a3b92ce4",
+        "packageId": "dev.usix.companion.fixture",
+        "resourceRefs": [],
+        "snapshotRef": null
+      },
+      "snapshotRef": "bb6580a2-30aa-4611-b637-8a3c1028db20",
+      "generation": 2940,
+      "rotation": 1,
+      "displayBounds": {
+        "bottom": 1856,
+        "left": 0,
+        "right": 2160,
+        "top": 0
+      },
+      "windowBounds": {
+        "bottom": 1856,
+        "left": 0,
+        "right": 2160,
+        "top": 0
+      },
+      "complete": true,
+      "totalNodes": 169,
+      "passed": true
+    },
+    {
+      "cwd": "/tmp",
+      "contextSha256": "571ee491781a740ba5991d948f769a9ea8e7a9ee10a23d88d65cee29ffe9958c",
+      "workspace": "/data/data/com.termux/files/home/usix-companion/.build-tools/P3-private/workspace",
+      "exitCode": 0,
+      "kind": "snapshot",
+      "errorCode": null,
+      "scope": {
+        "accountRef": "9bf88228-fc75-41dd-b6f5-4f97a3b92ce4",
+        "packageId": "dev.usix.companion.fixture",
+        "resourceRefs": [],
+        "snapshotRef": null
+      },
+      "snapshotRef": "e9cc5b66-7c95-46c3-a41f-be6f6b7fbe2e",
+      "generation": 2940,
+      "rotation": 1,
+      "displayBounds": {
+        "bottom": 1856,
+        "left": 0,
+        "right": 2160,
+        "top": 0
+      },
+      "windowBounds": {
+        "bottom": 1856,
+        "left": 0,
+        "right": 2160,
+        "top": 0
+      },
+      "complete": true,
+      "totalNodes": 169,
+      "passed": true
+    }
+  ],
+  "privateProfileUnchanged": true,
+  "passed": true,
+  "redaction": "no bearer, raw screen, node text, PNG or OCR content"
+}

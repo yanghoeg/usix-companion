@@ -83,7 +83,23 @@ class Qualification:
                 value = window
                 break
             self.check("selected window restored before text wait", window["packageId"] == PACKAGE)
-        raise ValueError("Expected controlled state unavailable: " + value.get("error", {}).get("code", "InvalidRequest"))
+        error_code = (value.get("error") or {}).get("code", "InvalidRequest")
+        # Diagnose the selected fixture immediately; a late snapshot never
+        # converts the failed wait into a pass or causes an effect replay.
+        self.wait_failure = {"errorCode": error_code, "expectedTextSha256": hashlib.sha256(text.encode()).hexdigest()}
+        try:
+            observed = self.read("/v2/observe", scope=scope(self.profile), selector=None, offset=0, limit=128)
+            nodes = observed.get("nodes", [])
+            self.wait_failure.update(kind=observed.get("kind"), observationErrorCode=(observed.get("error") or {}).get("code"),
+                                     generation=observed.get("generation"), rotation=observed.get("rotation"),
+                                     complete=observed.get("complete"), totalNodes=observed.get("totalNodes"),
+                                     expectedPresent=sum(node["text"] == text for node in nodes),
+                                     expectedVisible=sum(node["text"] == text and node["visible"] for node in nodes))
+        except Exception as error:
+            self.wait_failure["diagnosticExceptionType"] = type(error).__name__
+        self.last_error_code = error_code
+        self.last_operation = "/v2/wait"
+        raise ValueError("Expected controlled state unavailable: " + error_code)
 
     def action(self, operation, payload, snapshot=None, cancellation=None):
         if self.lease_refreshed is not None and time.monotonic() - self.lease_refreshed >= 40:
@@ -170,7 +186,9 @@ class Qualification:
     def mode(self, mode):
         receipt, _ = self.click({"resourceId": PACKAGE + ":id/mode_" + mode})
         self.check(mode + " mode dispatched", receipt.get("state") == "Dispatched")
-        self.wait("Fixture " + mode)
+        # Compose/WebView initialization on the physical CPU can exceed 5 s.
+        # Keep an explicit bounded event wait, including foreground recreation.
+        self.wait("Fixture " + mode, milliseconds=20000)
         observed = self.observe()
         self.check(mode + " rich metadata", observed["complete"] and observed["generation"] >= 1 and bool(observed["nodes"]) and
                    all("bounds" in node and "parentRef" in node and "className" in node for node in observed["nodes"]), totalNodes=observed["totalNodes"])
@@ -370,6 +388,7 @@ def main():
     except Exception as error:
         report.update(passed=False, exceptionType=type(error).__name__, lastOperation=evaluation.last_operation if evaluation else None,
                       error="Qualification incomplete; inspect controlled checks and current readiness. Credentials omitted.")
+        if evaluation and getattr(evaluation, "wait_failure", None): report["waitFailure"] = evaluation.wait_failure
     finally:
         if evaluation:
             try: evaluation.read("/v2/controller/release")

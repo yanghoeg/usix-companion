@@ -204,7 +204,8 @@ def main():
                   "configuration": {"backend": "existing llama-server on loopback:8080", "model": "existing Qwen3.5-2B-Q5_K_M", "interactive": True}}
     report = {"recordedAt": datetime.now(timezone.utc).isoformat(), "runtime": args.runtime, "invocationCwd": str(cwd),
               "source": "genuine unchanged installed runtime and existing model; exact admitted tool invokes physical controlled fixture",
-              "command": command, "permission": "new explicit user-approved USIX --yolo" if args.yolo else "existing TTY one-time exact-command approval",
+              "command": command, "permission": "new explicit user-approved USIX --yolo" if args.yolo else
+              "existing TTY one-time exact-command approval" if args.runtime == "usix-termux" else "existing USIX default admission and exact allowed-tools rule",
               "approvalDecisions": decisions, "physicalEvidence": str(args.physical.resolve().relative_to(ROOT)), "deviceWitness": observed,
               "exitCode": code, "elapsedMs": round((time.monotonic() - monotonic) * 1000), "deviceObservationsViaModelVerified": passed,
               "redaction": "only exact command, approvals, controlled fixture summary, correlation and model counts; no credentials or hidden reasoning", **detail}

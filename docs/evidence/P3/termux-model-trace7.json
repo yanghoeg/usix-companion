@@ -1,0 +1,51 @@
+{
+  "recordedAt": "2026-10-02T05:34:25.300386+00:00",
+  "runtime": "usix-termux",
+  "invocationCwd": "/data/data/com.termux/files/home/usix-termux",
+  "source": "genuine unchanged installed runtime and existing model; exact admitted tool invokes physical controlled fixture",
+  "command": "python3 /data/data/com.termux/files/home/usix-companion/.build-tools/termux-model-trace7-fixed-helper.py",
+  "permission": "existing TTY one-time exact-command approval",
+  "approvalDecisions": [
+    {
+      "tool": "shell",
+      "exactCommand": true,
+      "decision": "once",
+      "args": {
+        "command": "python3 /data/data/com.termux/files/home/usix-companion/.build-tools/termux-model-trace7-fixed-helper.py"
+      },
+      "recordedAt": "2026-10-02T05:32:44.778869+00:00"
+    }
+  ],
+  "physicalEvidence": "docs/evidence/P3/termux-model-physical7.json",
+  "deviceWitness": {
+    "recordedAt": "2026-10-02T05:32:45.443551+00:00",
+    "runtimeLabel": "usix-termux",
+    "operation": "P3.controlled-observation",
+    "invocationCwd": "/data/data/com.termux/files/home/usix-termux",
+    "suite": "all",
+    "passed": true,
+    "deviceCalls": 150,
+    "elapsedMs": 57955,
+    "lastDeviceErrorCode": "StaleSnapshot",
+    "contextSha256": "571ee491781a740ba5991d948f769a9ea8e7a9ee10a23d88d65cee29ffe9958c",
+    "checkCount": 83,
+    "passedChecks": 83,
+    "evidenceSha256": "2f7630d203b8894a1bc60996536ed91e395c43220d262c45887c9a3e297c40b4"
+  },
+  "exitCode": 0,
+  "elapsedMs": 120774,
+  "deviceObservationsViaModelVerified": true,
+  "redaction": "only exact command, approvals, controlled fixture summary, correlation and model counts; no credentials or hidden reasoning",
+  "normalTuiExit": true,
+  "publicModelSummary": {
+    "passed": true,
+    "checkCount": 83,
+    "evidenceSha256": "2f7630d203b8894a1bc60996536ed91e395c43220d262c45887c9a3e297c40b4"
+  },
+  "modelReportMatchesPhysicalEvidence": true,
+  "configuration": {
+    "backend": "existing llama-server on loopback:8080",
+    "model": "existing Qwen3.5-2B-Q5_K_M",
+    "interactive": true
+  }
+}

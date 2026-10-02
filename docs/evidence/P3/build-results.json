@@ -42,7 +42,7 @@
   "pythonTests": {
     "architecture": 6,
     "contract": 18,
-    "tools": 31,
+    "tools": 32,
     "integration": 19
   },
   "schemas": 9,
@@ -53,8 +53,8 @@
     "status": "passed",
     "requiredTask": ":adapters:persistence:testDebugUnitTest",
     "executionDatabaseCases": 5,
-    "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36961254575",
-    "revision": "4c426ac89b7ccc0012f8eb00582523db61623a40"
+    "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36969049725",
+    "revision": "a3930585d5d4650fc955d962e8270493976b2c2e"
   },
   "apks": {
     "app": {
@@ -80,5 +80,13 @@
       ]
     }
   },
-  "physicalInstallation": "User confirmed delivered latest Companion update, fixture installation, accessibility and unlock; installed bytes not read back"
+  "physicalInstallation": "User confirmed delivered latest Companion update, fixture installation, accessibility and unlock; installed bytes not read back",
+  "finalCi": {
+    "status": "passed",
+    "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36969049725",
+    "revision": "a3930585d5d4650fc955d962e8270493976b2c2e",
+    "productionCodeMatchesDeliveredApk": true,
+    "laterChange": "Fixture evaluator mode event wait extended from 5 to 20 seconds and redacted failed-wait diagnosis added; late matches stay failed. USIX default admission metadata corrected. All 32 local tooling tests pass; production APK code unchanged."
+  },
+  "toolingRetestedAt": "2026-10-02T06:15:07.044909+00:00"
 }

@@ -1,0 +1,91 @@
+{
+  "recordedAt": "2026-10-02T06:04:59.105686+00:00",
+  "source": "direct physical diagnostic; not model qualification",
+  "runtimeSourceWrites": 0,
+  "before": {
+    "kind": "snapshot",
+    "errorCode": null,
+    "rotation": 1,
+    "generation": 3870,
+    "totalNodes": 26,
+    "complete": true,
+    "controlledModes": [
+      {
+        "expectedText": "Fixture native",
+        "present": 0,
+        "visible": 0
+      },
+      {
+        "expectedText": "Fixture compose",
+        "present": 1,
+        "visible": 1
+      },
+      {
+        "expectedText": "Fixture webview",
+        "present": 0,
+        "visible": 0
+      }
+    ],
+    "composeTargets": 1
+  },
+  "dispatch": {
+    "actionId": "0e41c557-e6c5-42e7-b0f7-909648807804",
+    "state": "Dispatched",
+    "effect": "dispatched",
+    "errorCode": null
+  },
+  "wait": {
+    "kind": "snapshot",
+    "errorCode": null,
+    "rotation": 1,
+    "generation": 3873,
+    "totalNodes": 26,
+    "complete": true,
+    "controlledModes": [
+      {
+        "expectedText": "Fixture native",
+        "present": 0,
+        "visible": 0
+      },
+      {
+        "expectedText": "Fixture compose",
+        "present": 1,
+        "visible": 1
+      },
+      {
+        "expectedText": "Fixture webview",
+        "present": 0,
+        "visible": 0
+      }
+    ],
+    "composeTargets": 0
+  },
+  "waitElapsedMs": 123,
+  "after": {
+    "kind": "snapshot",
+    "errorCode": null,
+    "rotation": 1,
+    "generation": 3875,
+    "totalNodes": 26,
+    "complete": true,
+    "controlledModes": [
+      {
+        "expectedText": "Fixture native",
+        "present": 0,
+        "visible": 0
+      },
+      {
+        "expectedText": "Fixture compose",
+        "present": 1,
+        "visible": 1
+      },
+      {
+        "expectedText": "Fixture webview",
+        "present": 0,
+        "visible": 0
+      }
+    ],
+    "composeTargets": 1
+  },
+  "deviceCalls": 7
+}

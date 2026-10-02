@@ -1,0 +1,281 @@
+{
+  "recordedAt": "2026-10-02T05:50:18.631355+00:00",
+  "runtimeLabel": "usix",
+  "operation": "P3.controlled-observation",
+  "invocationCwd": "/data/data/com.termux/files/home/usix",
+  "source": "physical authenticated Companion fixture; no mock device/model",
+  "suite": "all",
+  "runtimeSourceWrites": 0,
+  "contextSha256": "d3a9497cb3adcb996fabca961cbb9280cc070f15e62d3b8f086d8722ba609731",
+  "passed": false,
+  "exceptionType": "ValueError",
+  "lastOperation": "/v2/wait",
+  "error": "Qualification incomplete; inspect controlled checks and current readiness. Credentials omitted.",
+  "checks": [
+    {
+      "check": "P3 supported by the real APK",
+      "passed": true
+    },
+    {
+      "check": "selected controller acquired",
+      "passed": true
+    },
+    {
+      "check": "fixture launch is dispatched",
+      "passed": true,
+      "state": "Dispatched"
+    },
+    {
+      "check": "foreground package retained",
+      "passed": true,
+      "packageId": "dev.usix.companion.fixture",
+      "accountRef": "c2d3eebb-4de4-4578-b3e7-6a7f61a29d3c"
+    },
+    {
+      "check": "fresh admission after known stale rejection",
+      "passed": true,
+      "actionId": "0bd69d30-8aba-4edf-8efb-77c658132d75",
+      "effect": "none"
+    },
+    {
+      "check": "native mode dispatched",
+      "passed": true
+    },
+    {
+      "check": "native rich metadata",
+      "passed": true,
+      "totalNodes": 169
+    },
+    {
+      "check": "native controlled duplicate labels agree",
+      "passed": true
+    },
+    {
+      "check": "native duplicate labels rejected",
+      "passed": true,
+      "state": "Failed"
+    },
+    {
+      "check": "effect acknowledged for Applied native",
+      "passed": true,
+      "actionId": "c01051e2-c83c-4db2-b9b8-b80a11e74b2d",
+      "state": "Verified",
+      "effect": "verified"
+    },
+    {
+      "check": "observed UI state Applied native",
+      "passed": true,
+      "receiptId": "55d8b34c-52e9-4696-bd54-761ca443cfe9",
+      "state": "Verified",
+      "evidence": [
+        {
+          "evidenceRef": "b52c407b-e39d-491b-b5fe-72bdf4a58c88",
+          "goalId": "6ab69174-d1eb-44f3-80aa-9c6f03bc8d7b",
+          "method": "observed_state",
+          "purpose": "ui_state",
+          "snapshotRef": "25ee1a7a-365c-4750-8fd3-633e2e8f0e5f",
+          "verifiedAt": "2026-10-02T05:50:24.666Z"
+        }
+      ],
+      "observationRef": "25ee1a7a-365c-4750-8fd3-633e2e8f0e5f"
+    },
+    {
+      "check": "native durable verified receipt",
+      "passed": true
+    },
+    {
+      "check": "native criterion substitution rejected",
+      "passed": true
+    },
+    {
+      "check": "native dispatch is not verification",
+      "passed": true,
+      "observationRef": "b7bb726e-887d-4d24-beef-d2a675db6f95"
+    },
+    {
+      "check": "native stale node rejected",
+      "passed": true
+    },
+    {
+      "check": "native event-driven asynchronous observation",
+      "passed": true,
+      "elapsedMs": 3025
+    },
+    {
+      "check": "password field masked",
+      "passed": true
+    },
+    {
+      "check": "pagination exceeds 80 without truncation",
+      "passed": true,
+      "totalMatching": 169
+    },
+    {
+      "check": "keyboard visibility True",
+      "passed": true,
+      "generation": 3136
+    },
+    {
+      "check": "focus/keyboard invalidate old coordinates",
+      "passed": true
+    },
+    {
+      "check": "effect acknowledged for 한글 English 123",
+      "passed": true,
+      "actionId": "5d518ec4-6a8e-45bd-9c3f-5f7c2849d9cb",
+      "state": "Verified",
+      "effect": "verified"
+    },
+    {
+      "check": "observed UI state 한글 English 123",
+      "passed": true,
+      "receiptId": "a9ba9786-8110-4b85-839a-cfde23e45990",
+      "state": "Verified",
+      "evidence": [
+        {
+          "evidenceRef": "0f106920-9db1-4de2-b3ee-0996944983e7",
+          "goalId": "674d3e2a-c201-4b0c-bb7e-5ac053e92a8d",
+          "method": "observed_state",
+          "purpose": "ui_state",
+          "snapshotRef": "0857f92f-9743-4e4a-bb5c-197c197df8ab",
+          "verifiedAt": "2026-10-02T05:50:33.694Z"
+        }
+      ],
+      "observationRef": "0857f92f-9743-4e4a-bb5c-197c197df8ab"
+    },
+    {
+      "check": "keyboard back dispatched",
+      "passed": true
+    },
+    {
+      "check": "keyboard visibility False",
+      "passed": true,
+      "generation": 3151
+    },
+    {
+      "check": "post-dispatch cancellation preserves effect",
+      "passed": true
+    },
+    {
+      "check": "ui.long_press has one visible controlled target",
+      "passed": true
+    },
+    {
+      "check": "effect acknowledged for Long pressed native",
+      "passed": true,
+      "actionId": "b81f3a24-a6fb-4513-ae86-322edcda9da2",
+      "state": "Verified",
+      "effect": "verified"
+    },
+    {
+      "check": "observed UI state Long pressed native",
+      "passed": true,
+      "receiptId": "4961450a-0eda-4b62-8502-9d8b5d14567a",
+      "state": "Verified",
+      "evidence": [
+        {
+          "evidenceRef": "20637d16-94bb-4bed-93ae-d0a77db9a218",
+          "goalId": "7aa9396a-0300-4f53-8cce-1a5af7b2f7ed",
+          "method": "observed_state",
+          "purpose": "ui_state",
+          "snapshotRef": "0040c5a6-1a98-4917-88cb-520c11d0ae1a",
+          "verifiedAt": "2026-10-02T05:50:39.544Z"
+        }
+      ],
+      "observationRef": "0040c5a6-1a98-4917-88cb-520c11d0ae1a"
+    },
+    {
+      "check": "ui.select has one visible controlled target",
+      "passed": true
+    },
+    {
+      "check": "effect acknowledged for Selected native",
+      "passed": true,
+      "actionId": "8dd7f8c2-0c00-49bc-98e3-ee1875f37ece",
+      "state": "Verified",
+      "effect": "verified"
+    },
+    {
+      "check": "observed UI state Selected native",
+      "passed": true,
+      "receiptId": "ecf0db35-ad65-49bf-b30b-39f4e3ab9998",
+      "state": "Verified",
+      "evidence": [
+        {
+          "evidenceRef": "ac50cb2d-1dc9-4ccd-ba21-0639dae234c0",
+          "goalId": "6bb2678e-b913-4112-b307-2e67f7254362",
+          "method": "observed_state",
+          "purpose": "ui_state",
+          "snapshotRef": "c4c645aa-0b27-4c8a-a213-3f5c8708575c",
+          "verifiedAt": "2026-10-02T05:50:42.773Z"
+        }
+      ],
+      "observationRef": "c4c645aa-0b27-4c8a-a213-3f5c8708575c"
+    },
+    {
+      "check": "semantic scroll True",
+      "passed": true,
+      "state": "Dispatched"
+    },
+    {
+      "check": "scroll rejects stale coordinates",
+      "passed": true
+    },
+    {
+      "check": "semantic scroll False",
+      "passed": true,
+      "state": "Dispatched"
+    },
+    {
+      "check": "effect acknowledged for Applied native",
+      "passed": true,
+      "actionId": "3d44e6a7-6f3b-418a-935f-e40ad0b85026",
+      "state": "Verified",
+      "effect": "verified"
+    },
+    {
+      "check": "observed UI state Applied native",
+      "passed": true,
+      "receiptId": "597f164f-8a98-48c3-81f4-50706e4e8030",
+      "state": "Verified",
+      "evidence": [
+        {
+          "evidenceRef": "b3000db6-83d1-423a-b450-f1df6a4fa289",
+          "goalId": "fdc38bbc-d6ce-47ef-a33c-5e9f3e042494",
+          "method": "observed_state",
+          "purpose": "ui_state",
+          "snapshotRef": "8f45caea-ea2b-4dc0-a8ce-e2a1dc818152",
+          "verifiedAt": "2026-10-02T05:50:53.041Z"
+        }
+      ],
+      "observationRef": "8f45caea-ea2b-4dc0-a8ce-e2a1dc818152"
+    },
+    {
+      "check": "bounded swipe acknowledged",
+      "passed": true,
+      "state": "Dispatched"
+    },
+    {
+      "check": "semantic scroll False",
+      "passed": true,
+      "state": "Dispatched"
+    },
+    {
+      "check": "same controller lease extended",
+      "passed": true
+    },
+    {
+      "check": "fresh admission after known stale rejection",
+      "passed": true,
+      "actionId": "0740df46-5f24-417c-acd6-d8d24f752666",
+      "effect": "none"
+    },
+    {
+      "check": "compose mode dispatched",
+      "passed": true
+    }
+  ],
+  "deviceCalls": 73,
+  "lastDeviceErrorCode": "DeadlineExceeded",
+  "elapsedMs": 63828
+}
