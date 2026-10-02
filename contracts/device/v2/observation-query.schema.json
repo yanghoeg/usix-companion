@@ -1,0 +1,480 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usix-companion:device:v2:observation-query",
+  "oneOf": [
+    {
+      "type": "object",
+      "properties": {
+        "contractVersion": {
+          "const": "usix-companion.device/v2"
+        },
+        "requestId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "scope": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/scope"
+        },
+        "selector": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/selector"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "offset": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4096
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 128
+        }
+      },
+      "required": [
+        "contractVersion",
+        "requestId",
+        "scope",
+        "selector",
+        "offset",
+        "limit"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "contractVersion": {
+          "const": "usix-companion.device/v2"
+        },
+        "requestId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "scope": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/scope"
+        },
+        "waitKind": {
+          "enum": [
+            "node",
+            "text",
+            "window",
+            "changed"
+          ]
+        },
+        "selector": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/selector"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "deadline": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+        },
+        "cancellationId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        }
+      },
+      "required": [
+        "contractVersion",
+        "requestId",
+        "scope",
+        "waitKind",
+        "selector",
+        "deadline",
+        "cancellationId"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "waitKind": {
+                "enum": [
+                  "node",
+                  "text"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "$ref": "#/$defs/selector"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "waitKind": {
+                "const": "text"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "required": [
+                  "text"
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "waitKind": {
+                "enum": [
+                  "window",
+                  "changed"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    },
+    {
+      "type": "object",
+      "properties": {
+        "contractVersion": {
+          "const": "usix-companion.device/v2"
+        },
+        "requestId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "scope": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/scope"
+        },
+        "language": {
+          "enum": [
+            null,
+            "latin",
+            "korean"
+          ]
+        }
+      },
+      "required": [
+        "contractVersion",
+        "requestId",
+        "scope",
+        "language"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "contractVersion": {
+          "const": "usix-companion.device/v2"
+        },
+        "requestId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "actionId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "goal": {
+          "$ref": "#/$defs/goal"
+        }
+      },
+      "required": [
+        "contractVersion",
+        "requestId",
+        "actionId",
+        "goal"
+      ],
+      "additionalProperties": false
+    },
+    {
+      "type": "object",
+      "properties": {
+        "contractVersion": {
+          "const": "usix-companion.device/v2"
+        },
+        "requestId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "cancellationId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        }
+      },
+      "required": [
+        "contractVersion",
+        "requestId",
+        "cancellationId"
+      ],
+      "additionalProperties": false
+    }
+  ],
+  "$defs": {
+    "selector": {
+      "type": "object",
+      "properties": {
+        "nodeRef": {
+          "type": "string",
+          "pattern": "^n(?:/[0-9]+){0,64}$",
+          "maxLength": 256
+        },
+        "resourceId": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 1
+        },
+        "text": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 1
+        },
+        "description": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 1
+        },
+        "className": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 1
+        },
+        "role": {
+          "type": "string",
+          "maxLength": 2048,
+          "minLength": 1
+        },
+        "windowId": {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 2147483647
+        },
+        "editable": {
+          "type": "boolean"
+        },
+        "scrollable": {
+          "type": "boolean"
+        }
+      },
+      "required": [],
+      "additionalProperties": false,
+      "minProperties": 1,
+      "anyOf": [
+        {
+          "required": [
+            "nodeRef"
+          ]
+        },
+        {
+          "required": [
+            "resourceId"
+          ]
+        },
+        {
+          "required": [
+            "text"
+          ]
+        },
+        {
+          "required": [
+            "description"
+          ]
+        },
+        {
+          "required": [
+            "className"
+          ]
+        },
+        {
+          "required": [
+            "role"
+          ]
+        },
+        {
+          "required": [
+            "editable"
+          ]
+        },
+        {
+          "required": [
+            "scrollable"
+          ]
+        }
+      ]
+    },
+    "goal": {
+      "type": "object",
+      "properties": {
+        "goalId": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "kind": {
+          "enum": [
+            "package_visible",
+            "node_present",
+            "node_text"
+          ]
+        },
+        "selector": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/selector"
+                },
+                {
+                  "not": {
+                    "required": [
+                      "nodeRef"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "expectedText": {
+          "anyOf": [
+            {
+              "type": "string",
+              "maxLength": 2048
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "accountSelector": {
+          "anyOf": [
+            {
+              "allOf": [
+                {
+                  "$ref": "#/$defs/selector"
+                },
+                {
+                  "not": {
+                    "required": [
+                      "nodeRef"
+                    ]
+                  }
+                }
+              ]
+            },
+            {
+              "type": "null"
+            }
+          ]
+        }
+      },
+      "required": [
+        "goalId",
+        "kind",
+        "selector",
+        "expectedText",
+        "accountSelector"
+      ],
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "package_visible"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "type": "null"
+              },
+              "expectedText": {
+                "type": "null"
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "enum": [
+                  "node_present",
+                  "node_text"
+                ]
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "selector": {
+                "allOf": [
+                  {
+                    "$ref": "#/$defs/selector"
+                  },
+                  {
+                    "not": {
+                      "required": [
+                        "nodeRef"
+                      ]
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "node_text"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "expectedText": {
+                "type": "string",
+                "maxLength": 2048
+              }
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {
+              "kind": {
+                "const": "node_present"
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "expectedText": {
+                "type": "null"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

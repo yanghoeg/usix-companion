@@ -27,7 +27,8 @@ class DeviceV2Router(
         if (path == "/v2/execute") {
             val session = authorization.session ?: return DeviceV2Codec.failure("IdentityMismatch", "Paired session required", "401 Unauthorized")
             val command = DeviceV2Codec.command(body)
-            return result(execution.execute(session, command.domain())) { receipt(it) }
+            val ui = ObservationCodec.action(command)
+            return result(execution.execute(session, command.domain(ui), ui?.domain(), ui?.goal?.domain())) { receipt(it) }
         }
         val data = StrictJson.objectValue(body)
         if (data["contractVersion"] != DEVICE_CONTRACT) throw ProtocolFailure("UnsupportedVersion", "Unsupported contract version")
@@ -42,11 +43,13 @@ class DeviceV2Router(
                     "nonce" to challenge.nonce, "expiresAt" to DeviceV2Codec.time(challenge.expiresAtMillis)))
             }
             "/v2/pair/complete" -> {
-                fields("challengeId", "nonce", "context", "packageId", "displayName")
+                val optional = listOf("accountRef", "fixtureUi").filter { it in data }.toTypedArray()
+                fields("challengeId", "nonce", "context", "packageId", "displayName", *optional)
                 val name = DeviceV2Codec.text(data["displayName"], 64)
                 if (name !in setOf("USIX", "USIX Termux")) throw ProtocolFailure(message = "Known setup label required")
                 result(execution.pair(DeviceV2Codec.id(data["challengeId"]), DeviceV2Codec.text(data["nonce"], 128),
-                    DeviceV2Codec.context(data["context"]).domain(), DeviceV2Codec.packageId(data["packageId"]), name)) {
+                    DeviceV2Codec.context(data["context"]).domain(), DeviceV2Codec.packageId(data["packageId"]), name,
+                    DeviceV2Codec.nullableId(data["accountRef"]), if ("fixtureUi" in data) ObservationCodec.boolean(data["fixtureUi"]) else false)) {
                     mapOf("contractVersion" to DEVICE_CONTRACT, "kind" to "paired", "requestId" to requestId,
                         "context" to context(it.session.context), "bearer" to it.bearer, "grantRef" to it.session.grantId,
                         "expiresAt" to DeviceV2Codec.time(it.session.expiresAtMillis), "maxActions" to it.session.maxActions)
@@ -77,6 +80,39 @@ class DeviceV2Router(
                 fields(); val health = query.health()
                 response("observation", mapOf("context" to context(session.context), "health" to mapOf("ok" to true,
                     "auth" to true, "paired" to true, "listener" to health.listenerConnected, "accessibility" to health.accessibilityConnected)))
+            }
+            "/v2/observe" -> {
+                fields("scope", "selector", "offset", "limit")
+                result(execution.observe(session, DeviceV2Codec.scope(data["scope"]).domain(), ObservationCodec.selector(data["selector"])?.domain(),
+                    DeviceV2Codec.integer(data["offset"], 0, 4096).toInt(), DeviceV2Codec.integer(data["limit"], 1, 128).toInt())) { snapshot(it, requestId) }
+            }
+            "/v2/wait" -> {
+                fields("scope", "waitKind", "selector", "deadline", "cancellationId")
+                val kind = DeviceV2Codec.text(data["waitKind"], 16)
+                if (kind !in setOf("node", "text", "window", "changed")) throw ProtocolFailure(message = "Invalid wait predicate")
+                val selector = ObservationCodec.selector(data["selector"])?.domain()
+                val scope = DeviceV2Codec.scope(data["scope"]).domain()
+                if ((kind in setOf("node", "text") && selector == null) || (kind == "text" && selector?.text == null) ||
+                    (kind in setOf("changed", "window") && selector != null) || (kind == "changed" && scope.snapshotRef == null) || (kind != "changed" && scope.snapshotRef != null)) throw ProtocolFailure(message = "Wait needs an explicit predicate and appropriate baseline")
+                result(execution.waitFor(session, scope, kind, selector, DeviceV2Codec.parseTime(data["deadline"]), DeviceV2Codec.id(data["cancellationId"]))) { snapshot(it, requestId) }
+            }
+            "/v2/wait/cancel" -> {
+                fields("cancellationId")
+                when (val cancelled = execution.cancelWait(session, DeviceV2Codec.id(data["cancellationId"]))) {
+                    is ExecutionResult.Rejected -> failure(cancelled.error)
+                    is ExecutionResult.Success -> response("wait_cancelled", mapOf("effect" to "none"))
+                }
+            }
+            "/v2/capture" -> {
+                fields("scope", "language")
+                val language = data["language"] as? String
+                if (data["language"] != null && language !in setOf("latin", "korean")) throw ProtocolFailure(message = "Bundled OCR language must be latin or korean")
+                result(execution.capture(session, DeviceV2Codec.scope(data["scope"]).domain(), language)) { visual(it, requestId) }
+            }
+            "/v2/verify" -> {
+                fields("actionId", "goal")
+                val goal = ObservationCodec.goal(data["goal"])
+                result(execution.verifyGoal(session, DeviceV2Codec.id(data["actionId"]), goal.domain(), ObservationCodec.goalHash(data["goal"]))) { receipt(it) }
             }
             "/v2/controller/acquire" -> { fields(); result(execution.acquire(session)) { mapOf("contractVersion" to DEVICE_CONTRACT,
                 "kind" to "controller", "requestId" to requestId, "lease" to lease(it.ref), "expiresAt" to DeviceV2Codec.time(it.expiresAtMillis)) } }
@@ -114,20 +150,41 @@ class DeviceV2Router(
     }
 
     private fun capabilities(requestId: String, session: ControllerSession): Map<String, Any?> {
-        val rejection = if (session.packageId == null) ExecutionError(ExecutionErrorCode.PermissionRequired, "No app-opening package selected during trusted setup")
-            else readiness.rejection("app.open", session.packageId)
-        fun capability(operation: String, supported: Boolean, authority: String, controller: Boolean, reason: String? = null) = mapOf(
-            "operation" to operation, "supported" to supported, "readiness" to if (!supported) "unsupported" else if (operation == "app.open" && rejection != null) when (rejection.code) {
-                ExecutionErrorCode.DeviceLocked -> "device_locked"; ExecutionErrorCode.AppMissing -> "app_missing"; else -> "permission_required"
-            } else "ready", "authority" to authority, "requiresController" to controller, "requiresSnapshot" to false,
-            "requiresAccount" to false, "reason" to (reason ?: if (operation == "app.open") rejection?.message else null))
+        fun capability(operation: String, supported: Boolean = true, mutation: Boolean = false, snapshot: Boolean = false,
+            extra: ExecutionError? = null, reason: String? = null): Map<String, Any?> {
+            val rejection = extra ?: if (operation == "device.health") null
+                else if (session.packageId == null) ExecutionError(ExecutionErrorCode.PermissionRequired, "No package selected during trusted setup")
+                else readiness.rejection(operation, session.packageId)
+            val authority = if (mutation && operation != "app.open" && !session.fixtureUi) "approval" else if (mutation) "grant" else "none"
+            val grantMissing = mutation && operation != "app.open" && !session.fixtureUi
+            val state = when {
+                !supported -> "unsupported"
+                rejection?.code == ExecutionErrorCode.DeviceLocked -> "device_locked"
+                rejection?.code == ExecutionErrorCode.AccessibilityDisconnected -> "accessibility_disconnected"
+                rejection?.code == ExecutionErrorCode.AppMissing -> "app_missing"
+                rejection?.code == ExecutionErrorCode.UnsupportedCapability -> "permission_required"
+                rejection?.code == ExecutionErrorCode.Busy -> "busy"
+                rejection != null || grantMissing -> "permission_required"
+                else -> "ready"
+            }
+            return mapOf("operation" to operation, "supported" to supported, "readiness" to state, "authority" to authority,
+                "requiresController" to mutation, "requiresSnapshot" to snapshot, "requiresAccount" to (session.accountRef != null),
+                "reason" to (reason ?: rejection?.message ?: if (grantMissing) "UI execution requires explicit controlled-fixture setup; general app approvals are P4 work" else null))
+        }
+        val capture = execution.captureReadiness(null)
+        val latin = execution.captureReadiness("latin"); val korean = execution.captureReadiness("korean")
+        val capabilities = mutableListOf(capability("device.health"), capability("app.open", mutation = true),
+            capability("ui.observe"), capability("ui.wait"), capability("ui.verify"),
+            capability("ui.screenshot", capture?.code != ExecutionErrorCode.UnsupportedCapability, snapshot = true, extra = capture),
+            capability("ui.ocr_latin", latin?.code != ExecutionErrorCode.UnsupportedCapability, snapshot = true, extra = latin),
+            capability("ui.ocr_korean", korean?.code != ExecutionErrorCode.UnsupportedCapability, snapshot = true, extra = korean))
+        capabilities += DeviceExecution.UI_OPERATIONS.sorted().map { capability(it, mutation = true, snapshot = true) }
+        capabilities += capability("mail.send", false, mutation = true, reason = "Requires an approved mail workflow and sent-state evidence")
+        capabilities += capability("notification.reply", false, reason = "Requires argument-bound approval and delivery evidence")
         return mapOf("contractVersion" to DEVICE_CONTRACT, "kind" to "capabilities", "requestId" to requestId, "deviceId" to execution.deviceId,
             "observedAt" to DeviceV2Codec.time(now()), "supportedVersions" to listOf("usix-companion.device/v1", DEVICE_CONTRACT),
-            "capabilities" to listOf(capability("device.health", true, "none", false), capability("app.open", true, "grant", true),
-                capability("ui.tap", false, "approval", true, "Requires P3 snapshots and P4 action authority"),
-                capability("mail.send", false, "approval", true, "Requires P4 approved workflow and goal evidence"),
-                capability("notification.reply", false, "approval", false, "Use supported legacy dispatch or the later approved v2 workflow")),
-            "limits" to mapOf("maxCommandBytes" to 65536, "maxObservationBytes" to 1048576, "maxMediaBytes" to 0, "maxPageItems" to 128, "eventRetentionCount" to 512), "pagination" to true)
+            "capabilities" to capabilities, "limits" to mapOf("maxCommandBytes" to 65536, "maxObservationBytes" to 1048576,
+                "maxMediaBytes" to 524288, "maxPageItems" to 128, "eventRetentionCount" to 512), "pagination" to true)
     }
     private fun <T> result(value: ExecutionResult<T>, encode: (T) -> Map<String, Any?>): LegacyResponse = when (value) {
         is ExecutionResult.Rejected -> failure(value.error)
@@ -152,10 +209,32 @@ class DeviceV2Router(
             return mapOf("contractVersion" to DEVICE_CONTRACT, "kind" to "receipt", "requestId" to r.command.requestId,
                 "receiptId" to r.receiptId, "revision" to r.revision, "context" to context(r.command.context), "actionId" to r.command.actionId,
                 "payloadHash" to r.command.payloadHash, "state" to r.state.name, "effect" to effect, "updatedAt" to DeviceV2Codec.time(r.updatedAtMillis),
-                "cancellationRequested" to r.cancellationRequested, "evidence" to emptyList<Any>(),
+                "cancellationRequested" to r.cancellationRequested, "evidence" to r.evidence.map { mapOf("evidenceRef" to it.evidenceRef,
+                    "goalId" to it.goalId, "method" to it.method, "verifiedAt" to DeviceV2Codec.time(it.verifiedAtMillis), "snapshotRef" to it.snapshotRef, "purpose" to it.purpose) },
+                "observationRef" to r.observationRef,
                 "error" to r.error?.let { mapOf("code" to it.code.name, "message" to it.message) },
                 "retry" to mapOf("decision" to retry, "reason" to if (retry == "reconcile") "Read the stored receipt and refresh observation; do not replay" else "A new attempt needs fresh admission"))
         }
+        private fun bounds(b: ScreenBounds) = mapOf("left" to b.left, "top" to b.top, "right" to b.right, "bottom" to b.bottom)
+        fun scope(s: ExecutionScope) = mapOf("packageId" to s.packageId, "accountRef" to s.accountRef, "resourceRefs" to s.resourceRefs, "snapshotRef" to s.snapshotRef)
+        fun snapshot(page: SnapshotPage, requestId: String): Map<String, Any?> {
+            val s = page.snapshot; val screen = s.screen
+            return mapOf("contractVersion" to DEVICE_CONTRACT, "kind" to "snapshot", "requestId" to requestId, "context" to context(s.context),
+                "scope" to scope(s.scope), "snapshotRef" to s.ref, "capturedAt" to DeviceV2Codec.time(s.capturedAtMillis), "expiresAt" to DeviceV2Codec.time(s.expiresAtMillis),
+                "packageId" to screen.packageId, "windowId" to screen.windowId, "generation" to screen.generation, "displayBounds" to bounds(screen.displayBounds),
+                "windowBounds" to bounds(screen.windowBounds), "rotation" to screen.rotation, "focusRef" to screen.focusRef, "inputWindowVisible" to screen.inputWindowVisible,
+                "complete" to screen.complete, "totalNodes" to screen.nodes.size, "untrusted" to true, "offset" to page.offset, "totalMatching" to page.totalMatching,
+                "nextOffset" to page.nextOffset, "nodes" to page.nodes.map { n -> mapOf("nodeRef" to n.ref, "parentRef" to n.parentRef, "childRefs" to n.childRefs,
+                    "resourceId" to n.resourceId, "className" to n.className, "role" to n.role, "bounds" to bounds(n.bounds), "text" to n.text, "description" to n.description,
+                    "enabled" to n.enabled, "visible" to n.visible, "editable" to n.editable, "clickable" to n.clickable, "scrollable" to n.scrollable,
+                    "focused" to n.focused, "selected" to n.selected, "sensitive" to n.sensitive, "textTruncated" to n.textTruncated) })
+        }
+        fun visual(v: VisualObservation, requestId: String): Map<String, Any?> = mapOf("contractVersion" to DEVICE_CONTRACT, "kind" to "visual", "requestId" to requestId,
+            "context" to context(v.snapshot.context), "scope" to scope(v.snapshot.scope), "snapshotRef" to v.snapshot.ref, "mediaRef" to v.mediaRef,
+            "width" to v.visual.width, "height" to v.visual.height, "contentHash" to v.visual.contentHash, "language" to v.visual.language,
+            "redacted" to v.visual.redacted, "ocrComplete" to v.visual.ocrComplete, "untrusted" to true, "encoding" to "png_base64", "coordinateSpace" to "image_pixels",
+            "pngChunks" to java.util.Base64.getEncoder().encodeToString(v.visual.png).chunked(8192),
+            "blocks" to v.visual.blocks.map { mapOf("text" to it.text, "bounds" to bounds(it.bounds)) })
         fun event(e: DeviceEvent): Map<String, Any?> = mapOf("contractVersion" to DEVICE_CONTRACT, "kind" to "event", "eventId" to e.eventId,
             "deviceId" to e.deviceId, "cursor" to e.cursor, "createdAt" to DeviceV2Codec.time(e.createdAtMillis), "type" to when (e.payload) {
                 is EventPayload.ActionUpdated -> "action_updated"; is EventPayload.ControllerChanged -> "controller_changed"
@@ -166,6 +245,11 @@ class DeviceV2Router(
     }
 }
 fun WireContext.domain() = ExecutionContext(deviceId, runtimeId, sessionId, taskId, taskRevision, workspaceId)
-private fun WireDeviceCommand.domain() = ExecutionCommand(requestId, context.domain(), actionId, operation,
+private fun WireScope.domain() = ExecutionScope(packageId, accountRef, resourceRefs, snapshotRef)
+private fun WireSelector.domain() = NodeSelector(fields["nodeRef"] as? String, fields["resourceId"] as? String, fields["text"] as? String,
+    fields["description"] as? String, fields["className"] as? String, fields["role"] as? String, (fields["windowId"] as? Long)?.toInt(), fields["editable"] as? Boolean, fields["scrollable"] as? Boolean)
+private fun WireUiGoal.domain() = UiGoal(goalId, kind, selector?.domain(), expectedText, accountSelector?.domain())
+private fun WireUiPayload.domain() = UiActionRequest(target?.domain(), text, x, y, endX, endY, durationMillis, forward)
+private fun WireDeviceCommand.domain(ui: WireUiPayload?) = ExecutionCommand(requestId, context.domain(), actionId, operation,
     ExecutionScope(scope.packageId, scope.accountRef, scope.resourceRefs, scope.snapshotRef), payloadHash, payload.isEmpty(), lease?.let { LeaseRef(it.leaseId, it.revision) },
-    deadlineMillis, cancellationId, AuthorityRef(authority.kind, authority.ref))
+    deadlineMillis, cancellationId, AuthorityRef(authority.kind, authority.ref), ui?.goal?.goalId, ui?.goalHash)

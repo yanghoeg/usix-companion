@@ -1,6 +1,6 @@
 # Device v2 contract
 
-Status: shared P0 contract with P2 APK/standalone CLI implementation. Companion 0.2.0 implements pairing, v2 negotiation, controller leases, durable receipts/outbox and outbound WSS. `tools/companion_http.py` remains a v1 caller. [Current capability and setup limits](../../../docs/device-integration.md) describe health and one-package app opening; P3/P4 add rich UI, canonical consequential approvals and verified outcomes. P2 device/CI acceptance is complete in [permanent evidence](../../../docs/evidence/P2-checkpoint.md), including both genuine runtime traces, physical loopback/WSS and reboot reconciliation without replay.
+Status: shared contract with Companion/standalone integration 0.3.0. Pairing, v2 negotiation, controller leases, durable receipts/outbox and outbound WSS retain the P2 baseline. P3 adds strict observation/query/visual schemas and bound UI-state evidence; [qualification is in progress](../../../docs/evidence/P3-checkpoint.md). `tools/companion_http.py` remains a v1 caller. [Current capability and setup limits](../../../docs/device-integration.md) describe package-scoped observations and controlled fixture effects; [P3 usage](../../../docs/observations.md) explains targeting/waits/OCR and UI-state verification. Canonical consequential approvals and business outcomes remain P4 work. P2 device/CI acceptance is complete in [permanent evidence](../../../docs/evidence/P2-checkpoint.md), including both genuine runtime traces, physical loopback/WSS and reboot reconciliation without replay.
 
 All schemas, clients and examples belong to Companion. Neither `../usix` nor `../usix-termux` is changed. Existing runtime authentication, tool admission, model policy and approvals apply in addition to device checks.
 
@@ -15,7 +15,7 @@ python3 -m venv .venv-contracts
 .venv-contracts/bin/python -m unittest discover -s tests/contracts -v
 ```
 
-The validators resolve the six schemas locally by their `urn:usix-companion:device:v2:*` identifiers; they never fetch schemas over the network. The schemas use [JSON Schema Draft 2020-12](https://json-schema.org/draft/2020-12). Date/time format validation is explicitly enabled, including calendar validity. Unknown envelope fields are rejected. Extension capabilities need a versioned payload schema and server catalog entry before dispatch.
+The validators resolve the nine schemas locally by their `urn:usix-companion:device:v2:*` identifiers; they never fetch schemas over the network. The schemas use [JSON Schema Draft 2020-12](https://json-schema.org/draft/2020-12). Date/time format validation is explicitly enabled, including calendar validity. Unknown envelope fields are rejected. Extension capabilities need a versioned payload schema and server catalog entry before dispatch.
 
 `tools/device_contract.py` is an offline conformance oracle with injected synthetic state and time. It does not consult live permissions, authenticate requests, grant authority, dispatch effects or implement persistence. Its accepted fixtures must not be used as live authority records. Production adapters must enforce these expectations against authenticated identity and canonical device state.
 

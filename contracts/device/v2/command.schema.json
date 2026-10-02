@@ -65,5 +65,228 @@
     "cancellationId",
     "authority"
   ],
-  "additionalProperties": false
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "enum": [
+              "ui.click",
+              "ui.select",
+              "ui.long_press"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "target": {
+                "$ref": "urn:usix-companion:device:v2:observation-query#/$defs/selector"
+              },
+              "goal": {
+                "$ref": "urn:usix-companion:device:v2:observation-query#/$defs/goal"
+              }
+            },
+            "required": [
+              "target"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "enum": [
+              "ui.set_text"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "target": {
+                "$ref": "urn:usix-companion:device:v2:observation-query#/$defs/selector"
+              },
+              "text": {
+                "type": "string",
+                "maxLength": 2048
+              },
+              "goal": {
+                "$ref": "urn:usix-companion:device:v2:observation-query#/$defs/goal"
+              }
+            },
+            "required": [
+              "target",
+              "text"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "enum": [
+              "ui.scroll"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "target": {
+                "$ref": "urn:usix-companion:device:v2:observation-query#/$defs/selector"
+              },
+              "forward": {
+                "type": "boolean"
+              },
+              "goal": {
+                "$ref": "urn:usix-companion:device:v2:observation-query#/$defs/goal"
+              }
+            },
+            "required": [
+              "target",
+              "forward"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "enum": [
+              "ui.tap"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 32768
+              },
+              "y": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 32768
+              },
+              "goal": {
+                "$ref": "urn:usix-companion:device:v2:observation-query#/$defs/goal"
+              }
+            },
+            "required": [
+              "x",
+              "y"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "enum": [
+              "ui.swipe"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "x": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 32768
+              },
+              "y": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 32768
+              },
+              "endX": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 32768
+              },
+              "endY": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 32768
+              },
+              "durationMillis": {
+                "type": "integer",
+                "minimum": 50,
+                "maximum": 2000
+              },
+              "goal": {
+                "$ref": "urn:usix-companion:device:v2:observation-query#/$defs/goal"
+              }
+            },
+            "required": [
+              "x",
+              "y",
+              "endX",
+              "endY",
+              "durationMillis"
+            ],
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    {
+      "if": {
+        "properties": {
+          "operation": {
+            "enum": [
+              "ui.back",
+              "ui.home"
+            ]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "payload": {
+            "type": "object",
+            "properties": {
+              "goal": {
+                "$ref": "urn:usix-companion:device:v2:observation-query#/$defs/goal"
+              }
+            },
+            "required": [],
+            "additionalProperties": false
+          }
+        }
+      }
+    }
+  ]
 }

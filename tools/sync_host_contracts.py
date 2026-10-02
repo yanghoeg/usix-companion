@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Copy/pin the six Companion schemas for installable standalone host packaging."""
+"""Copy/pin the Companion schemas for installable standalone host packaging."""
 import argparse
 from pathlib import Path
 

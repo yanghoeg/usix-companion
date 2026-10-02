@@ -1,0 +1,349 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usix-companion:device:v2:snapshot",
+  "type": "object",
+  "properties": {
+    "contractVersion": {
+      "const": "usix-companion.device/v2"
+    },
+    "requestId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "kind": {
+      "const": "snapshot"
+    },
+    "context": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/context"
+    },
+    "scope": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/scope"
+    },
+    "snapshotRef": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "capturedAt": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+    },
+    "expiresAt": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+    },
+    "packageId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/package"
+    },
+    "windowId": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 2147483647
+    },
+    "generation": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 9007199254740991
+    },
+    "displayBounds": {
+      "type": "object",
+      "properties": {
+        "left": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32768
+        },
+        "top": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32768
+        },
+        "right": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32768
+        },
+        "bottom": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32768
+        }
+      },
+      "required": [
+        "left",
+        "top",
+        "right",
+        "bottom"
+      ],
+      "additionalProperties": false
+    },
+    "windowBounds": {
+      "type": "object",
+      "properties": {
+        "left": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32768
+        },
+        "top": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32768
+        },
+        "right": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32768
+        },
+        "bottom": {
+          "type": "integer",
+          "minimum": -32768,
+          "maximum": 32768
+        }
+      },
+      "required": [
+        "left",
+        "top",
+        "right",
+        "bottom"
+      ],
+      "additionalProperties": false
+    },
+    "rotation": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 3
+    },
+    "focusRef": {
+      "anyOf": [
+        {
+          "type": "string",
+          "pattern": "^n(?:/[0-9]+){0,64}$",
+          "maxLength": 256
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "inputWindowVisible": {
+      "type": "boolean"
+    },
+    "complete": {
+      "type": "boolean"
+    },
+    "totalNodes": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4096
+    },
+    "untrusted": {
+      "const": true
+    },
+    "offset": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4096
+    },
+    "totalMatching": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 4096
+    },
+    "nextOffset": {
+      "anyOf": [
+        {
+          "type": "integer",
+          "minimum": 0,
+          "maximum": 4096
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "nodeRef": {
+            "type": "string",
+            "pattern": "^n(?:/[0-9]+){0,64}$",
+            "maxLength": 256
+          },
+          "parentRef": {
+            "anyOf": [
+              {
+                "type": "string",
+                "pattern": "^n(?:/[0-9]+){0,64}$",
+                "maxLength": 256
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "childRefs": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "pattern": "^n(?:/[0-9]+){0,64}$",
+              "maxLength": 256
+            },
+            "maxItems": 1024
+          },
+          "resourceId": {
+            "anyOf": [
+              {
+                "type": "string",
+                "maxLength": 512
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "className": {
+            "type": "string",
+            "maxLength": 256
+          },
+          "role": {
+            "type": "string",
+            "maxLength": 32
+          },
+          "bounds": {
+            "type": "object",
+            "properties": {
+              "left": {
+                "type": "integer",
+                "minimum": -32768,
+                "maximum": 32768
+              },
+              "top": {
+                "type": "integer",
+                "minimum": -32768,
+                "maximum": 32768
+              },
+              "right": {
+                "type": "integer",
+                "minimum": -32768,
+                "maximum": 32768
+              },
+              "bottom": {
+                "type": "integer",
+                "minimum": -32768,
+                "maximum": 32768
+              }
+            },
+            "required": [
+              "left",
+              "top",
+              "right",
+              "bottom"
+            ],
+            "additionalProperties": false
+          },
+          "text": {
+            "type": "string",
+            "maxLength": 2048
+          },
+          "description": {
+            "type": "string",
+            "maxLength": 2048
+          },
+          "enabled": {
+            "type": "boolean"
+          },
+          "visible": {
+            "type": "boolean"
+          },
+          "editable": {
+            "type": "boolean"
+          },
+          "clickable": {
+            "type": "boolean"
+          },
+          "scrollable": {
+            "type": "boolean"
+          },
+          "focused": {
+            "type": "boolean"
+          },
+          "selected": {
+            "type": "boolean"
+          },
+          "sensitive": {
+            "type": "boolean"
+          },
+          "textTruncated": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "nodeRef",
+          "parentRef",
+          "childRefs",
+          "resourceId",
+          "className",
+          "role",
+          "bounds",
+          "text",
+          "description",
+          "enabled",
+          "visible",
+          "editable",
+          "clickable",
+          "scrollable",
+          "focused",
+          "selected",
+          "sensitive"
+        ],
+        "additionalProperties": false,
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "sensitive": {
+                  "const": true
+                }
+              }
+            },
+            "then": {
+              "properties": {
+                "text": {
+                  "const": "[redacted]"
+                },
+                "description": {
+                  "const": "[redacted]"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "maxItems": 128
+    }
+  },
+  "required": [
+    "contractVersion",
+    "requestId",
+    "kind",
+    "context",
+    "scope",
+    "snapshotRef",
+    "capturedAt",
+    "expiresAt",
+    "packageId",
+    "windowId",
+    "generation",
+    "displayBounds",
+    "windowBounds",
+    "rotation",
+    "focusRef",
+    "inputWindowVisible",
+    "complete",
+    "totalNodes",
+    "untrusted",
+    "offset",
+    "totalMatching",
+    "nextOffset",
+    "nodes"
+  ],
+  "additionalProperties": false
+}

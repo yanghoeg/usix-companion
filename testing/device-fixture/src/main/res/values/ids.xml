@@ -1,0 +1,8 @@
+<resources>
+    <item name="mode_native" type="id" /><item name="mode_compose" type="id" /><item name="mode_webview" type="id" />
+    <item name="mode_canvas" type="id" /><item name="mode_secure" type="id" /><item name="rotate" type="id" />
+    <item name="account" type="id" /><item name="status" type="id" /><item name="apply" type="id" />
+    <item name="async" type="id" /><item name="duplicate_a" type="id" /><item name="duplicate_b" type="id" />
+    <item name="edit_text" type="id" /><item name="password" type="id" /><item name="long_press" type="id" />
+    <item name="select" type="id" /><item name="scroll" type="id" />
+</resources>

@@ -1,0 +1,144 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:usix-companion:device:v2:visual",
+  "type": "object",
+  "properties": {
+    "contractVersion": {
+      "const": "usix-companion.device/v2"
+    },
+    "requestId": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "kind": {
+      "const": "visual"
+    },
+    "context": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/context"
+    },
+    "scope": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/scope"
+    },
+    "snapshotRef": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "mediaRef": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+    },
+    "width": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1600
+    },
+    "height": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1600
+    },
+    "contentHash": {
+      "$ref": "urn:usix-companion:device:v2:types#/$defs/hash"
+    },
+    "language": {
+      "enum": [
+        null,
+        "latin",
+        "korean"
+      ]
+    },
+    "redacted": {
+      "type": "boolean"
+    },
+    "untrusted": {
+      "const": true
+    },
+    "encoding": {
+      "const": "png_base64"
+    },
+    "coordinateSpace": {
+      "const": "image_pixels"
+    },
+    "pngChunks": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 86,
+      "items": {
+        "type": "string",
+        "minLength": 1,
+        "maxLength": 8192,
+        "pattern": "^[A-Za-z0-9+/]*={0,2}$"
+      }
+    },
+    "blocks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "text": {
+            "type": "string",
+            "maxLength": 2048
+          },
+          "bounds": {
+            "type": "object",
+            "properties": {
+              "left": {
+                "type": "integer",
+                "minimum": -32768,
+                "maximum": 32768
+              },
+              "top": {
+                "type": "integer",
+                "minimum": -32768,
+                "maximum": 32768
+              },
+              "right": {
+                "type": "integer",
+                "minimum": -32768,
+                "maximum": 32768
+              },
+              "bottom": {
+                "type": "integer",
+                "minimum": -32768,
+                "maximum": 32768
+              }
+            },
+            "required": [
+              "left",
+              "top",
+              "right",
+              "bottom"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "required": [
+          "text",
+          "bounds"
+        ],
+        "additionalProperties": false
+      },
+      "maxItems": 128
+    },
+    "ocrComplete": {
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "contractVersion",
+    "requestId",
+    "kind",
+    "context",
+    "scope",
+    "snapshotRef",
+    "mediaRef",
+    "width",
+    "height",
+    "contentHash",
+    "language",
+    "redacted",
+    "untrusted",
+    "encoding",
+    "coordinateSpace",
+    "pngChunks",
+    "blocks"
+  ],
+  "additionalProperties": false
+}

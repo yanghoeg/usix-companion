@@ -20,7 +20,7 @@ import kotlin.coroutines.resume
  * 노드 회수: API 33 미만은 AccessibilityNodeInfo/WindowInfo 풀이 유한해서 recycle 을 안 하면
  * /screen 반복 폴링에 고갈돼 서비스가 끊긴다. 33+ 는 recycle 이 no-op 이라 SDK 가드로 감싼다.
  */
-class AccessibilityOperations(private val service: AccessibilityService) {
+class AccessibilityOperations(internal val service: AccessibilityService) {
     @Suppress("DEPRECATION")
     private fun AccessibilityNodeInfo.release() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) recycle()
@@ -44,7 +44,7 @@ class AccessibilityOperations(private val service: AccessibilityService) {
             for (root in roots) walk(root) { node ->
                 val text = node.text?.toString()?.trim().orEmpty()
                 val desc = node.contentDescription?.toString()?.trim().orEmpty()
-                val label = if (text.isNotEmpty()) text else desc
+                val label = if (node.isPassword || (Build.VERSION.SDK_INT >= 34 && node.isAccessibilityDataSensitive)) "[redacted]" else if (text.isNotEmpty()) text else desc
                 if (label.isEmpty() && !node.isClickable && !node.isEditable && !node.isScrollable) return@walk
                 node.getBoundsInScreen(rect)
                 if (rect.width() <= 0 || rect.height() <= 0) return@walk

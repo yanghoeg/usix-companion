@@ -1,0 +1,78 @@
+{
+  "recordedAt": "2026-10-02T03:16:18.880032+00:00",
+  "source": "local final Gradle XML, signed APK verification and aapt2 badging; installed state is separate",
+  "kotlinTests": {
+    "core/application": {
+      "tests": 36,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "protocol": {
+      "tests": 13,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "adapters/transport": {
+      "tests": 17,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "adapters/android": {
+      "tests": 33,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "feature/control": {
+      "tests": 2,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    },
+    "app": {
+      "tests": 1,
+      "errors": 0,
+      "failures": 0,
+      "skipped": 0
+    }
+  },
+  "pythonTests": {
+    "architecture": 6,
+    "contract": 18,
+    "tools": 28,
+    "integration": 19
+  },
+  "schemas": 9,
+  "routerOutputs": 9,
+  "pureCoreWithoutSdk": "passed",
+  "lint": "passed",
+  "nativeRoom": "pending supported-host CI",
+  "apks": {
+    "app": {
+      "path": "app/build/outputs/apk/release/app-release.apk",
+      "bytes": 51657263,
+      "sha256": "3a40c42598c60723a4656b83f385294eda92d57602789ccc0da76509b013e801",
+      "signingCertificateSha256": "1bf19c9316904bfea9df9f422af589a589dbdb425e4329a56bf473d79eca1ded",
+      "package": "package: name='dev.usix.companion' versionCode='8' versionName='0.3.0' platformBuildVersionName='14' platformBuildVersionCode='34' compileSdkVersion='34' compileSdkVersionCodename='14'",
+      "sdk": [
+        "minSdkVersion:'24'",
+        "targetSdkVersion:'34'"
+      ]
+    },
+    "fixture": {
+      "path": "testing/device-fixture/build/outputs/apk/debug/device-fixture-debug.apk",
+      "bytes": 7883817,
+      "sha256": "99d7a7f48ae80ea621b4102b718998143d6a2e5153bcc2037412d45e8d08b870",
+      "signingCertificateSha256": "1bf19c9316904bfea9df9f422af589a589dbdb425e4329a56bf473d79eca1ded",
+      "package": "package: name='dev.usix.companion.fixture' versionCode='1' versionName='P3.1' platformBuildVersionName='14' platformBuildVersionCode='34' compileSdkVersion='34' compileSdkVersionCodename='14'",
+      "sdk": [
+        "minSdkVersion:'24'",
+        "targetSdkVersion:'34'"
+      ]
+    }
+  },
+  "physicalInstallation": "pending"
+}

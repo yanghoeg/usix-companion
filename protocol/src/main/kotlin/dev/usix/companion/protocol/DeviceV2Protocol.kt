@@ -192,7 +192,12 @@ object DeviceV2Codec {
         calendar = java.util.GregorianCalendar(TimeZone.getTimeZone("UTC"), Locale.US).apply { gregorianChange = java.util.Date(Long.MIN_VALUE) }
         isLenient = false
     }
-    fun response(value: Map<String, Any?>, status: String = "200 OK") = LegacyResponse(status, StrictJson.encode(value))
+    fun response(value: Map<String, Any?>, status: String = "200 OK"): LegacyResponse {
+        val json = StrictJson.encode(value)
+        // Leave room for WSS correlation framing inside its 1 MiB bound.
+        if (json.toByteArray(Charsets.UTF_8).size > 1047552) throw ProtocolFailure(message = "Observation exceeds the response limit; narrow the query/page or capture")
+        return LegacyResponse(status, json)
+    }
     fun failure(code: String, message: String, status: String = "400 Bad Request") = response(mapOf(
         "contractVersion" to DEVICE_CONTRACT, "kind" to "error", "error" to mapOf("code" to code, "message" to message),
         "effect" to if (code == "UnknownEffect") "possible" else "none",

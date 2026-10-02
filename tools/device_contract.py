@@ -74,8 +74,8 @@ class Contracts:
     def __init__(self):
         self.schemas = {p.name.removesuffix(".schema.json"): load_json(p.read_bytes())
                         for p in sorted(SCHEMAS.glob("*.schema.json"))}
-        if len(self.schemas) != 6:
-            raise ValueError("expected six v2 schemas")
+        if len(self.schemas) != 9:
+            raise ValueError("expected nine v2 schemas")
         for schema in self.schemas.values():
             Draft202012Validator.check_schema(schema)
         registry = Registry().with_resources(

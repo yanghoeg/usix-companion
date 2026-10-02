@@ -52,9 +52,9 @@ python3 "$HOME/.usix/companion_http.py" health
 
 설치와 신뢰된 프로필 설정은 [기기 연동 안내](docs/device-integration.md)를 따른다. 사용자가 지정한 **절대 CLI 경로와 절대 프로필 경로**를 기존 `bash`/`shell`로 호출한다. 예: `/absolute/companion-tools/bin/companion-v2 --profile /absolute/private/profile.json capabilities`. 모델이 프로필·작업공간·기기·계정을 새로 설정하거나 자격증명 파일을 출력하지 않는다. 프로필 UUID는 연동 상관관계이며 런타임 인가를 대체하지 않는다.
 
-P2 v2는 health와 설정에서 선택한 앱 열기를 지원한다. `acquire` 뒤 명시한 action ID로 `open`하며 `Dispatched`는 앱에 전달한 상태다. 응답 유실은 같은 ID의 `receipt`로 확인하고 새로운 ID로 효과를 반복하지 않는다. 제어권 충돌은 로컬 앱에서 선택/중지한 뒤 해결한다. 세션 만료/해제/작업공간 이동은 사용자 설정이 필요하다. `mail.send`/상세 UI/OCR은 기능 조회의 `unsupported`를 따른다.
+0.3.0 v2는 health, 선택한 앱 열기, 패키지/계정에 묶인 관찰·대기·캡처와 제어용 fixture 앱의 UI 상태 검증을 지원한다. 현재 P3의 실기기/모델 검증은 진행 중이다. 일반 앱 UI 권한·메일 발신 검증은 P4 작업이다. `acquire` 뒤 명시한 action ID로 `open`하며 `Dispatched`는 앱에 전달한 상태다. 응답 유실은 같은 ID의 `receipt`로 확인하고 새로운 ID로 효과를 반복하지 않는다. 제어권 충돌은 로컬 앱에서 선택/중지한 뒤 해결한다. 세션 만료/해제/작업공간 이동은 사용자 설정이 필요하다. 관찰/선택자/OCR 사용법은 [관찰 계약](docs/observations.md)을 따른다. 기능 조회의 `unsupported`와 권한 오류에서 중지한다. UI 상태의 검증을 발신·전달 증거로 해석하지 않는다.
 
-P2 APK의 v1 탭·입력·뒤로·스크롤·알림 답장은 인자에 결합된 Companion 권한이 없어 403 `ApprovalRequired`로 중지한다. 런타임 승인만으로 이 오류를 우회하지 않는다. v2 제어권이 활성화된 동안 v1 효과는 409로 중지한다. 기존 조회·앱 열기·`sent:false` 초안 API는 유지되며 자동 효과 재시도는 금지한다.
+현재 APK의 v1 탭·입력·뒤로·스크롤·알림 답장은 인자에 결합된 Companion 권한이 없어 403 `ApprovalRequired`로 중지한다. 런타임 승인만으로 이 오류를 우회하지 않는다. v2 제어권이 활성화된 동안 v1 효과는 409로 중지한다. 기존 조회·앱 열기·`sent:false` 초안 API는 유지되며 자동 효과 재시도는 금지한다.
 
 ## 사용자 설정에 설치
 

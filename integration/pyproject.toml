@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "usix-companion-integration"
-version = "0.2.0"
+version = "0.3.0"
 description = "Companion-owned device v2 CLI and supervised WSS broker"
 requires-python = ">=3.10"
 dependencies = ["jsonschema==4.23.0", "referencing==0.35.1", "websockets==15.0.1"]

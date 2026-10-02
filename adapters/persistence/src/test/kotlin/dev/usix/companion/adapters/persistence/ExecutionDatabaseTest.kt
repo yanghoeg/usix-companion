@@ -20,7 +20,7 @@ class ExecutionDatabaseTest {
     private fun receipt() = ExecutionReceipt(id(7), ExecutionCommand(id(8), session().context, id(9), "app.open", ExecutionScope("dev.usix.companion"),
         "sha256:" + "a".repeat(64), true, LeaseRef(id(10), 1), 99999, id(11), AuthorityRef("grant", id(6))), 2, ReceiptState.Executing, 1000)
     private fun database(name: String) = Room.databaseBuilder(context, ExecutionDatabase::class.java, name).allowMainThreadQueries()
-        .addMigrations(ExecutionDatabase.MIGRATION_1_2).build()
+        .addMigrations(ExecutionDatabase.MIGRATION_1_2, ExecutionDatabase.MIGRATION_2_3).build()
 
     @Test fun deviceIdentityReceiptsCountersAndAcksSurviveDatabaseReopen() {
         val name = "durable-test.db"; context.deleteDatabase(name)
@@ -62,11 +62,32 @@ class ExecutionDatabaseTest {
             old.execSQL("INSERT INTO sessions_v1 SELECT id,context_deviceId,context_runtimeId,context_sessionId,context_taskId,context_taskRevision,context_workspaceId,credentialHash,expiresAtMillis,grantId,packageId,maxActions,actionsUsed,revoked FROM sessions")
             old.execSQL("DROP TABLE sessions"); old.execSQL("ALTER TABLE sessions_v1 RENAME TO sessions")
             old.execSQL("CREATE UNIQUE INDEX index_sessions_credentialHash ON sessions(credentialHash)")
+            for (column in listOf("goalId", "goalHash", "observationRef", "evidenceRefs")) old.execSQL("ALTER TABLE actions DROP COLUMN $column")
             old.version = 1
         }
         val upgraded = database(name); val migrated = RoomExecutionRepository(upgraded)
         assertEquals(receipt(), migrated.receipt(id(9))); assertEquals(1, migrated.session(id(3))!!.actionsUsed)
         assertEquals(0L, migrated.session(id(3))!!.acknowledgedCursor); assertEquals("External runtime", migrated.session(id(3))!!.displayName)
         upgraded.close()
+    }
+    @Test fun v2MigrationPreservesAuthorityAndVerifiedEvidenceAcrossReopen() {
+        val name = "migration-v2-test.db"; context.deleteDatabase(name)
+        var db = database(name); var store = RoomExecutionRepository(db)
+        store.putSession(session().copy(actionsUsed = 3, deliveredCursor = 8, acknowledgedCursor = 7)); store.putReceipt(receipt()); db.close()
+        SQLiteDatabase.openDatabase(context.getDatabasePath(name).path, null, SQLiteDatabase.OPEN_READWRITE).use { old ->
+            old.execSQL("ALTER TABLE sessions DROP COLUMN accountRef"); old.execSQL("ALTER TABLE sessions DROP COLUMN fixtureUi")
+            for (column in listOf("goalId", "goalHash", "observationRef", "evidenceRefs")) old.execSQL("ALTER TABLE actions DROP COLUMN $column")
+            old.version = 2
+        }
+        db = database(name); store = RoomExecutionRepository(db)
+        assertEquals(receipt(), store.receipt(id(9))); assertEquals(3, store.session(id(3))!!.actionsUsed)
+        assertEquals(7L, store.session(id(3))!!.acknowledgedCursor); assertFalse(store.session(id(3))!!.fixtureUi)
+        val evidence = VerificationEvidence(id(30), id(31), 2000, id(32))
+        val verified = receipt().copy(command = receipt().command.copy(goalId = id(31), goalHash = "sha256:" + "b".repeat(64)),
+            state = ReceiptState.Verified, observationRef = id(32), evidence = listOf(evidence))
+        store.putReceipt(verified); store.putSession(session().copy(accountRef = id(33), fixtureUi = true)); db.close()
+        db = database(name); store = RoomExecutionRepository(db)
+        assertEquals(verified, store.receipt(id(9))); assertEquals(id(33), store.session(id(3))!!.accountRef); assertTrue(store.session(id(3))!!.fixtureUi)
+        db.close()
     }
 }

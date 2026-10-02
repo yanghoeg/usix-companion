@@ -67,7 +67,7 @@ class Contracts:
     def __init__(self):
         schemas = [loads(path.read_bytes()) for path in files("usix_companion").joinpath("contracts").iterdir()
                    if path.name.endswith(".schema.json")]
-        if len(schemas) != 6:
+        if len(schemas) != 9:
             raise ValueError("Packaged shared contracts are missing")
         registry = Registry().with_resources((s["$id"], Resource.from_contents(s)) for s in schemas)
         self.validators = {s["$id"].rsplit(":", 1)[1]: Draft202012Validator(s, registry=registry, format_checker=FormatChecker()) for s in schemas}

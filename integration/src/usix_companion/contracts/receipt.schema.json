@@ -76,6 +76,16 @@
     },
     "retry": {
       "$ref": "urn:usix-companion:device:v2:types#/$defs/retry"
+    },
+    "observationRef": {
+      "anyOf": [
+        {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        {
+          "type": "null"
+        }
+      ]
     }
   },
   "required": [

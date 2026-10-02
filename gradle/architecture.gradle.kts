@@ -10,6 +10,7 @@ val allowedProjects = mapOf(
     ":adapters:transport" to setOf(":core:application", ":core:domain", ":protocol"),
     ":feature:control" to setOf(":core:application", ":core:domain"),
     ":testing:fixtures" to setOf(":core:application", ":core:domain"),
+    ":testing:device-fixture" to emptySet(),
     ":app" to setOf(":core:application", ":core:domain", ":protocol", ":adapters:android", ":adapters:persistence", ":adapters:transport", ":feature:control"),
 )
 val pureLibraries = mapOf(

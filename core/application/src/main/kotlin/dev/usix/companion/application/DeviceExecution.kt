@@ -18,6 +18,7 @@ class DeviceExecution(
     private val readiness: ExecutionReadiness,
     private val actions: ExecuteDeviceAction,
     private val eventRetention: Int = 512,
+    private val observations: DeviceObservations? = null,
 ) : LocalExecutionControl {
     private val controller = Mutex()
     private val pairing = Mutex()
@@ -44,21 +45,24 @@ class DeviceExecution(
     }
 
     /** Invoked only after the transport authenticates the local setup owner. */
-    suspend fun pair(challengeId: String, nonce: String, context: ExecutionContext, packageId: String?, displayName: String = "External runtime"): ExecutionResult<PairedSession> = pairing.withLock {
+    suspend fun pair(challengeId: String, nonce: String, context: ExecutionContext, packageId: String?, displayName: String = "External runtime",
+        accountRef: String? = null, fixtureUi: Boolean = false): ExecutionResult<PairedSession> = pairing.withLock {
         val challenge = challenges.remove(challengeId)
             ?: return@withLock reject(ExecutionErrorCode.IdentityMismatch, "Pairing challenge missing or already consumed")
         if (challenge.second <= clock.nowMillis() || !crypto.matches(nonce, challenge.first))
             return@withLock reject(ExecutionErrorCode.IdentityMismatch, "Pairing challenge expired or invalid")
         if (context.deviceId != deviceId) return@withLock reject(ExecutionErrorCode.IdentityMismatch, "Selected device does not match")
+        if (fixtureUi && packageId != CONTROLLED_UI_PACKAGE) return@withLock reject(ExecutionErrorCode.ApprovalRequired, "UI qualification grant only permits the Companion fixture")
         val bearer = crypto.newSecret()
         controller.withLock {
             repository.transaction {
                 val old = repository.session(context.sessionId)
-                if (old != null && (old.context != context || old.packageId != packageId))
-                    return@transaction reject(ExecutionErrorCode.IdentityMismatch, "Renewal cannot replace the captured context or package")
+                if (old != null && (old.context != context || old.packageId != packageId || old.accountRef != accountRef || old.fixtureUi != fixtureUi))
+                    return@transaction reject(ExecutionErrorCode.IdentityMismatch, "Renewal cannot replace the captured context, package, account or grant scope")
                 val session = old?.copy(credentialHash = crypto.digest(bearer), expiresAtMillis = clock.nowMillis() + 1_800_000,
                     grantId = ids.next(), revoked = false)
-                    ?: ControllerSession(context, crypto.digest(bearer), clock.nowMillis() + 1_800_000, ids.next(), packageId, displayName = displayName)
+                    ?: ControllerSession(context, crypto.digest(bearer), clock.nowMillis() + 1_800_000, ids.next(), packageId,
+                        maxActions = if (fixtureUi) 64 else 16, displayName = displayName, accountRef = accountRef, fixtureUi = fixtureUi)
                 repository.putSession(session)
                 if (repository.lease()?.sessionId == context.sessionId) { repository.putLease(null); controllerEvent(null) }
                 ExecutionResult.Success(PairedSession(session, bearer))
@@ -99,10 +103,11 @@ class DeviceExecution(
 
     /** Local user pause/revocation takes priority over future dispatch, including queued calls. */
     override fun revoke(sessionId: String) = repository.transaction {
+        observations?.cancelWaits(sessionId)
         repository.session(sessionId)?.let { repository.putSession(it.copy(revoked = true)) }
         if (repository.lease()?.sessionId == sessionId) { repository.putLease(null); controllerEvent(null) }
     }
-    override fun pause() = repository.transaction { repository.putLease(null); controllerEvent(null) }
+    override fun pause() = repository.transaction { observations?.cancelWaits(null); repository.putLease(null); controllerEvent(null) }
     override fun selectController(sessionId: String) = repository.transaction {
         val session = repository.session(sessionId) ?: return@transaction
         if (sessionError(session) != null) return@transaction
@@ -117,7 +122,10 @@ class DeviceExecution(
     }
     fun pairedSessions(): List<ControllerSession> = repository.sessions()
 
-    suspend fun execute(session: ControllerSession, command: ExecutionCommand): ExecutionResult<ExecutionReceipt> {
+    suspend fun execute(session: ControllerSession, command: ExecutionCommand, uiRequest: UiActionRequest? = null,
+        goal: UiGoal? = null): ExecutionResult<ExecutionReceipt> {
+        if (command.operation in UI_OPERATIONS && (uiRequest == null || observations == null))
+            return reject(ExecutionErrorCode.UnsupportedCapability, "UI execution adapter or typed request unavailable")
         // Queueing and adapter waiting are both bounded by the caller deadline and server limit.
         val remaining = command.deadlineMillis - clock.nowMillis()
         if (remaining <= 0) return reject(ExecutionErrorCode.DeadlineExceeded, "Action deadline passed")
@@ -151,26 +159,46 @@ class DeviceExecution(
                     }
                     if (executing.state != ReceiptState.Executing) return@withLock ExecutionResult.Success(executing)
                     try {
-                        val result = actions.execute(DeviceAction.Open(command.scope.packageId))
+                        val effect = if (command.operation in UI_OPERATIONS) observations!!.perform(command.context, command.scope,
+                            command.operation, uiRequest!!) { admission(session, command, budgetCharged = true) }
+                        else when (val result = actions.execute(DeviceAction.Open(command.scope.packageId))) {
+                            is DeviceResult.Success -> UiEffect(if (result.value.accepted) UiEffectState.Dispatched else UiEffectState.Possible)
+                            is DeviceResult.Rejected -> UiEffect(UiEffectState.Possible)
+                        }
                         val done = repository.transaction {
                             val fresh = repository.receipt(command.actionId)!!
-                            when (result) {
-                                is DeviceResult.Success -> if (result.value.accepted) update(fresh, ReceiptState.Dispatched)
-                                    else update(fresh, ReceiptState.UnknownEffect, ExecutionError(ExecutionErrorCode.UnknownEffect, "Adapter did not establish the effect; do not replay"))
-                                is DeviceResult.Rejected -> update(fresh, ReceiptState.UnknownEffect,
-                                    ExecutionError(ExecutionErrorCode.UnknownEffect, "Adapter rejected after execution began; reconcile before another attempt"))
+                            when (effect.state) {
+                                UiEffectState.Dispatched -> update(fresh, ReceiptState.Dispatched)
+                                UiEffectState.None -> update(fresh, if (effect.error?.code == ExecutionErrorCode.Cancelled) ReceiptState.Cancelled else ReceiptState.Failed,
+                                    effect.error ?: ExecutionError(ExecutionErrorCode.InvalidRequest, "UI action was not dispatched"))
+                                UiEffectState.Possible -> update(fresh, ReceiptState.UnknownEffect,
+                                    effect.error ?: ExecutionError(ExecutionErrorCode.UnknownEffect, "Adapter did not establish the effect; do not replay"))
                             }
                         }
-                        ExecutionResult.Success(done)
+                        if (done.state == ReceiptState.Dispatched && observations != null) {
+                            if (goal != null) verifyGoal(session, command.actionId, goal, command.goalHash!!)
+                            else {
+                                val observed = observations.observe(command.context, command.scope.copy(snapshotRef = null), null, 0, 128) {
+                                    observationAdmission(session, command.scope.copy(snapshotRef = null))
+                                }
+                                ExecutionResult.Success(if (observed is ExecutionResult.Success) repository.transaction {
+                                    update(repository.receipt(command.actionId)!!.copy(observationRef = observed.value.snapshot.ref), ReceiptState.Dispatched)
+                                } else done)
+                            }
+                        } else ExecutionResult.Success(done)
                     } catch (error: CancellationException) {
                         withContext(NonCancellable) { repository.transaction {
-                            update(repository.receipt(old.command.actionId)!!, ReceiptState.UnknownEffect,
+                            val fresh = repository.receipt(old.command.actionId)!!
+                            if (fresh.state == ReceiptState.Executing) update(fresh, ReceiptState.UnknownEffect,
                                 ExecutionError(ExecutionErrorCode.UnknownEffect, "Execution interrupted; no automatic retry"))
                         } }
                         throw error
                     } catch (_: Exception) {
-                        ExecutionResult.Success(repository.transaction { update(repository.receipt(command.actionId)!!,
-                            ReceiptState.UnknownEffect, ExecutionError(ExecutionErrorCode.UnknownEffect, "Effect acknowledgement unavailable; reconcile")) })
+                        ExecutionResult.Success(repository.transaction {
+                            val fresh = repository.receipt(command.actionId)!!
+                            if (fresh.state == ReceiptState.Executing) update(fresh, ReceiptState.UnknownEffect,
+                                ExecutionError(ExecutionErrorCode.UnknownEffect, "Effect acknowledgement unavailable; reconcile")) else fresh
+                        })
                     }
                 }
             }
@@ -184,10 +212,15 @@ class DeviceExecution(
     private fun admission(session: ControllerSession, command: ExecutionCommand, budgetCharged: Boolean = false): ExecutionError? {
         sessionError(session)?.let { return it }
         if (command.deadlineMillis <= clock.nowMillis()) return ExecutionError(ExecutionErrorCode.DeadlineExceeded, "Action deadline passed")
-        if (command.cancellationId?.let(repository::cancelled) == true) return ExecutionError(ExecutionErrorCode.Cancelled, "Action cancellation context was stopped")
-        if (command.operation != "app.open") return ExecutionError(ExecutionErrorCode.UnsupportedCapability, "Operation is not implemented by this APK")
-        if (!command.payloadEmpty || command.scope.accountRef != null || command.scope.snapshotRef != null || command.scope.resourceRefs.isNotEmpty() || command.scope.packageId == null)
-            return ExecutionError(ExecutionErrorCode.InvalidRequest, "app.open requires only an explicit package scope and empty payload")
+        if (command.cancellationId?.let { repository.cancelled(it) || repository.cancelled("${session.context.sessionId}:$it") } == true || repository.receipt(command.actionId)?.cancellationRequested == true)
+            return ExecutionError(ExecutionErrorCode.Cancelled, "Action cancellation context was stopped")
+        if (command.operation != "app.open" && command.operation !in UI_OPERATIONS) return ExecutionError(ExecutionErrorCode.UnsupportedCapability, "Operation is not implemented by this APK")
+        if (command.scope.packageId == null || command.scope.resourceRefs.isNotEmpty() || command.scope.accountRef != session.accountRef)
+            return ExecutionError(ExecutionErrorCode.IdentityMismatch, "Action requires the captured package/account scope")
+        if (command.operation == "app.open" && (!command.payloadEmpty || command.scope.snapshotRef != null))
+            return ExecutionError(ExecutionErrorCode.InvalidRequest, "app.open requires an empty payload and no snapshot")
+        if (command.operation in UI_OPERATIONS && (command.scope.snapshotRef == null || !session.fixtureUi || session.packageId != CONTROLLED_UI_PACKAGE))
+            return ExecutionError(ExecutionErrorCode.ApprovalRequired, "UI actions require a snapshot and the explicit controlled-fixture setup grant; general app authority is not implemented")
         val lease = repository.lease()
         if (lease == null || lease.ref != command.lease || lease.sessionId != session.context.sessionId || lease.expiresAtMillis <= clock.nowMillis())
             return ExecutionError(ExecutionErrorCode.ControllerConflict, "Controller lease missing, expired or replaced")
@@ -195,6 +228,62 @@ class DeviceExecution(
         if (command.authority != AuthorityRef("grant", current.grantId) || command.scope.packageId != current.packageId || (!budgetCharged && current.actionsUsed >= current.maxActions))
             return ExecutionError(ExecutionErrorCode.ApprovalRequired, "No setup grant for this package or the action budget is exhausted")
         return readiness.rejection(command.operation, command.scope.packageId)
+    }
+
+    fun observationAdmission(session: ControllerSession, scope: ExecutionScope): ExecutionError? {
+        sessionError(session)?.let { return it }
+        if (scope.packageId == null || scope.packageId != session.packageId || scope.accountRef != session.accountRef || scope.resourceRefs.isNotEmpty())
+            return ExecutionError(ExecutionErrorCode.IdentityMismatch, "Observation cannot replace the captured package, account or resources")
+        return readiness.rejection("ui.observe", scope.packageId)
+    }
+    suspend fun observe(session: ControllerSession, scope: ExecutionScope, selector: NodeSelector?, offset: Int, limit: Int): ExecutionResult<SnapshotPage> =
+        observations?.observe(session.context, scope, selector, offset, limit) { observationAdmission(session, scope) }
+            ?: reject(ExecutionErrorCode.UnsupportedCapability, "Rich observation adapter unavailable")
+
+    suspend fun waitFor(session: ControllerSession, scope: ExecutionScope, kind: String, selector: NodeSelector?, deadline: Long, cancellationId: String): ExecutionResult<SnapshotPage> =
+        observations?.wait(session.context, scope, kind, selector, deadline, cancellationId) {
+            observationAdmission(session, scope) ?: if (repository.cancelled("${session.context.sessionId}:$cancellationId"))
+                ExecutionError(ExecutionErrorCode.Cancelled, "Observation cancellation context was stopped") else null
+        } ?: reject(ExecutionErrorCode.UnsupportedCapability, "Observation waits unavailable")
+
+    fun cancelWait(session: ControllerSession, cancellationId: String): ExecutionResult<Unit> {
+        sessionError(session)?.let { return ExecutionResult.Rejected(it) }
+        repository.transaction { repository.markCancelled("${session.context.sessionId}:$cancellationId") }
+        observations?.cancelWait(session.context.sessionId, cancellationId)
+        return ExecutionResult.Success(Unit)
+    }
+    fun captureReadiness(language: String?) = observations?.captureReadiness(language)
+        ?: if (observations == null) ExecutionError(ExecutionErrorCode.UnsupportedCapability, "Capture adapter unavailable") else null
+    suspend fun capture(session: ControllerSession, scope: ExecutionScope, language: String?): ExecutionResult<VisualObservation> =
+        observations?.capture(session.context, scope, language) { observationAdmission(session, scope) }
+            ?: reject(ExecutionErrorCode.UnsupportedCapability, "Capture adapter unavailable")
+
+    suspend fun verifyGoal(session: ControllerSession, actionId: String, goal: UiGoal, goalHash: String): ExecutionResult<ExecutionReceipt> {
+        val receipt = receipt(session, actionId)
+        if (receipt !is ExecutionResult.Success) return receipt
+        val old = receipt.value
+        if (old.command.goalId != goal.goalId || old.command.goalHash != goalHash || old.command.operation !in UI_OPERATIONS)
+            return reject(ExecutionErrorCode.ActionConflict, "Verification must match the UI-state criterion bound to the original action")
+        if (old.state == ReceiptState.Verified) return receipt
+        if (old.state !in setOf(ReceiptState.Dispatched, ReceiptState.NeedsVerification, ReceiptState.UnknownEffect))
+            return reject(ExecutionErrorCode.InvalidRequest, "Action has no effect to reconcile")
+        val verifier = observations ?: return reject(ExecutionErrorCode.UnsupportedCapability, "Verifier unavailable")
+        val scope = old.command.scope.copy(snapshotRef = null)
+        val verified = verifier.verify(session.context, scope, goal) { observationAdmission(session, scope) }
+        return ExecutionResult.Success(repository.transaction {
+            val fresh = repository.receipt(actionId)!!
+            if (fresh.state == ReceiptState.Verified) fresh
+            else when (verified) {
+                is ExecutionResult.Rejected -> update(fresh, ReceiptState.NeedsVerification, verified.error)
+                is ExecutionResult.Success -> update(fresh.copy(observationRef = verified.value.snapshot.ref,
+                    evidence = verified.value.evidence?.let(::listOf) ?: emptyList()),
+                    if (verified.value.evidence != null) ReceiptState.Verified else ReceiptState.NeedsVerification, null)
+            }
+        })
+    }
+
+    companion object {
+        val UI_OPERATIONS = setOf("ui.click", "ui.select", "ui.set_text", "ui.scroll", "ui.long_press", "ui.tap", "ui.swipe", "ui.back", "ui.home")
     }
 
     fun receipt(session: ControllerSession, actionId: String): ExecutionResult<ExecutionReceipt> = repository.transaction {

@@ -22,6 +22,7 @@ import dev.usix.companion.adapters.transport.OutboundDeviceConnection
 import dev.usix.companion.application.DeviceApplication
 import dev.usix.companion.application.DeviceQuery
 import dev.usix.companion.application.DeviceExecution
+import dev.usix.companion.application.DeviceObservations
 import dev.usix.companion.application.ExecuteDeviceAction
 import dev.usix.companion.application.DeviceAction
 import dev.usix.companion.application.ExecutionClock
@@ -36,7 +37,7 @@ import kotlinx.coroutines.Dispatchers
 @InstallIn(SingletonComponent::class)
 object CompanionModule {
     @Provides @Singleton
-    fun accessibility() = ConnectedAccessibilityAdapter(Dispatchers.Main.immediate)
+    fun accessibility() = ConnectedAccessibilityAdapter(Dispatchers.Main.immediate, Dispatchers.IO)
     @Provides @Singleton
     fun notifications(@ApplicationContext context: Context) = AndroidNotificationAdapter(context, Dispatchers.Main.immediate)
     @Provides @Singleton
@@ -51,10 +52,13 @@ object CompanionModule {
     @Provides @Singleton
     fun journal(@ApplicationContext context: Context) = RoomExecutionRepository(ExecutionDatabase.open(context))
     @Provides @Singleton
-    fun readiness(@ApplicationContext context: Context) = AndroidExecutionReadiness(context)
+    fun readiness(@ApplicationContext context: Context, accessibility: ConnectedAccessibilityAdapter) = AndroidExecutionReadiness(context, accessibility)
     @Provides @Singleton
-    fun execution(journal: RoomExecutionRepository, readiness: AndroidExecutionReadiness, application: DeviceApplication) =
-        DeviceExecution(journal, ExecutionClock { System.currentTimeMillis() }, ExecutionIds { java.util.UUID.randomUUID().toString() }, ExecutionCrypto(), readiness, application)
+    fun observations(accessibility: ConnectedAccessibilityAdapter) = DeviceObservations(accessibility,
+        ExecutionClock { System.currentTimeMillis() }, ExecutionIds { java.util.UUID.randomUUID().toString() })
+    @Provides @Singleton
+    fun execution(journal: RoomExecutionRepository, readiness: AndroidExecutionReadiness, application: DeviceApplication, observations: DeviceObservations) =
+        DeviceExecution(journal, ExecutionClock { System.currentTimeMillis() }, ExecutionIds { java.util.UUID.randomUUID().toString() }, ExecutionCrypto(), readiness, application, observations = observations)
     @Provides @Singleton
     fun v2Router(execution: DeviceExecution, application: DeviceApplication, credentials: BridgeCredentialStore, readiness: AndroidExecutionReadiness) =
         DeviceV2Router(execution, application, credentials, readiness) { System.currentTimeMillis() }

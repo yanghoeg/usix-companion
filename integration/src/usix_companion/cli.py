@@ -10,6 +10,7 @@ from pathlib import Path
 from . import CONTRACT
 from .client import IntegrationFailure, absolute, call, private_json, save_private
 from .contract import Contracts, loads, payload_hash, utc
+from . import observations
 
 
 def packet(**fields):
@@ -34,6 +35,8 @@ def main(argv=None):
     setup.add_argument("--workspace", required=True)
     setup.add_argument("--runtime", required=True, choices=["usix", "usix-termux"])
     setup.add_argument("--package", default=None)
+    setup.add_argument("--account-ref", type=lambda value: str(uuid.UUID(value)))
+    setup.add_argument("--fixture-ui", action="store_true", help="controlled Companion fixture only; does not authorize general app effects")
     setup.add_argument("--owner-token-file", default=str(Path.home() / ".usix/companion_token"))
     connection = setup.add_mutually_exclusive_group()
     connection.add_argument("--endpoint", default="http://127.0.0.1:8760")
@@ -53,6 +56,7 @@ def main(argv=None):
     events.add_argument("--limit", type=int, default=128)
     ack = commands.add_parser("ack")
     ack.add_argument("--cursor", type=int, required=True)
+    observations.add_commands(commands)
     args = parser.parse_args(argv)
     sent_effect = False
     sent_action_id = None
@@ -72,13 +76,13 @@ def main(argv=None):
             context = {"deviceId": challenge["deviceId"], "runtimeId": str(uuid.uuid4()), "sessionId": str(uuid.uuid4()),
                        "taskId": str(uuid.uuid4()), "taskRevision": 1, "workspaceId": str(uuid.uuid4())}
             paired = call(connection, "/v2/pair/complete", bearer, packet(challengeId=challenge["challengeId"], nonce=challenge["nonce"], context=context,
-                          packageId=args.package, displayName="USIX" if args.runtime == "usix" else "USIX Termux"))
+                          packageId=args.package, displayName="USIX" if args.runtime == "usix" else "USIX Termux", accountRef=args.account_ref, fixtureUi=args.fixture_ui))
             if paired.get("kind") != "paired":
                 print(json.dumps(paired, ensure_ascii=False)); return 1
             if paired.get("context") != context:
                 raise ValueError("Pairing response replaced the captured context")
             profile = {"profileVersion": 2, "connection": connection, "context": context, "workspace": str(workspace), "runtime": args.runtime,
-                       "packageId": args.package, "bearer": paired["bearer"], "grantRef": paired["grantRef"], "expiresAt": paired["expiresAt"], "lease": None}
+                       "packageId": args.package, "accountRef": args.account_ref, "fixtureUi": args.fixture_ui, "bearer": paired["bearer"], "grantRef": paired["grantRef"], "expiresAt": paired["expiresAt"], "lease": None}
             save_private(profile_path, profile)
             result = {"contractVersion": CONTRACT, "kind": "setup_saved", "profile": str(profile_path), "workspace": str(workspace),
                       "runtime": args.runtime, "expiresAt": paired["expiresAt"], "notice": "Context uses trusted setup correlation IDs; runtime dispatch authority remains separate"}
@@ -93,7 +97,8 @@ def main(argv=None):
             if challenge.get("deviceId") != profile["context"]["deviceId"]:
                 raise ValueError("Renewal selected a different device")
             paired = call(profile["connection"], "/v2/pair/complete", bearer, packet(challengeId=challenge["challengeId"], nonce=challenge["nonce"],
-                          context=profile["context"], packageId=profile["packageId"], displayName="USIX" if profile["runtime"] == "usix" else "USIX Termux"))
+                          context=profile["context"], packageId=profile["packageId"], displayName="USIX" if profile["runtime"] == "usix" else "USIX Termux",
+                          accountRef=profile.get("accountRef"), fixtureUi=profile.get("fixtureUi", False)))
             if paired.get("kind") != "paired":
                 print(json.dumps(paired, ensure_ascii=False)); return 1
             if paired.get("context") != profile["context"]:
@@ -117,13 +122,20 @@ def main(argv=None):
                 body.update(cursor=args.cursor, limit=args.limit)
             elif args.command == "ack":
                 body["cursor"] = args.cursor
-            if args.command in ("open", "execute"):
+            if args.command in observations.COMMANDS:
+                route, body = observations.request(args, profile, packet)
+                sent_effect = args.command == "ui"
+                sent_action_id = body.get("actionId") if sent_effect else None
+                result = call(profile["connection"], route, profile["bearer"], body)
+            elif args.command in ("open", "execute"):
                 if args.command == "execute":
-                    raw = sys.stdin.buffer.read(65537) if args.request_file == "-" else absolute(args.request_file).read_bytes()
+                    if args.request_file == "-": raw = sys.stdin.buffer.read(65537)
+                    else:
+                        with absolute(args.request_file).open("rb") as source: raw = source.read(65537)
                     body = loads(raw)
                 else:
                     body.update(kind="command", context=profile["context"], actionId=args.action_id, operation="app.open", payload={},
-                                scope={"packageId": profile["packageId"], "accountRef": None, "resourceRefs": [], "snapshotRef": None},
+                                scope=observations.scope(profile),
                                 controllerLease=profile["lease"], deadline=utc(int(time.time() * 1000) + 30_000), cancellationId=None,
                                 authority={"kind": "grant", "ref": profile["grantRef"]})
                     body["payloadHash"] = payload_hash(body)
@@ -139,10 +151,14 @@ def main(argv=None):
                 profile["lease"] = result["lease"]; save_private(profile_path, profile)
             if result.get("kind") == "controller_released":
                 profile["lease"] = None; save_private(profile_path, profile)
-            if result.get("kind") in ("receipt", "capabilities"):
+            if result.get("kind") in ("receipt", "capabilities", "snapshot", "visual"):
                 Contracts().validate(result["kind"], result)
-            if result.get("kind") in ("receipt", "observation") and result.get("context") != profile["context"]:
+            if result.get("kind") in ("receipt", "observation", "snapshot", "visual") and result.get("context") != profile["context"]:
                 raise IntegrationFailure("IdentityMismatch", "Response is bound to a different captured context")
+            if result.get("kind") in ("snapshot", "visual") and result.get("scope") != observations.scope(profile):
+                raise IntegrationFailure("IdentityMismatch", "Observation replaced the captured package/account scope")
+            if result.get("kind") == "visual":
+                result = observations.summarize_visual(profile, result, args.output)
         print(json.dumps(result, ensure_ascii=False))
         return 1 if result.get("kind") == "error" else 3 if result.get("state") in ("UnknownEffect", "NeedsVerification", "Executing") else 0
     except IntegrationFailure as failure:

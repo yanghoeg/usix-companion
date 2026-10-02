@@ -2,7 +2,7 @@ name: build
 
 on:
   push:
-    branches: [main, "companion/p2-*"]
+    branches: [main, "companion/p2-*", "companion/p3-*"]
     tags: ["v*"]
   pull_request:
     branches: [main]
@@ -75,6 +75,14 @@ jobs:
         run: ./gradlew checkArchitecture :adapters:transport:test testDebugUnitTest lintDebug --no-daemon --stacktrace
       - name: Validate APK-router wire output
         run: python tools/check_apk_contract_outputs.py
+
+      - name: Build controlled native, Compose and WebView device fixture
+        run: ./gradlew :testing:device-fixture:assembleDebug --no-daemon --stacktrace
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: usix-companion-fixture
+          path: testing/device-fixture/build/outputs/apk/debug/device-fixture-debug.apk
 
       # Every push/PR: keep the signed APK as a build artifact (expires).
       - uses: actions/upload-artifact@v4

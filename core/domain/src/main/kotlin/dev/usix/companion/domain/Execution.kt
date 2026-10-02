@@ -16,6 +16,7 @@ data class ExecutionCommand(
     val operation: String, val scope: ExecutionScope, val payloadHash: String,
     val payloadEmpty: Boolean, val lease: LeaseRef?, val deadlineMillis: Long,
     val cancellationId: String?, val authority: AuthorityRef,
+    val goalId: String? = null, val goalHash: String? = null,
 )
 enum class ExecutionErrorCode {
     InvalidRequest, IdentityMismatch, UnsupportedVersion, UnsupportedCapability,
@@ -30,15 +31,17 @@ data class ExecutionReceipt(
     val receiptId: String, val command: ExecutionCommand, val revision: Long,
     val state: ReceiptState, val updatedAtMillis: Long,
     val cancellationRequested: Boolean = false, val error: ExecutionError? = null,
+    val observationRef: String? = null, val evidence: List<VerificationEvidence> = emptyList(),
 )
 data class ControllerLease(val ref: LeaseRef, val sessionId: String, val runtimeId: String, val expiresAtMillis: Long)
-/** P2 setup grant is deliberately limited to opening one explicitly selected package. */
+/** General setup permits observation/app opening; UI qualification is confined to our fixture. */
 data class ControllerSession(
     val context: ExecutionContext, val credentialHash: String, val expiresAtMillis: Long,
     val grantId: String, val packageId: String?, val maxActions: Int = 16,
     val actionsUsed: Int = 0, val revoked: Boolean = false,
     val deliveredCursor: Long = 0, val acknowledgedCursor: Long = 0,
     val displayName: String = "External runtime",
+    val accountRef: String? = null, val fixtureUi: Boolean = false,
 )
 data class PairedRuntimeSummary(val sessionId: String, val displayName: String, val expiresAtMillis: Long, val revoked: Boolean, val selected: Boolean)
 data class PairingChallenge(val challengeId: String, val nonce: String, val expiresAtMillis: Long)

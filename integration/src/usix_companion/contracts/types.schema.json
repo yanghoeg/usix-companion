@@ -280,6 +280,12 @@
         },
         "verifiedAt": {
           "$ref": "urn:usix-companion:device:v2:types#/$defs/timestamp"
+        },
+        "snapshotRef": {
+          "$ref": "urn:usix-companion:device:v2:types#/$defs/id"
+        },
+        "purpose": {
+          "const": "ui_state"
         }
       },
       "required": [

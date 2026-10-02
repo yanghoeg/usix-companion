@@ -1,0 +1,579 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 3,
+    "identityHash": "14a53e6e247f402cf843ea4ac50c0d47",
+    "entities": [
+      {
+        "tableName": "sessions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` TEXT NOT NULL, `credentialHash` TEXT NOT NULL, `expiresAtMillis` INTEGER NOT NULL, `grantId` TEXT NOT NULL, `packageId` TEXT, `maxActions` INTEGER NOT NULL, `actionsUsed` INTEGER NOT NULL, `revoked` INTEGER NOT NULL, `deliveredCursor` INTEGER NOT NULL DEFAULT 0, `acknowledgedCursor` INTEGER NOT NULL DEFAULT 0, `displayName` TEXT NOT NULL DEFAULT 'External runtime', `accountRef` TEXT DEFAULT NULL, `fixtureUi` INTEGER NOT NULL DEFAULT 0, `context_deviceId` TEXT NOT NULL, `context_runtimeId` TEXT NOT NULL, `context_sessionId` TEXT NOT NULL, `context_taskId` TEXT NOT NULL, `context_taskRevision` INTEGER NOT NULL, `context_workspaceId` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "credentialHash",
+            "columnName": "credentialHash",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expiresAtMillis",
+            "columnName": "expiresAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "grantId",
+            "columnName": "grantId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageId",
+            "columnName": "packageId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "maxActions",
+            "columnName": "maxActions",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actionsUsed",
+            "columnName": "actionsUsed",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revoked",
+            "columnName": "revoked",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deliveredCursor",
+            "columnName": "deliveredCursor",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "acknowledgedCursor",
+            "columnName": "acknowledgedCursor",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "displayName",
+            "columnName": "displayName",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "'External runtime'"
+          },
+          {
+            "fieldPath": "accountRef",
+            "columnName": "accountRef",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "NULL"
+          },
+          {
+            "fieldPath": "fixtureUi",
+            "columnName": "fixtureUi",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "context.deviceId",
+            "columnName": "context_deviceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context.runtimeId",
+            "columnName": "context_runtimeId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context.sessionId",
+            "columnName": "context_sessionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context.taskId",
+            "columnName": "context_taskId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context.taskRevision",
+            "columnName": "context_taskRevision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context.workspaceId",
+            "columnName": "context_workspaceId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_sessions_credentialHash",
+            "unique": true,
+            "columnNames": [
+              "credentialHash"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_sessions_credentialHash` ON `${TABLE_NAME}` (`credentialHash`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "actions",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`actionId` TEXT NOT NULL, `receiptId` TEXT NOT NULL, `requestId` TEXT NOT NULL, `operation` TEXT NOT NULL, `packageId` TEXT, `accountRef` TEXT, `resourceRefs` TEXT NOT NULL, `snapshotRef` TEXT, `payloadHash` TEXT NOT NULL, `payloadEmpty` INTEGER NOT NULL, `leaseId` TEXT, `leaseRevision` INTEGER, `deadlineMillis` INTEGER NOT NULL, `cancellationId` TEXT, `authorityKind` TEXT NOT NULL, `authorityRef` TEXT, `revision` INTEGER NOT NULL, `state` TEXT NOT NULL, `updatedAtMillis` INTEGER NOT NULL, `cancellationRequested` INTEGER NOT NULL, `errorCode` TEXT, `errorMessage` TEXT, `goalId` TEXT DEFAULT NULL, `goalHash` TEXT DEFAULT NULL, `observationRef` TEXT DEFAULT NULL, `evidenceRefs` TEXT NOT NULL DEFAULT '', `context_deviceId` TEXT NOT NULL, `context_runtimeId` TEXT NOT NULL, `context_sessionId` TEXT NOT NULL, `context_taskId` TEXT NOT NULL, `context_taskRevision` INTEGER NOT NULL, `context_workspaceId` TEXT NOT NULL, PRIMARY KEY(`actionId`))",
+        "fields": [
+          {
+            "fieldPath": "actionId",
+            "columnName": "actionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "receiptId",
+            "columnName": "receiptId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "requestId",
+            "columnName": "requestId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "operation",
+            "columnName": "operation",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "packageId",
+            "columnName": "packageId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "accountRef",
+            "columnName": "accountRef",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "resourceRefs",
+            "columnName": "resourceRefs",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "snapshotRef",
+            "columnName": "snapshotRef",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "payloadHash",
+            "columnName": "payloadHash",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "payloadEmpty",
+            "columnName": "payloadEmpty",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "leaseId",
+            "columnName": "leaseId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "leaseRevision",
+            "columnName": "leaseRevision",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "deadlineMillis",
+            "columnName": "deadlineMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cancellationId",
+            "columnName": "cancellationId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "authorityKind",
+            "columnName": "authorityKind",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "authorityRef",
+            "columnName": "authorityRef",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "revision",
+            "columnName": "revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "state",
+            "columnName": "state",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "updatedAtMillis",
+            "columnName": "updatedAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "cancellationRequested",
+            "columnName": "cancellationRequested",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "errorCode",
+            "columnName": "errorCode",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "errorMessage",
+            "columnName": "errorMessage",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "goalId",
+            "columnName": "goalId",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "NULL"
+          },
+          {
+            "fieldPath": "goalHash",
+            "columnName": "goalHash",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "NULL"
+          },
+          {
+            "fieldPath": "observationRef",
+            "columnName": "observationRef",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "NULL"
+          },
+          {
+            "fieldPath": "evidenceRefs",
+            "columnName": "evidenceRefs",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "context.deviceId",
+            "columnName": "context_deviceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context.runtimeId",
+            "columnName": "context_runtimeId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context.sessionId",
+            "columnName": "context_sessionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context.taskId",
+            "columnName": "context_taskId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context.taskRevision",
+            "columnName": "context_taskRevision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "context.workspaceId",
+            "columnName": "context_workspaceId",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "actionId"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_actions_context_sessionId",
+            "unique": false,
+            "columnNames": [
+              "context_sessionId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_actions_context_sessionId` ON `${TABLE_NAME}` (`context_sessionId`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "controller",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`singleton` INTEGER NOT NULL, `leaseId` TEXT NOT NULL, `revision` INTEGER NOT NULL, `sessionId` TEXT NOT NULL, `runtimeId` TEXT NOT NULL, `expiresAtMillis` INTEGER NOT NULL, PRIMARY KEY(`singleton`))",
+        "fields": [
+          {
+            "fieldPath": "singleton",
+            "columnName": "singleton",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "leaseId",
+            "columnName": "leaseId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "revision",
+            "columnName": "revision",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "sessionId",
+            "columnName": "sessionId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "runtimeId",
+            "columnName": "runtimeId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "expiresAtMillis",
+            "columnName": "expiresAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "singleton"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "events",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`cursor` INTEGER NOT NULL, `eventId` TEXT NOT NULL, `deviceId` TEXT NOT NULL, `createdAtMillis` INTEGER NOT NULL, `type` TEXT NOT NULL, `actionId` TEXT, `receiptId` TEXT, `receiptRevision` INTEGER, `runtimeId` TEXT, `leaseId` TEXT, `leaseRevision` INTEGER, `context_deviceId` TEXT, `context_runtimeId` TEXT, `context_sessionId` TEXT, `context_taskId` TEXT, `context_taskRevision` INTEGER, `context_workspaceId` TEXT, PRIMARY KEY(`cursor`))",
+        "fields": [
+          {
+            "fieldPath": "cursor",
+            "columnName": "cursor",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "eventId",
+            "columnName": "eventId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "deviceId",
+            "columnName": "deviceId",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "createdAtMillis",
+            "columnName": "createdAtMillis",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "type",
+            "columnName": "type",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "actionId",
+            "columnName": "actionId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "receiptId",
+            "columnName": "receiptId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "receiptRevision",
+            "columnName": "receiptRevision",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "runtimeId",
+            "columnName": "runtimeId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "leaseId",
+            "columnName": "leaseId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "leaseRevision",
+            "columnName": "leaseRevision",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "context.deviceId",
+            "columnName": "context_deviceId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "context.runtimeId",
+            "columnName": "context_runtimeId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "context.sessionId",
+            "columnName": "context_sessionId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "context.taskId",
+            "columnName": "context_taskId",
+            "affinity": "TEXT",
+            "notNull": false
+          },
+          {
+            "fieldPath": "context.taskRevision",
+            "columnName": "context_taskRevision",
+            "affinity": "INTEGER",
+            "notNull": false
+          },
+          {
+            "fieldPath": "context.workspaceId",
+            "columnName": "context_workspaceId",
+            "affinity": "TEXT",
+            "notNull": false
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "cursor"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_events_eventId",
+            "unique": true,
+            "columnNames": [
+              "eventId"
+            ],
+            "orders": [],
+            "createSql": "CREATE UNIQUE INDEX IF NOT EXISTS `index_events_eventId` ON `${TABLE_NAME}` (`eventId`)"
+          }
+        ],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "metadata",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`name` TEXT NOT NULL, `value` TEXT NOT NULL, PRIMARY KEY(`name`))",
+        "fields": [
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "value",
+            "columnName": "value",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "name"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '14a53e6e247f402cf843ea4ac50c0d47')"
+    ]
+  }
+}

@@ -21,10 +21,12 @@ data class SessionRow(
     @ColumnInfo(defaultValue = "0") val deliveredCursor: Long = 0,
     @ColumnInfo(defaultValue = "0") val acknowledgedCursor: Long = 0,
     @ColumnInfo(defaultValue = "'External runtime'") val displayName: String = "External runtime",
+    @ColumnInfo(defaultValue = "NULL") val accountRef: String? = null,
+    @ColumnInfo(defaultValue = "0") val fixtureUi: Boolean = false,
 ) {
-    fun domain() = ControllerSession(context.domain(), credentialHash, expiresAtMillis, grantId, packageId, maxActions, actionsUsed, revoked, deliveredCursor, acknowledgedCursor, displayName)
+    fun domain() = ControllerSession(context.domain(), credentialHash, expiresAtMillis, grantId, packageId, maxActions, actionsUsed, revoked, deliveredCursor, acknowledgedCursor, displayName, accountRef, fixtureUi)
     companion object { fun from(s: ControllerSession) = SessionRow(s.context.sessionId, ContextColumns.from(s.context), s.credentialHash, s.expiresAtMillis,
-        s.grantId, s.packageId, s.maxActions, s.actionsUsed, s.revoked, s.deliveredCursor, s.acknowledgedCursor, s.displayName) }
+        s.grantId, s.packageId, s.maxActions, s.actionsUsed, s.revoked, s.deliveredCursor, s.acknowledgedCursor, s.displayName, s.accountRef, s.fixtureUi) }
 }
 @Entity(tableName = "actions", indices = [Index("context_sessionId")])
 data class ActionRow(
@@ -35,16 +37,23 @@ data class ActionRow(
     val leaseId: String?, val leaseRevision: Long?, val deadlineMillis: Long, val cancellationId: String?,
     val authorityKind: String, val authorityRef: String?, val revision: Long, val state: String,
     val updatedAtMillis: Long, val cancellationRequested: Boolean, val errorCode: String?, val errorMessage: String?,
+    @ColumnInfo(defaultValue = "NULL") val goalId: String? = null,
+    @ColumnInfo(defaultValue = "NULL") val goalHash: String? = null,
+    @ColumnInfo(defaultValue = "NULL") val observationRef: String? = null,
+    @ColumnInfo(defaultValue = "''") val evidenceRefs: String = "",
 ) {
     fun domain() = ExecutionReceipt(receiptId, ExecutionCommand(requestId, context.domain(), actionId, operation,
         ExecutionScope(packageId, accountRef, resourceRefs.split('\n').filter(String::isNotEmpty), snapshotRef), payloadHash, payloadEmpty,
-        leaseId?.let { LeaseRef(it, leaseRevision!!) }, deadlineMillis, cancellationId, AuthorityRef(authorityKind, authorityRef)),
+        leaseId?.let { LeaseRef(it, leaseRevision!!) }, deadlineMillis, cancellationId, AuthorityRef(authorityKind, authorityRef), goalId, goalHash),
         revision, ReceiptState.valueOf(state), updatedAtMillis, cancellationRequested,
-        errorCode?.let { ExecutionError(ExecutionErrorCode.valueOf(it), errorMessage!!) })
+        errorCode?.let { ExecutionError(ExecutionErrorCode.valueOf(it), errorMessage!!) }, observationRef,
+        evidenceRefs.lines().filter(String::isNotEmpty).map { line -> val parts = line.split('\t');
+            VerificationEvidence(parts[0], parts[1], parts[2].toLong(), parts[3]) })
     companion object { fun from(r: ExecutionReceipt): ActionRow { val c = r.command; return ActionRow(c.actionId, r.receiptId, c.requestId,
         ContextColumns.from(c.context), c.operation, c.scope.packageId, c.scope.accountRef, c.scope.resourceRefs.joinToString("\n"), c.scope.snapshotRef,
         c.payloadHash, c.payloadEmpty, c.lease?.leaseId, c.lease?.revision, c.deadlineMillis, c.cancellationId, c.authority.kind, c.authority.ref,
-        r.revision, r.state.name, r.updatedAtMillis, r.cancellationRequested, r.error?.code?.name, r.error?.message) } }
+        r.revision, r.state.name, r.updatedAtMillis, r.cancellationRequested, r.error?.code?.name, r.error?.message,
+        c.goalId, c.goalHash, r.observationRef, r.evidence.joinToString("\n") { "${it.evidenceRef}\t${it.goalId}\t${it.verifiedAtMillis}\t${it.snapshotRef}" }) } }
 }
 @Entity(tableName = "controller")
 data class LeaseRow(@PrimaryKey val singleton: Int = 1, val leaseId: String, val revision: Long, val sessionId: String, val runtimeId: String, val expiresAtMillis: Long) {
@@ -90,7 +99,7 @@ interface ExecutionDao {
     @Query("SELECT MIN(cursor) FROM events") fun oldest(): Long?
     @Query("SELECT MAX(cursor) FROM events") fun latest(): Long?
 }
-@Database(entities = [SessionRow::class, ActionRow::class, LeaseRow::class, EventRow::class, MetadataRow::class], version = 2, exportSchema = true)
+@Database(entities = [SessionRow::class, ActionRow::class, LeaseRow::class, EventRow::class, MetadataRow::class], version = 3, exportSchema = true)
 abstract class ExecutionDatabase : RoomDatabase() {
     abstract fun execution(): ExecutionDao
     companion object {
@@ -99,8 +108,16 @@ abstract class ExecutionDatabase : RoomDatabase() {
             db.execSQL("ALTER TABLE sessions ADD COLUMN acknowledgedCursor INTEGER NOT NULL DEFAULT 0")
             db.execSQL("ALTER TABLE sessions ADD COLUMN displayName TEXT NOT NULL DEFAULT 'External runtime'")
         } }
+        val MIGRATION_2_3 = object : Migration(2, 3) { override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("ALTER TABLE sessions ADD COLUMN accountRef TEXT DEFAULT NULL")
+            db.execSQL("ALTER TABLE sessions ADD COLUMN fixtureUi INTEGER NOT NULL DEFAULT 0")
+            db.execSQL("ALTER TABLE actions ADD COLUMN goalId TEXT DEFAULT NULL")
+            db.execSQL("ALTER TABLE actions ADD COLUMN goalHash TEXT DEFAULT NULL")
+            db.execSQL("ALTER TABLE actions ADD COLUMN observationRef TEXT DEFAULT NULL")
+            db.execSQL("ALTER TABLE actions ADD COLUMN evidenceRefs TEXT NOT NULL DEFAULT ''")
+        } }
         fun open(context: Context, name: String = "device-execution.db") = Room.databaseBuilder(context.applicationContext, ExecutionDatabase::class.java, name)
-            .addMigrations(MIGRATION_1_2).build()
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3).build()
     }
 }
 class RoomExecutionRepository(val database: ExecutionDatabase) : ExecutionRepository {

@@ -13,7 +13,7 @@ from pathlib import Path
 def capture(root: Path, binary: str):
     root = root.resolve()
     revision = subprocess.check_output(["git", "-C", str(root), "rev-parse", "HEAD"], text=True).strip()
-    status = subprocess.check_output(["git", "-C", str(root), "status", "--porcelain=v1"], text=True).splitlines()
+    status = subprocess.check_output(["git", "--no-optional-locks", "-C", str(root), "status", "--porcelain=v1"], text=True).splitlines()
     files = subprocess.check_output(["git", "-C", str(root), "ls-files", "-z"]).split(b"\0")
     digest = hashlib.sha256()
     for name in sorted(x for x in files if x):
