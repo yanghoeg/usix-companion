@@ -1,6 +1,6 @@
 {
-  "recordedAt": "2026-10-01T23:04:14.155730+00:00",
-  "chapterStatus": "in_progress",
+  "recordedAt": "2026-10-02T00:50:06.356790+00:00",
+  "chapterStatus": "complete",
   "latestApk": {
     "gitRevision": "b3c853ea342905b6ade6df36ce91e4ade39d7022",
     "githubRun": 36890107600,
@@ -20,7 +20,7 @@
   "checks": {
     "architecturePython": 6,
     "contractPython": 18,
-    "integrationPython": 11,
+    "integrationPython": 14,
     "toolsPythonLocal": 25,
     "actualKotlinRouterOutputsSchemaValidated": 6,
     "coreApplicationLocal": 27,
@@ -31,22 +31,23 @@
     "appCompositionLocal": 1,
     "localRoomNativeTests": "4 could not initialize unsupported Robolectric native runtime on Termux aarch64; mandatory Linux CI test task passes",
     "toolsPythonCi": 25,
-    "rebootEvidenceBoundaryPythonLocal": 3
+    "rebootEvidenceBoundaryPythonLocal": 3,
+    "rebootEvidenceBoundaryPythonCi": 3
   },
   "installation": {
     "verified": true,
     "v2Available": true,
     "installerIntentRequested": true,
     "apkCopiedToDownload": true,
-    "pmInstallResult": "Android /system/bin/pm: Operation not permitted; requires phone installer confirmation",
+    "pmInstallResult": "Historical Android pm permission denial; user subsequently confirmed phone-installer update and authenticated v2 runs",
     "observedAt": "2026-10-01T21:48:13.919919+00:00",
     "v2ProbeHttpStatus": 401,
     "verification": "User confirmed installation and live typed v2 route replaces earlier 404",
     "installedApkBytesReadBack": false,
     "pairingVerified": true,
     "pairingState": "Existing usix-termux pair succeeded; owner token file 0600; authenticated v2 health passes",
-    "authenticatedHealthEvidence": "physical-cwd-and-pairing.json",
-    "authenticatedHealthObservedAt": "2026-10-01T22:13:06.298420+00:00"
+    "authenticatedHealthEvidence": "physical-reboot-after.json",
+    "authenticatedHealthObservedAt": "2026-10-02T00:48:59.159152+00:00"
   },
   "genuineModels": {
     "termuxLegacyHealth": "pass; exact existing shell approval, actual phone response, matching final model report and exit 0",
@@ -62,11 +63,7 @@
     "usix-termux": true
   },
   "evaluationModelServer": "evaluation-owned Qwen server stopped; port 8080 closed after genuine v2 trace",
-  "requiredRemaining": [
-    "Reboot physical phone, restart existing broker, verify exact stored receipts/events/acknowledgements and reject stale leases without replay",
-    "After required exits pass, write final acceptance evidence, update plan and delete temporary P2 execution document"
-  ],
-  "chapterDocumentRetained": "docs/chapters/P2.md",
+  "requiredRemaining": [],
   "physicalChecks": {
     "loopback": {
       "passed": true,
@@ -92,13 +89,21 @@
       "externalNetworkDeployment": false
     },
     "physicalReboot": {
-      "passed": false,
+      "passed": true,
       "prepared": true,
       "beforeSteps": 17,
       "beforeEvidence": "physical-reboot-before.json",
       "savedReceipts": 4,
       "sameBootNegativeCheck": "pass; rejected before device requests or renewals",
-      "savedEffectsReplayed": 0
+      "savedEffectsReplayed": 0,
+      "afterSteps": 27,
+      "afterEvidence": "physical-reboot-after.json",
+      "bootIdChanged": true,
+      "persistedReceiptsVerified": 4,
+      "savedEventHistoryPreserved": true,
+      "nativeWssSettingsRestored": true,
+      "controllerClearedBeforeWssRenewal": true,
+      "staleControllerRejectedWithoutEffect": true
     },
     "wssFirstLockedAttempt": {
       "passed": false,
@@ -108,14 +113,29 @@
       "evidence": "physical-wss-scenarios.json"
     }
   },
-  "runtimeIdentityEvidence": "runtime-after-usix-v2-model.json",
+  "runtimeIdentityEvidence": "runtime-final.json",
   "latestEvaluatorCi": {
-    "gitRevision": "e700516ff6130c2e6773e80849dcecaf921c836d",
-    "githubRun": 36937058592,
-    "githubUrl": "https://github.com/yanghoeg/usix-companion/actions/runs/36937058592",
+    "gitRevision": "8e088ae1c9ae559f0db1578e030237286ed31cfa",
+    "githubRun": 36939375889,
+    "githubUrl": "https://github.com/yanghoeg/usix-companion/actions/runs/36939375889",
     "coreJob": "success",
     "androidJob": "success",
     "nativeRoomTestTask": "success",
-    "androidSourceUnchangedFromInstalledCheckpoint": true
+    "androidSourceUnchangedFromInstalledCheckpoint": true,
+    "integrationTests": 14
+  },
+  "allRequiredExitChecksPassed": true,
+  "chapterDocumentDeleted": "docs/chapters/P2.md",
+  "nextChapter": "P3",
+  "nextChapterStarted": false,
+  "verifiedMatrix": {
+    "physicalPhone": true,
+    "loopback": true,
+    "nativeAndroidWssSamePhoneBroker": true,
+    "genuineUsixAuthorizedReadProfile": true,
+    "genuineTermuxExactShellApproval": true,
+    "physicalReboot": true,
+    "externalLinuxOrRemoteNetworkDeploymentVerified": false,
+    "richUiMailVerified": false
   }
 }

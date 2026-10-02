@@ -1,10 +1,12 @@
-# P2 implementation and installation checkpoint
+# P2 device execution acceptance evidence
 
-Date: 2026-10-01 UTC. **P2 remains in progress.** GitHub build, all 30 physical loopback and 30 native Android WSS scenario steps, four cwd checks and both genuine v2 model gates pass. Physical reboot reconciliation remains required. Keep [the execution document](../chapters/P2.md).
+Completed: 2026-10-02 UTC. **All P2 exits pass.** GitHub build, all 30 physical loopback and 30 native Android WSS scenario steps, four cwd checks, both genuine v2 model gates and all 27 physical reboot recovery steps pass. The temporary `docs/chapters/P2.md` execution document is deleted. This permanent evidence retains the measured profiles, original failed attempts and P3 handoff.
 
 ## GitHub APK
 
 [Run 36890107600](https://github.com/yanghoeg/usix-companion/actions/runs/36890107600) built the installed delivery checkpoint `b3c853ea342905b6ade6df36ce91e4ade39d7022`. Both core and Android jobs passed, including the mandatory native Room persistence/migration test task, Android regressions/lint and standalone TLS broker checks. [Evaluator run 36937058592](https://github.com/yanghoeg/usix-companion/actions/runs/36937058592) also passed core/build/native Room/lint at `e700516ff6130c2e6773e80849dcecaf921c836d`; Android source is unchanged from the installed checkpoint. [The renewal build](https://github.com/yanghoeg/usix-companion/actions/runs/36885404502) and [initial build](https://github.com/yanghoeg/usix-companion/actions/runs/36882403814) also passed. This branch is `companion/p2-device-contract`; main was not merged or rewritten.
+
+[Final implementation/evaluator run 36939375889](https://github.com/yanghoeg/usix-companion/actions/runs/36939375889) passes at `8e088ae1c9ae559f0db1578e030237286ed31cfa`: core/build, release APK assembly, Android/native Room/lint, six Kotlin-router schema outputs, 6 architecture, 18 contract, 25 tooling and 14 integration tests. The integration suite includes all three new reboot-evidence boundary tests. Android source remains identical to the installed checkpoint; completion changes only acceptance evidence and documentation. No newer installed APK bytes are claimed.
 
 | APK property | Verified value |
 | --- | --- |
@@ -20,7 +22,7 @@ Date: 2026-10-01 UTC. **P2 remains in progress.** GitHub build, all 30 physical 
 
 - Local pure JVM application/protocol/transport tests: 27/11/14, all passing. Transport tests include actual TLS, hostname rejection, replay rejection and Kotlin-router outputs; six generated messages pass the unchanged shared schemas.
 - Existing Android adapter/control/composition tests: 31/2/1 pass. Lint and release assembly pass locally. Four native Room tests cannot initialize Robolectric's unsupported Linux aarch64 native runtime on this Termux host; they stay enabled and their mandatory Linux CI task passes. No persistence test was skipped or replaced with a fake.
-- Python: 6 architecture, 18 contract, 11 integration/TLS/CLI tests and 25 tooling tests pass in Linux CI. The two new tooling tests specifically verify the existing TTY approval boundary and also pass locally.
+- Python: 6 architecture, 18 contract, 14 integration/TLS/CLI/reboot-boundary tests and 25 tooling tests pass in the final Linux CI run. The existing TTY approval boundary and all three reboot-evidence boundary checks also pass locally.
 - Trusted session renewal is owner-authenticated and challenge-bound. It rotates bearer/grant, invalidates old controller/credentials, and preserves the exact context, selected package, receipt history, remaining action budget and delivered/acknowledged cursors. Old requests authorized before credential rotation are rejected. Renewal cannot change an existing task/package or replenish its budget.
 
 ## Physical v2 checks
@@ -41,15 +43,17 @@ Date: 2026-10-01 UTC. **P2 remains in progress.** GitHub build, all 30 physical 
 | Installed USIX, default TTY v2 profile | [Original v2 attempt](P2/usix-v2-interactive-model-health.json) completed without a tool; [fixed-helper attempt](P2/usix-v2-explicit-model-health.json) reached its 300-second limit with an unsuccessful unmatched result and no witness. | Default profile not verified; neither failure is relabelled as a pass. |
 | Installed USIX, user-authorized existing `--yolo` for one v2 read | [Actual trace](P2/usix-v2-authorized-model-health.json): one exact existing `bash` call, successful matching fresh real-device v2 witness and `done.completed`, exit 0. Actual model `qwen3.8-flash-next`; 18,783 ms total, 2,745 ms witness helper. All five authenticated health booleans are true. | **Pass in this explicitly authorized profile.** The user limited the option to this one state query. Static/surface/deployment gates and runtime source are unchanged; this grants no ongoing bypass permission. |
 
-The controlled traces read no mail, notification contents or private screen data. The evaluation-owned local model server was stopped afterward and port 8080 was confirmed closed. Runtime source, installed-binary hashes and clean worktrees are identical in [before](P2/runtime-before.json) and [after both genuine v2 model runs](P2/runtime-after-usix-v2-model.json) captures. The current Termux source revision and installed binary are recorded independently; the binary is not claimed to have been rebuilt from that revision.
+The controlled traces read no mail, notification contents or private screen data. The evaluation-owned local model server was stopped afterward and port 8080 was confirmed closed. Runtime source, installed-binary hashes and clean worktrees are identical in [before](P2/runtime-before.json), [after both genuine v2 model runs](P2/runtime-after-usix-v2-model.json) and [final after-reboot](P2/runtime-final.json) captures. USIX remains at `b7a9755386a4b5017da7d921516e3c21b67244c2`; Termux remains at `a678eea24e00d5852e1aaf9b460eea88fe68c508`. The current Termux source revision and installed binary are recorded independently; the binary is not claimed to have been rebuilt from that revision.
 
-## Physical reboot checkpoint
+## Physical reboot recovery
 
 [The pre-reboot checkpoint](P2/physical-reboot-before.json) passes 17 real-device checks and saves four exact dispatched receipts, both acknowledged event cursors, stable event IDs, a WSS controller lease/revision and a SHA-256 of the kernel boot ID. It is preparation, **not reboot evidence**. The lease lasts at most 60 seconds; expiry alone will not satisfy recovery. The evaluator requires a changed kernel boot ID and a persisted controller-clear event before renewing the WSS session, verifies exact receipts/event history and rejects backwards acknowledgements before advancing any cursor. A new controller revision must exceed the saved revision and reject a new controlled probe using the old lease without creating a receipt. The four saved effect commands are never submitted again.
 
-The same-boot negative check exited 1 with zero device calls/renewals/effect replays. Three new boundary tests pass locally: same boot, unreadable boot identity with redacted diagnostics, and refusal to overwrite previous evidence. The broker is on the phone and will stop during a physical reboot. Restart its same private configuration; do not initialize new registrations or reinstall Android remote settings. The app's native WSS reconnection then tests its persisted DataStore/Keystore settings. If profiles expire, existing trusted renewal preserves context/history/budget; this does not create new sessions.
+The same-boot negative check exited 1 with zero device calls/renewals/effect replays. Three new boundary tests pass locally and in CI: same boot, unreadable boot identity with redacted diagnostics, and refusal to overwrite previous evidence. The broker is on the phone and stops during a physical reboot. Its same private configuration was restarted without new registrations or re-entering Android remote settings. The app's native WSS reconnected using its persisted DataStore/Keystore settings. Both expired profiles renewed through existing trusted owner setup with their original contexts, receipt history, cursors and remaining budgets.
 
-After the user reboots, unlocks and opens Companion and Termux, restart the broker with the retained private config, then run:
+[Actual after-reboot evidence](P2/physical-reboot-after.json) passes all 27 steps at `2026-10-02T00:48:59Z`. The kernel boot ID hash changed. Four exact stored receipts retain their IDs, revisions, payload hashes, `Dispatched` states and cancellation flags. Old event IDs/data remain identical, both backwards acknowledgement attempts reject before the original cursor is acknowledged, and resync neither recreates actions nor changes their receipts. A persisted controller-clear event was read through the different loopback session before WSS renewal, so renewal did not supply that recovery evidence. The new controller revision exceeds the saved revision. A new probe with the old lease returns `ControllerConflict` with no effect and has no receipt. **Saved effect commands replayed: zero.** This does not test an in-flight physical send or imply verified business completion.
+
+The reproducible after-reboot invocation was:
 
 ```sh
 /data/data/com.termux/files/home/usix-companion/.venv-integration/bin/python \
@@ -58,9 +62,10 @@ After the user reboots, unlocks and opens Companion and Termux, restart the brok
   after --baseline /data/data/com.termux/files/home/usix-companion/docs/evidence/P2/physical-reboot-before.json
 ```
 
-## Required continuation
+## P3 handoff
 
-1. Reboot the real phone, reconnect using the existing broker configuration, reconcile the saved action IDs and acknowledged event cursors, and reject old controller revisions without replay. Unit DB reopen and service restoration are separate evidence, not a physical reboot. The concrete checkpoint and evaluator above are ready; physical reboot is still required.
-2. Write final permanent acceptance evidence, update the plan and delete the temporary chapter document only after every required exit passes. P3 has not started. Both genuine v2 model gates and the complete local/WSS scenarios are already verified; do not rerun the one-time authorized `--yolo` query.
+P3 can start only at the user's next instruction. Keep the installed identity/signature and v1 compatibility, shared v2 schemas, explicit captured contexts, single controller, persisted action/outbox transactions, typed rejection and truthful dispatch/uncertainty semantics. Add rich observation, targeting, waits, cancellation and goal verification in Companion through existing runtime interfaces. Neither runtime source may change. The one-time authorized USIX `--yolo` query is consumed; do not infer permission for another bypass invocation.
 
-[Machine-readable checkpoint](P2/verification-checkpoint.json) pins the checks, install probe and explicitly incomplete gates.
+The verified matrix is this physical Android phone, loopback, native Android WSS through its same-phone owning-user broker, installed USIX configured `qwen3.8-flash-next`, and installed Termux TUI with the evaluation-owned Qwen CPU server. The evaluator server is stopped; the restored broker remains running with the same private config. External Linux/remote-network deployment, supervised startup/Doze/force-stop behavior, cryptographic native-runtime dispatch identity, rich UI/OCR, consequential mail approval/send verification and broad repeated release workflows retain their declared later gates. P2 health/app-dispatch/reboot evidence does not establish those capabilities.
+
+[Machine-readable acceptance](P2/verification-checkpoint.json) pins the completed exits, delivered APK, actual model/device evidence and unchanged runtime identities.

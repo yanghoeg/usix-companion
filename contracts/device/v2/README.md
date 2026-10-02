@@ -1,6 +1,6 @@
 # Device v2 contract
 
-Status: shared P0 contract with P2 APK/standalone CLI implementation. Companion 0.2.0 implements pairing, v2 negotiation, controller leases, durable receipts/outbox and outbound WSS. `tools/companion_http.py` remains a v1 caller. [Current capability and setup limits](../../../docs/device-integration.md) describe health and one-package app opening; P3/P4 add rich UI, canonical consequential approvals and verified outcomes. P2 device/CI acceptance remains in its execution document until the required evidence passes.
+Status: shared P0 contract with P2 APK/standalone CLI implementation. Companion 0.2.0 implements pairing, v2 negotiation, controller leases, durable receipts/outbox and outbound WSS. `tools/companion_http.py` remains a v1 caller. [Current capability and setup limits](../../../docs/device-integration.md) describe health and one-package app opening; P3/P4 add rich UI, canonical consequential approvals and verified outcomes. P2 device/CI acceptance is complete in [permanent evidence](../../../docs/evidence/P2-checkpoint.md), including both genuine runtime traces, physical loopback/WSS and reboot reconciliation without replay.
 
 All schemas, clients and examples belong to Companion. Neither `../usix` nor `../usix-termux` is changed. Existing runtime authentication, tool admission, model policy and approvals apply in addition to device checks.
 

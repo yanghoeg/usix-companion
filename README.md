@@ -25,7 +25,9 @@ need an existing permitted path; `--yolo` does not add a missing tool. P0 is com
 and [P1's hexagonal foundation](docs/evidence/P1-foundation.md) is complete. The
 [architecture guide](docs/architecture.md) describes the pure Kotlin core, injected
 adapters, Hilt composition, Compose setup UI and enforced dependency boundaries.
-P2 implementation and device/CI acceptance are in progress in [its execution document](docs/chapters/P2.md).
+[P2 device execution acceptance](docs/evidence/P2-checkpoint.md) is complete: the GitHub-built APK is installed,
+both unchanged runtimes have genuine v2 model/device traces, all local/WSS scenarios pass,
+and physical reboot preserves receipts/events while rejecting stale controllers without replay.
 Detailed UI/mail verification remains P3/P4 work.
 
 For mail lookup, use the [IMAP caller](tools/companion_mail.py) without switching
