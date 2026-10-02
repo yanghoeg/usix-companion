@@ -1,0 +1,115 @@
+{
+  "recordedAt": "2026-10-02T08:36:20.749444+00:00",
+  "chapter": "P3",
+  "passed": true,
+  "source": "fresh physical/genuine model reports, source/binary captures and complete required Linux CI; no mocked device/model acceptance",
+  "ci": {
+    "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36980789477",
+    "revision": "574201cf4f79f491ffc671acc6de22ce089b394f",
+    "requiredJobsPassed": true,
+    "nativeRoomCases": 5,
+    "toolingTests": 33,
+    "integrationTests": 19,
+    "testedExecutableSourceUnchanged": true
+  },
+  "models": {
+    "usix": {
+      "trace": "usix-model-trace13.json",
+      "physical": "usix-model-physical13.json",
+      "checks": 83,
+      "deviceCalls": 146,
+      "physicalElapsedMs": 53417,
+      "modelElapsedMs": 106606,
+      "evidenceSha256": "ad83457a6778a5556c89157ab8d139ccf39e719e548ff206602143d0e09c385c",
+      "permission": "existing USIX default admission and exact allowed-tools rule",
+      "invocationCwd": "/data/data/com.termux/files/home/usix-companion"
+    },
+    "usix-termux": {
+      "trace": "termux-model-trace7.json",
+      "physical": "termux-model-physical7.json",
+      "checks": 83,
+      "deviceCalls": 150,
+      "physicalElapsedMs": 57955,
+      "modelElapsedMs": 120774,
+      "evidenceSha256": "2f7630d203b8894a1bc60996536ed91e395c43220d262c45887c9a3e297c40b4",
+      "permission": "existing TTY one-time exact-command approval",
+      "invocationCwd": "/data/data/com.termux/files/home/usix-termux"
+    }
+  },
+  "directWssChecks": 81,
+  "device": {
+    "ro.product.manufacturer": "samsung",
+    "ro.product.model": "SM-F956N",
+    "ro.build.version.release": "16",
+    "ro.build.version.sdk": "36"
+  },
+  "cwdChecks": 4,
+  "runtimeSourceWrites": 0,
+  "bothCurrentValidationBaselinesMatchFinal": true,
+  "bothRuntimeWorktreesClean": true,
+  "termuxPhaseStartMatchesFinal": true,
+  "usixPhaseStartMatchesFinal": false,
+  "usixExternalUpdate": "User confirmed separate updates; current revision is pinned before/after validation, initial revision remains historical evidence",
+  "runtimeRevisions": {
+    "usix": "68e3e30285656ee7d58c3b654666089c0c979f34",
+    "usix-termux": "a678eea24e00d5852e1aaf9b460eea88fe68c508"
+  },
+  "deliveredApkHashesMatchBuildEvidence": true,
+  "installedApkBytesReadBack": false,
+  "installationEvidence": "User-confirmed Companion and fixture installation, followed by complete genuine USIX and Termux controlled UI/OCR/rotation qualification. Installed APK bytes and exact installed fixture version were not read back; signed P3.2 fixture is staged.",
+  "evaluationModelServerStopped": true,
+  "loopback8080ClosedAtFinalCheck": true,
+  "selectedSessionNoLongerOwnsController": true,
+  "existingCompanionBrokerRetained": true,
+  "scopeLimits": [
+    "Samsung SM-F956N Android 16/API 36 with same-phone native Android WSS broker; external Linux/network deployment is not qualified",
+    "Only the controlled fixture has UI effect authority; general app task grants, canonical approvals and mail remain P4",
+    "UI-state verification does not establish business completion or delivery",
+    "Explicit device locks and unavailable foreground screens retain truthful errors; background durability remains a later gate"
+  ],
+  "evidenceFiles": {
+    "ci-final.json": {
+      "sha256": "5f9c86d80575857bfe5ddeeb3b2eee56051047e6746c2c8ae90f0b3e0221e080"
+    },
+    "build-results.json": {
+      "sha256": "083d6bb483ca63af7971c6ee3f67961f9eda58fea561673d5d1060cf145bda4d"
+    },
+    "runtime-validation-before.json": {
+      "sha256": "e5f885c87b42be443f92e36fbe746525734b49c1b5058b005f19bc9bb4312ec9"
+    },
+    "runtime-validation5-before.json": {
+      "sha256": "8de4b279079deaf674ccf4c316c51580406f7201d03d3c8679b86c866bce894a"
+    },
+    "runtime-final.json": {
+      "sha256": "d46c13879f1dbbc6b935135b182ec21c5f4a52c8e0e9edb88e2306f261ae2d16"
+    },
+    "physical-wss-all-attempt1.json": {
+      "sha256": "10f410fb44e007e00ea4b491df85f36d8d1af89b8a8f6bf49965f542f4f0e2de"
+    },
+    "termux-model-trace7.json": {
+      "sha256": "74c92ff5544c52afd0cf239399d32171ff331d530093511e4b576eea0cabd268"
+    },
+    "termux-model-physical7.json": {
+      "sha256": "2f7630d203b8894a1bc60996536ed91e395c43220d262c45887c9a3e297c40b4"
+    },
+    "usix-model-trace13.json": {
+      "sha256": "444f7d74042ba79973a3e67ed5a95274488e73b6762abea043d17b8b63fb3871"
+    },
+    "usix-model-physical13.json": {
+      "sha256": "ad83457a6778a5556c89157ab8d139ccf39e719e548ff206602143d0e09c385c"
+    },
+    "cwd-and-device2.json": {
+      "sha256": "bd61cc627c84eadb05b5b74e0bf294487e4c4a171d9fee2e2ad1c9f351b424b6"
+    },
+    "model-server-shutdown.json": {
+      "sha256": "42830d02c761b099910625f0a3d3dc2394dac9d6038e4ee31a08b919ae5b135c"
+    },
+    "controller-cleanup-final.json": {
+      "sha256": "90ebf2ccaef10e6be058fd96dca2153d17ac67950955112bc5f4cd4e608568df"
+    }
+  },
+  "temporaryExecutionDocument": "docs/chapters/P3.md",
+  "temporaryExecutionDocumentDeletedAfterAcceptance": true,
+  "nextChapter": "P4",
+  "nextChapterStarted": false
+}

@@ -1,0 +1,23 @@
+{
+  "recordedAt": "2026-10-02T08:21:42.791559+00:00",
+  "runtimeLabel": "usix",
+  "operation": "P3.controlled-observation",
+  "invocationCwd": "/data/data/com.termux/files/home/usix-companion",
+  "source": "physical authenticated Companion fixture; no mock device/model",
+  "suite": "all",
+  "runtimeSourceWrites": 0,
+  "contextSha256": "5e4712d3105c0599958d59f4e4b90cd1642d913e0b51ecaf7135ad2b8f1a7c5b",
+  "passed": false,
+  "exceptionType": "ValueError",
+  "lastOperation": "/v2/capabilities",
+  "error": "Qualification incomplete; inspect controlled checks and current readiness. Credentials omitted.",
+  "checks": [
+    {
+      "check": "P3 supported by the real APK",
+      "passed": false
+    }
+  ],
+  "deviceCalls": 2,
+  "lastDeviceErrorCode": "IdentityMismatch",
+  "elapsedMs": 53
+}

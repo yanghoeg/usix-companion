@@ -413,7 +413,13 @@ The user requested GitHub build and phone installation. [GitHub run 36890107600]
 
 [Actual physical reboot reconciliation](evidence/P2/physical-reboot-after.json) passes all 27 steps after the user's reboot: changed kernel boot ID, four identical persisted receipts, stable event history and acknowledged cursor lower bounds, controller-clear evidence before WSS renewal, restored native WSS settings and stale-lease rejection without effect or receipt. Saved effect commands replayed: zero. [Final CI 36939375889](https://github.com/yanghoeg/usix-companion/actions/runs/36939375889) passes all required core/build/native Room/lint/contract/evaluator checks, including 14 integration tests with three physical-evidence boundary tests. [Final runtime capture](evidence/P2/runtime-final.json) confirms the original source/binary hashes and clean worktrees. Installed APK bytes were not read back; the delivered signature/hash and live authenticated v2 installation are distinct evidence.
 
-P3 started on 2026-10-02 at the user's request. [Its execution document](chapters/P3.md) tracks pending exits; [permanent P3 evidence](evidence/P3-checkpoint.md) and [observation contract](observations.md) distinguish implementation/unit checks from required physical/runtime qualification. Preserve P2's authority, durable uncertainty and v1 compatibility while adding rich observations/selectors/waits and goal-specific evidence. This passing matrix covers the physical phone and same-phone broker; external Linux/network deployment, Doze/force-stop supervision, missing cryptographic runtime dispatch binding and broad UI/mail workflows retain their later gates. The consumed one-time USIX `--yolo` permission is not ongoing authorization. The original default-profile and locked-phone failures remain in permanent evidence.
+P2 handed off rich observations/selectors/waits and goal-specific evidence to P3 while retaining its authority, durable uncertainty and v1 compatibility. This passing matrix covers the physical phone and same-phone broker; external Linux/network deployment, Doze/force-stop supervision, missing cryptographic runtime dispatch binding and broad UI/mail workflows retain their later gates. The consumed one-time USIX `--yolo` permission is not ongoing authorization. Original default-profile and locked-phone failures remain in permanent evidence.
+
+### P3 execution status — 2026-10-02
+
+P3 is complete. [Permanent acceptance evidence](evidence/P3-checkpoint.md) and [final gate verification](evidence/P3/final-verification.json) retain rich immutable snapshots/exact selectors, bounded event waits/cancellation, stale/ambiguous rejection, screenshot masking/bundled Latin/Korean OCR and criterion-bound UI-state verification. The 81-check direct native Android WSS suite and both genuine model/device suites pass: unchanged Termux uses its existing exact approved shell and passes 83 checks; unchanged USIX uses default admission and its exact existing `allowed-tools` rule from Companion, without `--yolo`, and passes 83 checks with a fresh matching tool-result witness. Native/Compose/WebView, account/package boundaries, protected/unavailable capture, dispatch versus verified outcomes and physical rotation are covered. Four installed CLI cwd checks retain captured context/workspace. [Final CI 36980789477](https://github.com/yanghoeg/usix-companion/actions/runs/36980789477) passes all core/build/native Room/lint/schema/fixture gates, including 33 tooling and 19 integration tests.
+
+[The final runtime capture](evidence/P3/runtime-final.json) matches every current validation source/status/installed-binary field for both targets. USIX is pinned to the user's separately updated `68e3e30285656ee7d58c3b654666089c0c979f34`; Termux remains `a678eea24e00d5852e1aaf9b460eea88fe68c508`. Companion changed neither runtime tree. Historical captures/failed attempts remain, and installed APK bytes are not claimed to have been read back. The temporary P3 execution document is deleted after all exits pass. P4 is ready for the user's next-start instruction and must implement broader captured-context workflows, task grants, canonical approvals and mail read → draft → approved send → verification on both unchanged targets. UI-state evidence still does not prove business completion; external Linux/network deployment and durable background operation retain their later gates. P4 has not started.
 
 Security, protocol conformance and outcome tests run with their corresponding phase, not only in P9. P4 is the first broad vertical milestone; P6–P8 remain part of the roadmap rather than being silently omitted after that milestone.
 
@@ -421,14 +427,14 @@ If a required shared workflow cannot pass through the existing interfaces of one
 
 ### Execution documents and next-start mapping
 
-Create an execution document when its chapter starts and delete it when that chapter's exit evidence passes. The short prompts below identify the next chapter; use the complete next-start template above in the completion report. P0, P1 and P2 are complete; the remaining paths describe future execution documents.
+Create an execution document when its chapter starts and delete it when that chapter's exit evidence passes. The short prompts below identify the next chapter; use the complete next-start template above in the completion report. P0–P3 are complete; the remaining paths describe future execution documents.
 
 | Chapter | Temporary execution document | Next start after verified completion |
 | --- | --- | --- |
 | P0 — Baseline and contracts | Completed; temporary document deleted. [Evidence](evidence/P0-baseline.md). | `P1 시작해` |
 | P1 — Hexagonal foundation | Completed; temporary document deleted. [Evidence](evidence/P1-foundation.md). | `P2 시작해` |
 | P2 — Device execution contract | Completed; temporary document deleted. [Evidence](evidence/P2-checkpoint.md). | `P3 시작해` |
-| P3 — Observation and verification | `docs/chapters/P3.md` | `P4 시작해` |
+| P3 — Observation and verification | Completed; temporary document deleted. [Evidence](evidence/P3-checkpoint.md). | `P4 시작해` |
 | P4 — Complete agent workflow | `docs/chapters/P4.md` | `P5 시작해` |
 | P5 — Durable automation | `docs/chapters/P5.md` | `P6 시작해` |
 | P6 — Communication and calendar | `docs/chapters/P6.md` | `P7 시작해` |

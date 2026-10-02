@@ -1,0 +1,75 @@
+{
+  "recordedAt": "2026-10-02T08:25:31.820662+00:00",
+  "runtime": "usix",
+  "invocationCwd": "/data/data/com.termux/files/home/usix-companion",
+  "source": "genuine unchanged installed runtime and existing model; exact admitted tool invokes physical controlled fixture",
+  "command": "python3 /data/data/com.termux/files/home/usix-companion/.build-tools/usix-model-trace13-fixed-helper.py",
+  "permission": "existing USIX default admission and exact allowed-tools rule",
+  "approvalDecisions": [],
+  "physicalEvidence": "docs/evidence/P3/usix-model-physical13.json",
+  "deviceWitness": {
+    "recordedAt": "2026-10-02T08:24:13.539910+00:00",
+    "runtimeLabel": "usix",
+    "operation": "P3.controlled-observation",
+    "invocationCwd": "/data/data/com.termux/files/home/usix-companion",
+    "suite": "all",
+    "passed": true,
+    "deviceCalls": 146,
+    "elapsedMs": 53417,
+    "lastDeviceErrorCode": "StaleSnapshot",
+    "contextSha256": "5e4712d3105c0599958d59f4e4b90cd1642d913e0b51ecaf7135ad2b8f1a7c5b",
+    "checkCount": 83,
+    "passedChecks": 83,
+    "evidenceSha256": "ad83457a6778a5556c89157ab8d139ccf39e719e548ff206602143d0e09c385c"
+  },
+  "exitCode": 0,
+  "elapsedMs": 106606,
+  "deviceObservationsViaModelVerified": true,
+  "redaction": "only exact command, approvals, controlled fixture summary, correlation and model counts; no credentials or hidden reasoning",
+  "events": [
+    {
+      "type": "tool_execute",
+      "seq": 83,
+      "tool": "bash",
+      "exactCommand": true,
+      "args": {
+        "command": "python3 /data/data/com.termux/files/home/usix-companion/.build-tools/usix-model-trace13-fixed-helper.py"
+      },
+      "call_id": "chatcmpl-tool-9d4c5180c29f84e3",
+      "request_id": "6a4b840d-7c04-4342-80cd-a9bbb9ab5856"
+    },
+    {
+      "type": "tool_result",
+      "seq": 84,
+      "exactCommandResult": true,
+      "success": true,
+      "code": null,
+      "deviceWitness": {
+        "recordedAt": "2026-10-02T08:24:13.539910+00:00",
+        "runtimeLabel": "usix",
+        "operation": "P3.controlled-observation",
+        "invocationCwd": "/data/data/com.termux/files/home/usix-companion",
+        "suite": "all",
+        "passed": true,
+        "deviceCalls": 146,
+        "elapsedMs": 53417,
+        "lastDeviceErrorCode": "StaleSnapshot",
+        "contextSha256": "5e4712d3105c0599958d59f4e4b90cd1642d913e0b51ecaf7135ad2b8f1a7c5b",
+        "checkCount": 83,
+        "passedChecks": 83,
+        "evidenceSha256": "ad83457a6778a5556c89157ab8d139ccf39e719e548ff206602143d0e09c385c"
+      },
+      "call_id": "chatcmpl-tool-9d4c5180c29f84e3",
+      "request_id": "6a4b840d-7c04-4342-80cd-a9bbb9ab5856"
+    },
+    {
+      "type": "done",
+      "seq": 386,
+      "model": "qwen3.8-flash-next",
+      "tokens": 446,
+      "prompt_tokens": 14958,
+      "finish_reason": "completed",
+      "request_id": "6a4b840d-7c04-4342-80cd-a9bbb9ab5856"
+    }
+  ]
+}

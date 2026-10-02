@@ -1,6 +1,6 @@
 # Rich observations and UI-state verification
 
-Companion 0.3.0 and integration package 0.3.0 add P3 observations to the existing v2 connection. Qualification is in progress; [P3 evidence](evidence/P3-checkpoint.md) distinguishes unit/build checks from required physical and genuine runtime checks. Install matching APK/CLI schema versions. Existing v1 requests retain their fields and draft semantics.
+Companion 0.3.0 and integration package 0.3.0 add P3 observations to the existing v2 connection. P3 qualification is complete on the recorded physical Android/WSS profile and both unchanged runtimes; [P3 evidence](evidence/P3-checkpoint.md) retains the build, physical and genuine model checks. Install matching APK/CLI schema versions. Existing v1 requests retain their fields and draft semantics.
 
 ## Scope and authority
 

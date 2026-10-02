@@ -1,0 +1,9 @@
+{
+  "recordedAt": "2026-10-02T08:36:20.739393+00:00",
+  "source": "authenticated explicit final release result after the fixture helper already released its controller",
+  "kind": "error",
+  "effect": "none",
+  "errorCode": "ControllerConflict",
+  "selectedSessionNoLongerOwnsController": true,
+  "meaning": "Final release confirmed this session has no controller to release; no UI effect or other session was changed."
+}

@@ -81,7 +81,7 @@
       "foregroundBehavior": "FLAG_KEEP_SCREEN_ON while fixture foreground; Android releases it in background; explicit locking still respected"
     }
   },
-  "physicalInstallation": "Companion functional installation and P3.1 fixture confirmed; updated P3.2 fixture installation remains pending",
+  "physicalInstallation": "User-confirmed Companion and fixture installation, followed by complete genuine USIX and Termux controlled UI/OCR/rotation qualification. Installed APK bytes and exact installed fixture version were not read back; signed P3.2 fixture is staged.",
   "finalCi": {
     "status": "passed",
     "run": "https://github.com/yanghoeg/usix-companion/actions/runs/36980789477",

@@ -28,7 +28,7 @@ adapters, Hilt composition, Compose setup UI and enforced dependency boundaries.
 [P2 device execution acceptance](docs/evidence/P2-checkpoint.md) is complete: the GitHub-built APK is installed,
 both unchanged runtimes have genuine v2 model/device traces, all local/WSS scenarios pass,
 and physical reboot preserves receipts/events while rejecting stale controllers without replay.
-[P3 rich observations and controlled UI-state verification](docs/observations.md) are under qualification. General app authority and mail verification remain P4 work.
+[P3 rich observations and controlled UI-state verification](docs/observations.md) are complete: both unchanged runtimes pass their genuine model/device suites. [Acceptance evidence](docs/evidence/P3-checkpoint.md). General app authority and mail verification remain P4 work.
 
 For mail lookup, use the [IMAP caller](tools/companion_mail.py) without switching
 apps. It reads inbox headers and selected message bodies directly from the mail server
