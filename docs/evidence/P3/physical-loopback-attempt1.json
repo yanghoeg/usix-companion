@@ -1,0 +1,30 @@
+{
+  "recordedAt": "2026-10-02T03:31:06.272121+00:00",
+  "runtimeLabel": "direct",
+  "operation": "P3.controlled-observation",
+  "invocationCwd": "/data/data/com.termux/files/home/usix-companion",
+  "source": "physical authenticated Companion fixture; no mock device/model",
+  "suite": "all",
+  "runtimeSourceWrites": 0,
+  "contextSha256": "ea4eb7597eca569c57ff374f03b7a09612f3d7fdf3ef8318568879c039ecc0f6",
+  "passed": false,
+  "error": "Qualification incomplete; inspect controlled checks and current readiness. Credentials omitted.",
+  "checks": [
+    {
+      "check": "P3 supported by the real APK",
+      "passed": true
+    },
+    {
+      "check": "selected controller acquired",
+      "passed": true
+    },
+    {
+      "check": "fixture launch is dispatched",
+      "passed": false,
+      "state": null
+    }
+  ],
+  "deviceCalls": 4,
+  "lastDeviceErrorCode": "AppMissing",
+  "elapsedMs": 380
+}

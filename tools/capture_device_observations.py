@@ -38,6 +38,7 @@ class Qualification:
         self.checks = []
         self.calls = 0
         self.last_error_code = None
+        self.lease_refreshed = None
 
     def read(self, route, **data):
         self.calls += 1
@@ -70,6 +71,10 @@ class Qualification:
         return value
 
     def action(self, operation, payload, snapshot=None, cancellation=None):
+        if self.lease_refreshed is not None and time.monotonic() - self.lease_refreshed >= 40:
+            current = self.read("/v2/controller/acquire")
+            self.check("same controller lease extended", current.get("kind") == "controller" and current.get("lease") == self.profile["lease"])
+            self.lease_refreshed = time.monotonic()
         body = packet(kind="command", context=self.profile["context"], actionId=str(uuid.uuid4()), operation=operation,
                       scope=scope(self.profile, snapshot), payload=payload, controllerLease=self.profile["lease"],
                       deadline=utc(int(time.time() * 1000) + 30000), cancellationId=cancellation,
@@ -129,6 +134,7 @@ class Qualification:
         lease = self.read("/v2/controller/acquire")
         self.check("selected controller acquired", lease.get("kind") == "controller")
         self.profile["lease"] = lease["lease"]; save_private(self.profile_path, self.profile)
+        self.lease_refreshed = time.monotonic()
         opened, _ = self.action("app.open", {})
         self.check("fixture launch is dispatched", opened.get("state") == "Dispatched", state=opened.get("state"))
         window = self.read("/v2/wait", scope=scope(self.profile), waitKind="window", selector=None,
@@ -142,7 +148,15 @@ class Qualification:
         observed = self.observe()
         self.check(mode + " rich metadata", observed["complete"] and observed["generation"] >= 1 and bool(observed["nodes"]) and
                    all("bounds" in node and "parentRef" in node and "className" in node for node in observed["nodes"]), totalNodes=observed["totalNodes"])
-        duplicate, _ = self.action("ui.click", {"target": {"text": "Duplicate"}}, observed["snapshotRef"])
+        duplicate_label = "Duplicate"
+        if mode == "native":
+            labels = [node["text"] for node in observed["nodes"] if node["resourceId"] in
+                      (PACKAGE + ":id/duplicate_a", PACKAGE + ":id/duplicate_b") and node["visible"]]
+            self.check("native controlled duplicate labels agree", len(labels) == 2 and labels[0] == labels[1] and bool(labels[0]))
+            # Android's native Button theme exposes its transformed ALL CAPS
+            # text. Use that exact observed string; never substring/case folding.
+            duplicate_label = labels[0]
+        duplicate, _ = self.action("ui.click", {"target": {"text": duplicate_label}}, observed["snapshotRef"])
         self.check(mode + " duplicate labels rejected", duplicate.get("effect") == "none" and duplicate.get("error", {}).get("code") == "AmbiguousTarget", state=duplicate.get("state"))
         selector = {"resourceId": PACKAGE + ":id/apply"} if mode == "native" else {"resourceId": "compose_apply"} if mode == "compose" else {"text": "Apply webview", "role": "button"}
         goal = self.goal("Applied " + mode)
@@ -184,6 +198,7 @@ class Qualification:
         self.keyboard(False, self.observe())
         cancelled = self.read("/v2/cancel", actionId=command["actionId"])
         self.check("post-dispatch cancellation preserves effect", cancelled.get("state") == "Dispatched" and cancelled.get("cancellationRequested") is True)
+        self.native_operations()
         before = self.observe()
         self.click({"resourceId": PACKAGE + ":id/rotate"})
         rotated = self.changed(before["snapshotRef"])
@@ -195,6 +210,45 @@ class Qualification:
         self.check("rotation rejects stale coordinates", stale.get("effect") == "none" and stale.get("error", {}).get("code") == "StaleSnapshot")
         self.click({"resourceId": PACKAGE + ":id/rotate"})
         self.wait("Fixture native")
+
+    def native_operations(self):
+        scroll_target = {"resourceId": PACKAGE + ":id/scroll"}
+        def scroll(forward):
+            observed = self.observe()
+            receipt, _ = self.action("ui.scroll", {"target": scroll_target, "forward": forward}, observed["snapshotRef"])
+            self.check("semantic scroll " + str(forward), receipt.get("state") == "Dispatched", state=receipt.get("state"))
+            self.changed(observed["snapshotRef"])
+        for operation, resource, expected in (("ui.long_press", "long_press", "Long pressed native"), ("ui.select", "select", "Selected native")):
+            target = {"resourceId": PACKAGE + ":id/" + resource}
+            for _ in range(4):
+                observed = self.observe(selector=target)
+                if any(node["visible"] for node in observed["nodes"]): break
+                scroll(True)
+            self.check(operation + " has one visible controlled target", sum(node["visible"] for node in observed["nodes"]) == 1)
+            goal = self.goal(expected, {"resourceId": PACKAGE + ":id/status"})
+            receipt, command = self.action(operation, {"target": target, "goal": goal}, observed["snapshotRef"])
+            # The status may be above the viewport after target discovery. Scroll
+            # back through the same scope before reading the stored criterion.
+            for _ in range(4):
+                status = self.observe(selector={"resourceId": PACKAGE + ":id/status"})
+                if any(node["visible"] for node in status["nodes"]): break
+                scroll(False)
+            self.verified(receipt, command, goal, expected)
+        baseline = self.observe()
+        scroll(True)
+        stale, _ = self.action("ui.tap", {"x": 30, "y": 30}, baseline["snapshotRef"])
+        self.check("scroll rejects stale coordinates", stale.get("effect") == "none" and stale.get("error", {}).get("code") == "StaleSnapshot")
+        scroll(False)
+        observed = self.observe(selector={"resourceId": PACKAGE + ":id/apply"})
+        node = next(node for node in observed["nodes"] if node["visible"])
+        b = node["bounds"]; goal = self.goal("Applied native")
+        receipt, command = self.action("ui.tap", {"x": (b["left"] + b["right"]) // 2, "y": (b["top"] + b["bottom"]) // 2, "goal": goal}, observed["snapshotRef"])
+        self.verified(receipt, command, goal, "Applied native")
+        observed = self.observe(selector=scroll_target)
+        b = observed["nodes"][0]["bounds"]; x = (b["left"] + b["right"]) // 2
+        receipt, _ = self.action("ui.swipe", {"x": x, "y": b["bottom"] - 50, "endX": x, "endY": b["bottom"] - 200, "durationMillis": 250}, observed["snapshotRef"])
+        self.check("bounded swipe acknowledged", receipt.get("state") == "Dispatched" and receipt.get("evidence") == [], state=receipt.get("state"))
+        scroll(False)
 
     def safety(self):
         wrong = self.read("/v2/observe", scope={**scope(self.profile), "accountRef": str(uuid.uuid4())}, selector=None, offset=0, limit=128)

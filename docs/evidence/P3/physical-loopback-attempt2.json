@@ -1,0 +1,56 @@
+{
+  "recordedAt": "2026-10-02T03:37:15.441405+00:00",
+  "runtimeLabel": "direct",
+  "operation": "P3.controlled-observation",
+  "invocationCwd": "/data/data/com.termux/files/home/usix-companion",
+  "source": "physical authenticated Companion fixture; no mock device/model",
+  "suite": "all",
+  "runtimeSourceWrites": 0,
+  "contextSha256": "ea4eb7597eca569c57ff374f03b7a09612f3d7fdf3ef8318568879c039ecc0f6",
+  "passed": false,
+  "error": "Qualification incomplete; inspect controlled checks and current readiness. Credentials omitted.",
+  "checks": [
+    {
+      "check": "P3 supported by the real APK",
+      "passed": true
+    },
+    {
+      "check": "selected controller acquired",
+      "passed": true
+    },
+    {
+      "check": "fixture launch is dispatched",
+      "passed": true,
+      "state": "Dispatched"
+    },
+    {
+      "check": "foreground package retained",
+      "passed": true,
+      "packageId": "dev.usix.companion.fixture",
+      "accountRef": "b926ea4d-7f71-4f57-8346-086af5e97649"
+    },
+    {
+      "check": "fresh admission after known stale rejection",
+      "passed": true,
+      "actionId": "39b21734-8af3-4883-9131-985bddccb64f",
+      "effect": "none"
+    },
+    {
+      "check": "native mode dispatched",
+      "passed": true
+    },
+    {
+      "check": "native rich metadata",
+      "passed": true,
+      "totalNodes": 169
+    },
+    {
+      "check": "native duplicate labels rejected",
+      "passed": false,
+      "state": "Failed"
+    }
+  ],
+  "deviceCalls": 12,
+  "lastDeviceErrorCode": "ExpiredReference",
+  "elapsedMs": 4964
+}

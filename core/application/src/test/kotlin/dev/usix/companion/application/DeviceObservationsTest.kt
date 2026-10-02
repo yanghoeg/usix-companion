@@ -105,6 +105,9 @@ class DeviceObservationsTest {
         assertEquals(UiEffectState.None, effect.state); assertEquals(0, port.effects)
         val goal = UiGoal(id(), "node_text", NodeSelector(resourceId = "input"), "Initial")
         assertNull((observations.verify(context, scope, goal) { null } as ExecutionResult.Success).value.evidence)
+        val query = observations.observe(context, scope, NodeSelector(text = "Initial"), 0, 128) { null } as ExecutionResult.Success
+        assertEquals(0, query.value.totalMatching)
+        assertEquals(ExecutionErrorCode.DeadlineExceeded, code(observations.wait(context, scope, "text", NodeSelector(text = "Initial"), now + 20, id()) { null }))
     }
     @Test fun generalPackageCannotObtainFixtureExecutionAuthority() = runTest {
         val store = MemoryExecutionRepository()

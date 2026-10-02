@@ -36,6 +36,7 @@ data class NodeSelector(
     val windowId: Int? = null, val editable: Boolean? = null, val scrollable: Boolean? = null,
 ) {
     fun matches(node: ObservedNode, window: Int) =
+        (!node.textTruncated || (text == null && description == null)) &&
         (nodeRef == null || node.ref == nodeRef) && (resourceId == null || node.resourceId == resourceId) &&
         (text == null || node.text == text) && (description == null || node.description == description) &&
         (className == null || node.className == className) && (role == null || node.role == role) &&

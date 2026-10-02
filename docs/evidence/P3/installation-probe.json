@@ -1,0 +1,15 @@
+{
+  "recordedAt": "2026-10-02T03:30:19.037833+00:00",
+  "source": "actual installed external CLI setup with fixture-only scope",
+  "helperExitCode": 0,
+  "response": {
+    "contractVersion": "usix-companion.device/v2",
+    "kind": "setup_saved",
+    "profile": "/data/data/com.termux/files/home/usix-companion/.build-tools/P3-private/direct-local.json",
+    "workspace": "/data/data/com.termux/files/home/usix-companion/.build-tools/P3-private/workspace",
+    "runtime": "usix",
+    "expiresAt": "2026-10-02T04:00:18.967Z",
+    "notice": "Context uses trusted setup correlation IDs; runtime dispatch authority remains separate"
+  },
+  "installedP3SessionEstablished": true
+}

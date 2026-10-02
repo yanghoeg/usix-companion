@@ -4,7 +4,10 @@ plugins {
     alias(libs.plugins.kotlin.kapt)
 }
 apply(from = rootProject.file("gradle/android-library.gradle"))
-android { namespace = "dev.usix.companion.adapters.persistence" }
+android {
+    namespace = "dev.usix.companion.adapters.persistence"
+    sourceSets.getByName("test").resources.srcDir("schemas")
+}
 kapt { arguments { arg("room.schemaLocation", "$projectDir/schemas") } }
 dependencies {
     implementation(project(":core:application"))

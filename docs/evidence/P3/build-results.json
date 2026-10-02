@@ -54,7 +54,7 @@
     "app": {
       "path": "app/build/outputs/apk/release/app-release.apk",
       "bytes": 51657263,
-      "sha256": "3a40c42598c60723a4656b83f385294eda92d57602789ccc0da76509b013e801",
+      "sha256": "dcedbab613047a36a4ce66ca56b738d558e78c1725f907f67449940dbb66d799",
       "signingCertificateSha256": "1bf19c9316904bfea9df9f422af589a589dbdb425e4329a56bf473d79eca1ded",
       "package": "package: name='dev.usix.companion' versionCode='8' versionName='0.3.0' platformBuildVersionName='14' platformBuildVersionCode='34' compileSdkVersion='34' compileSdkVersionCodename='14'",
       "sdk": [
@@ -74,5 +74,5 @@
       ]
     }
   },
-  "physicalInstallation": "pending"
+  "physicalInstallation": "first Companion and fixture confirmed; latest exact-text boundary APK update pending"
 }

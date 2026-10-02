@@ -10,6 +10,7 @@ import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
 import org.robolectric.annotation.Config
+import org.json.JSONObject
 
 @RunWith(RobolectricTestRunner::class)
 @Config(sdk = [28])
@@ -21,6 +22,23 @@ class ExecutionDatabaseTest {
         "sha256:" + "a".repeat(64), true, LeaseRef(id(10), 1), 99999, id(11), AuthorityRef("grant", id(6))), 2, ReceiptState.Executing, 1000)
     private fun database(name: String) = Room.databaseBuilder(context, ExecutionDatabase::class.java, name).allowMainThreadQueries()
         .addMigrations(ExecutionDatabase.MIGRATION_1_2, ExecutionDatabase.MIGRATION_2_3).build()
+
+    /** Build the genuine exported v2 layout without SQLite 3.35 DROP COLUMN. */
+    private fun restoreV2Table(old: SQLiteDatabase, table: String) {
+        val resource = "dev.usix.companion.adapters.persistence.ExecutionDatabase/2.json"
+        val text = javaClass.classLoader!!.getResourceAsStream(resource)!!.bufferedReader().use { it.readText() }
+        val entities = JSONObject(text).getJSONObject("database").getJSONArray("entities")
+        val entity = (0 until entities.length()).map { entities.getJSONObject(it) }.single { it.getString("tableName") == table }
+        val temporary = table + "_v2_fixture"
+        val fields = entity.getJSONArray("fields")
+        val columns = (0 until fields.length()).joinToString(",") { "`${fields.getJSONObject(it).getString("columnName")}`" }
+        old.execSQL(entity.getString("createSql").replace("\${TABLE_NAME}", temporary))
+        old.execSQL("INSERT INTO `$temporary` ($columns) SELECT $columns FROM `$table`")
+        old.execSQL("DROP TABLE `$table`")
+        old.execSQL("ALTER TABLE `$temporary` RENAME TO `$table`")
+        val indices = entity.getJSONArray("indices")
+        for (i in 0 until indices.length()) old.execSQL(indices.getJSONObject(i).getString("createSql").replace("\${TABLE_NAME}", table))
+    }
 
     @Test fun deviceIdentityReceiptsCountersAndAcksSurviveDatabaseReopen() {
         val name = "durable-test.db"; context.deleteDatabase(name)
@@ -62,7 +80,7 @@ class ExecutionDatabaseTest {
             old.execSQL("INSERT INTO sessions_v1 SELECT id,context_deviceId,context_runtimeId,context_sessionId,context_taskId,context_taskRevision,context_workspaceId,credentialHash,expiresAtMillis,grantId,packageId,maxActions,actionsUsed,revoked FROM sessions")
             old.execSQL("DROP TABLE sessions"); old.execSQL("ALTER TABLE sessions_v1 RENAME TO sessions")
             old.execSQL("CREATE UNIQUE INDEX index_sessions_credentialHash ON sessions(credentialHash)")
-            for (column in listOf("goalId", "goalHash", "observationRef", "evidenceRefs")) old.execSQL("ALTER TABLE actions DROP COLUMN $column")
+            restoreV2Table(old, "actions")
             old.version = 1
         }
         val upgraded = database(name); val migrated = RoomExecutionRepository(upgraded)
@@ -75,8 +93,7 @@ class ExecutionDatabaseTest {
         var db = database(name); var store = RoomExecutionRepository(db)
         store.putSession(session().copy(actionsUsed = 3, deliveredCursor = 8, acknowledgedCursor = 7)); store.putReceipt(receipt()); db.close()
         SQLiteDatabase.openDatabase(context.getDatabasePath(name).path, null, SQLiteDatabase.OPEN_READWRITE).use { old ->
-            old.execSQL("ALTER TABLE sessions DROP COLUMN accountRef"); old.execSQL("ALTER TABLE sessions DROP COLUMN fixtureUi")
-            for (column in listOf("goalId", "goalHash", "observationRef", "evidenceRefs")) old.execSQL("ALTER TABLE actions DROP COLUMN $column")
+            restoreV2Table(old, "sessions"); restoreV2Table(old, "actions")
             old.version = 2
         }
         db = database(name); store = RoomExecutionRepository(db)
