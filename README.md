@@ -116,7 +116,7 @@ usix-termux task run 1  # use the returned task ID to resume with human approval
 `usix-termux task schedule --every 1h "Check my battery"` creates a repeat schedule;
 `usix-termux worker` must remain running to process it. Phone-changing actions pause
 for explicit approval. Android may suspend Termux, so execution time is best-effort.
-See the [Termux task guide](https://github.com/yanghoeg/usix-termux/blob/main/docs/tasks.md)
+See the [Termux task guide](https://github.com/yanghoeg/usix-code/blob/main/docs/tasks.md)
 for scheduling, cancellation, and recovery behavior.
 
 Build with JDK 17 and Android SDK 34 using the checksum-pinned Gradle 8.10.2 wrapper:
