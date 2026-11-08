@@ -1,5 +1,6 @@
 package dev.usix.companion.adapters.transport
 
+import dev.usix.companion.application.CredentialProver
 import dev.usix.companion.application.CredentialVerifier
 import dev.usix.companion.testing.FakeDevice
 import org.json.JSONObject
@@ -11,6 +12,8 @@ import java.net.InetAddress
 import java.net.Socket
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
+import javax.crypto.Mac
+import javax.crypto.spec.SecretKeySpec
 
 class LoopbackBridgeServerTest {
     private lateinit var fake: FakeDevice
@@ -34,6 +37,31 @@ class LoopbackBridgeServerTest {
         assertTrue(response.startsWith("HTTP/1.1 401 Unauthorized"))
         assertTrue(fake.calls.isEmpty())
         assertTrue(exchange("GET /private HTTP/1.1\r\n\r\n").startsWith("HTTP/1.1 401 Unauthorized"))
+    }
+
+    @Test fun proofShowsPossessionOfTheTokenWithoutABearerOrRevealingIt() {
+        server.close()
+        server = LoopbackBridgeServer(LegacyDeviceRouter(fake.application(), fake.application()),
+            CredentialVerifier { it == "synthetic-test-token" }, port = 0,
+            limits = HttpLimits(idleTimeMs = 300, requestTimeMs = 300, headerBytes = 512, bodyBytes = 64),
+            prover = CredentialProver { message ->
+                Mac.getInstance("HmacSHA256").run {
+                    init(SecretKeySpec("synthetic-test-token".toByteArray(), "HmacSHA256")); doFinal(message)
+                }
+            })
+        assertTrue(server.start())
+        // Known-answer vector shared with usix-code's bridge client test.
+        val response = exchange("GET /proof?challenge=${"0123456789abcdef".repeat(4)} HTTP/1.1\r\n\r\n")
+        assertTrue(response.startsWith("HTTP/1.1 200"))
+        val body = response.substringAfter("\r\n\r\n")
+        assertEquals("498e77767c364bba373090dfff25c93e80bff354d33937691f61003cf61962f8", JSONObject(body).getString("proof"))
+        assertFalse(body.contains("synthetic-test-token"))
+        assertStatus("400", "GET /proof?challenge=short HTTP/1.1\r\n\r\n")
+        assertTrue(fake.calls.isEmpty())
+    }
+
+    @Test fun proofIsAbsentWithoutAProver() {
+        assertStatus("404", "GET /proof?challenge=${"0".repeat(64)} HTTP/1.1\r\n\r\n")
     }
 
     @Test fun healthIsLivenessAndReportsAuthenticationWithoutWaitingForItsBody() {

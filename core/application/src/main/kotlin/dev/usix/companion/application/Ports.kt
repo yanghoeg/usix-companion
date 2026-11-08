@@ -50,6 +50,11 @@ fun interface CredentialVerifier {
     fun verify(bearer: String?): Boolean
 }
 
+/** Proves possession of the pairing secret without revealing it: HMAC-SHA256 over [message]. */
+fun interface CredentialProver {
+    fun sign(message: ByteArray): ByteArray
+}
+
 /** Local setup only; credentials are never part of a device query/result. */
 interface PairingCredentials {
     fun current(): String

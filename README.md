@@ -73,8 +73,11 @@ access is only needed for the notification tools.
 
 Install the companion APK and use an existing compatible `usix-termux` build.
 Pair them by copying the companion token and running `usix-termux pair` in Termux.
-Requests bind to `127.0.0.1:8760`; every endpoint except `/health` requires the paired
-`Authorization: Bearer <token>` header.
+Requests bind to `127.0.0.1:8760`; every endpoint except `/health` and `/proof` requires
+the paired `Authorization: Bearer <token>` header. Every app shares loopback, so a
+client first sends `GET /proof?challenge=<64 lowercase hex>` and checks that `proof`
+equals `HMAC-SHA256(token, "usix-companion-proof-v1:" + challenge)` before it sends
+the bearer; another app that took port 8760 cannot produce it.
 
 | Request | JSON body / behavior |
 | --- | --- |

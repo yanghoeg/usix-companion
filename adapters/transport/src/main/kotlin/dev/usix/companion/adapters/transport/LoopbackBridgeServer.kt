@@ -1,5 +1,6 @@
 package dev.usix.companion.adapters.transport
 
+import dev.usix.companion.application.CredentialProver
 import dev.usix.companion.application.CredentialVerifier
 import dev.usix.companion.protocol.LegacyCodec
 import dev.usix.companion.protocol.LegacyResponse
@@ -46,6 +47,7 @@ class LoopbackBridgeServer(
     private val limits: HttpLimits = HttpLimits(),
     private val dispatcher: CoroutineDispatcher = Dispatchers.IO,
     private val v2: DeviceV2Router? = null,
+    private val prover: CredentialProver? = null,
 ) : AutoCloseable {
     private class Running(val socket: ServerSocket, val pool: ThreadPoolExecutor, val job: Job) {
         val clients = ConcurrentHashMap.newKeySet<Socket>()
@@ -195,6 +197,17 @@ class LoopbackBridgeServer(
                 writeResponse(out, LegacyCodec.error(error.status, error.message ?: "bad request")); return
             } catch (_: SocketTimeoutException) {
                 writeResponse(out, LegacyCodec.error("408 Request Timeout", "request timed out")); return
+            }
+            // Identity proof precedes authentication: the client sends no bearer until it
+            // has checked that this listener knows the pairing secret.
+            if (LegacyCodec.isProof(head.method, head.path)) {
+                val challenge = LegacyCodec.proofChallenge(head.path)
+                writeResponse(out, when {
+                    prover == null -> LegacyCodec.error("404 Not Found", "not found")
+                    challenge == null -> LegacyCodec.error("400 Bad Request", "challenge must be 64 lowercase hex characters")
+                    else -> LegacyCodec.proof(prover.sign(LegacyCodec.proofMessage(challenge)))
+                })
+                return
             }
             val paired = credentials.verify(bearer(head.headers["authorization"]))
             val v2Call = head.path.startsWith("/v2/")

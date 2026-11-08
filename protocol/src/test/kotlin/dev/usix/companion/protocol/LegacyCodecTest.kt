@@ -15,6 +15,19 @@ class LegacyCodecTest {
         assertEquals(LegacyCommand.NotFound, LegacyCodec.decode("GET", "/health?anything", ""))
     }
 
+    @Test fun proofAcceptsOnlyAFullLowercaseHexChallenge() {
+        val challenge = "0123456789abcdef".repeat(4)
+        assertTrue(LegacyCodec.isProof("GET", "/proof?challenge=$challenge"))
+        assertFalse(LegacyCodec.isProof("POST", "/proof?challenge=$challenge"))
+        assertFalse(LegacyCodec.isProof("GET", "/proof-private"))
+        assertEquals(challenge, LegacyCodec.proofChallenge("/proof?other=1&challenge=$challenge"))
+        for (bad in listOf("", "challenge=", "challenge=${challenge.dropLast(1)}", "challenge=${challenge.uppercase()}", "challenge=${"g".repeat(64)}")) {
+            assertNull(bad, LegacyCodec.proofChallenge("/proof?$bad"))
+        }
+        assertEquals("usix-companion-proof-v1:$challenge", String(LegacyCodec.proofMessage(challenge)))
+        assertEquals("00ff", JSONObject(LegacyCodec.proof(byteArrayOf(0, -1)).json).getString("proof"))
+    }
+
     @Test fun optionalScopePresenceAndInvalidTypeSurviveDecoding() {
         assertEquals(WireField.Missing, (LegacyCodec.decode("POST", "/type", "{\"text\":\"reply\"}") as LegacyCommand.Type).packageName)
         for (value in listOf("null", "7", "{}")) {
