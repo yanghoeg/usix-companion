@@ -71,7 +71,7 @@ object CompanionModule {
     fun bridge(application: DeviceApplication, credentials: BridgeCredentialStore, execution: DeviceExecution, v2Router: DeviceV2Router) =
         LoopbackBridgeServer(LegacyDeviceRouter(application, object : ExecuteDeviceAction {
             override suspend fun execute(action: DeviceAction) = execution.executeLegacy(action)
-        }), credentials, v2 = v2Router)
+        }), credentials, v2 = v2Router, prover = credentials)
     @Provides fun viewModelFactory(query: DeviceQuery, credentials: PairingCredentials, execution: DeviceExecution, remote: OutboundDeviceConnection) =
         ControlViewModel.Factory(query, credentials, execution, remote)
 }

@@ -74,6 +74,24 @@ object LegacyCodec {
 
     fun error(status: String, message: String) = LegacyResponse(status, JSONObject().put("ok", false).put("error", message).toString())
 
+    /**
+     * Unauthenticated identity proof. Loopback is shared by every app, so a client checks
+     * `HMAC(token, PROOF_PREFIX + challenge)` before it sends its bearer to port 8760.
+     */
+    const val PROOF_PREFIX = "usix-companion-proof-v1:"
+
+    fun isProof(method: String, path: String) = method == "GET" && path.substringBefore('?') == "/proof"
+
+    /** The challenge is exactly 64 lowercase hex characters (32 random bytes), else null. */
+    fun proofChallenge(path: String): String? = path.substringAfter('?', "").split('&')
+        .firstOrNull { it.substringBefore('=') == "challenge" }?.substringAfter('=', "")
+        ?.takeIf { c -> c.length == 64 && c.all { it in '0'..'9' || it in 'a'..'f' } }
+
+    fun proofMessage(challenge: String) = (PROOF_PREFIX + challenge).toByteArray(Charsets.UTF_8)
+
+    fun proof(mac: ByteArray) = LegacyResponse("200 OK", JSONObject().put("ok", true)
+        .put("proof", mac.joinToString("") { "%02x".format(it) }).toString())
+
     fun health(paired: Boolean, listener: Boolean, accessibility: Boolean) = LegacyResponse("200 OK", JSONObject()
         .put("ok", true).put("auth", true).put("paired", paired).put("listener", listener).put("accessibility", accessibility).toString())
 
