@@ -12,7 +12,12 @@ from urllib import error, parse, request
 ROUTES = {
     "health": ("GET", "/health"),
     "notifications": ("GET", "/notifications"),
+    "notifications-history": ("GET", "/notifications/history"),
+    "notifications-history-clear": ("POST", "/notifications/history/clear"),
     "screen": ("GET", "/screen"),
+    "read-window": ("GET", "/read-window"),
+    "read-select": ("POST", "/read-select"),
+    "read-scroll": ("POST", "/read-scroll"),
     "open": ("POST", "/open"),
     "tap": ("POST", "/tap"),
     "type": ("POST", "/type"),
@@ -57,14 +62,30 @@ def main():
 
     method, path = ROUTES[args.action]
     if method == "GET":
-        allowed = {"package"} if args.action == "screen" else set()
+        history = args.action == "notifications-history"
+        allowed = {"package", "query", "since", "until", "limit", "before"} if history else ({"package"} if args.action in ("screen", "read-window") else set())
         if body.keys() - allowed:
             return fail("InvalidArguments", "unsupported query fields")
         if "package" in body:
             package = body["package"]
             if not isinstance(package, str) or not re.fullmatch(r"[A-Za-z0-9_]+(?:\.[A-Za-z0-9_]+)+", package):
                 return fail("InvalidArguments", "package must be an Android package name")
-            path += "?" + parse.urlencode({"package": package})
+        if history:
+            if body.get("package") != "com.kakao.talk":
+                return fail("InvalidArguments", "history requires package com.kakao.talk")
+            if "query" in body and (not isinstance(body["query"], str) or len(body["query"]) > 256):
+                return fail("InvalidArguments", "query must be a string of at most 256 characters")
+            for field in ("since", "until", "limit"):
+                if field in body and (type(body[field]) is not int or not 0 <= body[field] <= 9223372036854775807):
+                    return fail("InvalidArguments", field + " must be a nonnegative integer")
+            if not 1 <= body.get("limit", 50) <= 100:
+                return fail("InvalidArguments", "limit must be between 1 and 100")
+            if "since" in body and "until" in body and body["since"] > body["until"]:
+                return fail("InvalidArguments", "since must not be later than until")
+            if "before" in body and (not isinstance(body["before"], str) or not re.fullmatch(r"[0-9a-f]{64}", body["before"])):
+                return fail("InvalidArguments", "before must be a returned history cursor")
+        if body:
+            path += "?" + parse.urlencode(body)
         data = None
     else:
         try:
@@ -98,7 +119,15 @@ def main():
         with opener.open(req, timeout=10) as response:
             raw = response.read(MAX_RESPONSE_BYTES + 1)
     except error.HTTPError as exc:
-        return fail("HttpError", "bridge rejected the request; check pairing, permissions and arguments", http_status=exc.code)
+        details = {}
+        if args.action in ("read-window", "read-select", "read-scroll", "notifications-history", "notifications-history-clear"):
+            try:
+                rejected = json.loads(exc.read(4096).decode("utf-8"))
+                if isinstance(rejected, dict) and isinstance(rejected.get("error"), str):
+                    details["reason"] = rejected["error"][:1024]
+            except (ValueError, OSError, UnicodeError):
+                pass
+        return fail("HttpError", "bridge rejected the request; check pairing, permissions and arguments", http_status=exc.code, **details)
     except (error.URLError, OSError, TimeoutError):
         # Never retry: a POST may already have produced an external effect.
         return fail("TransportError", "bridge unavailable or response lost; inspect before retrying a mutation", effect="unknown" if method == "POST" else "none")

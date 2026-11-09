@@ -2,6 +2,7 @@ package dev.usix.companion.application
 
 import dev.usix.companion.domain.ActionOutcome
 import dev.usix.companion.domain.DeviceHealth
+import dev.usix.companion.domain.DeviceError
 import dev.usix.companion.domain.DeviceResult
 import dev.usix.companion.domain.MailDraft
 import dev.usix.companion.domain.NotificationInfo
@@ -31,6 +32,8 @@ interface UiActionPort {
 }
 
 interface AppLauncherPort {
+    /** A known pre-dispatch failure; callers must not substitute a fullscreen launch. */
+    fun launchRejection(): DeviceError? = null
     suspend fun open(packageId: PackageId): Boolean
     suspend fun compose(draft: MailDraft): Boolean
 }

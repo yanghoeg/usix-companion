@@ -41,10 +41,10 @@ class AccessibilityOperations(internal val service: AccessibilityService) {
         val rect = Rect()
         val roots = targetRoots(pkg)
         try {
-            for (root in roots) walk(root) { node ->
+            for (root in roots) walk(root) { node, sensitive ->
                 val text = node.text?.toString()?.trim().orEmpty()
                 val desc = node.contentDescription?.toString()?.trim().orEmpty()
-                val label = if (node.isPassword || (Build.VERSION.SDK_INT >= 34 && node.isAccessibilityDataSensitive)) "[redacted]" else if (text.isNotEmpty()) text else desc
+                val label = if (sensitive) "[redacted]" else if (text.isNotEmpty()) text else desc
                 if (label.isEmpty() && !node.isClickable && !node.isEditable && !node.isScrollable) return@walk
                 node.getBoundsInScreen(rect)
                 if (rect.width() <= 0 || rect.height() <= 0) return@walk
@@ -93,12 +93,13 @@ class AccessibilityOperations(internal val service: AccessibilityService) {
     }
 
     /** 깊이 우선 순회. 자식 노드는 순회가 끝나면 회수한다(루트는 호출자 책임). */
-    private fun walk(node: AccessibilityNodeInfo, visit: (AccessibilityNodeInfo) -> Unit) {
-        visit(node)
+    private fun walk(node: AccessibilityNodeInfo, inheritedSensitive: Boolean = false, visit: (AccessibilityNodeInfo, Boolean) -> Unit) {
+        val sensitive = inheritedSensitive || node.isPassword || (Build.VERSION.SDK_INT >= 34 && node.isAccessibilityDataSensitive)
+        visit(node, sensitive)
         for (i in 0 until node.childCount) {
             val child = node.getChild(i) ?: continue
             try {
-                walk(child, visit)
+                walk(child, sensitive, visit)
             } finally {
                 child.release()
             }

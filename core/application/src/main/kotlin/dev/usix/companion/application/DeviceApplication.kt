@@ -32,6 +32,8 @@ class DeviceApplication(
 
     override suspend fun execute(action: DeviceAction): DeviceResult<ActionOutcome> = try {
         when (action) {
+            is DeviceAction.ReadSelect, is DeviceAction.ReadScroll, is DeviceAction.ClearNotificationHistory -> DeviceResult.Rejected(DeviceError(DeviceErrorCode.APPROVAL_REQUIRED,
+                "Action requires its authenticated application boundary"))
             is DeviceAction.Tap -> {
                 require(action.x != null && action.y != null) { "x/y required" }
                 uiAction { ActionOutcome(ui.tap(action.x, action.y), ActionKind.UI) }
@@ -65,7 +67,10 @@ class DeviceApplication(
                 }
                 val subject = textOrEmpty(action.subject)
                 val body = textOrEmpty(action.body)
-                val ok = uiMutex.withLock { launcher.compose(MailDraft(action.to, subject, body, pkg)) }
+                val ok = uiMutex.withLock {
+                    launcher.launchRejection()?.let { return DeviceResult.Rejected(it) }
+                    launcher.compose(MailDraft(action.to, subject, body, pkg))
+                }
                 DeviceResult.Success(ActionOutcome(ok, ActionKind.MAIL_DRAFT, if (ok) null else
                     "email app could not open the composer; install Thunderbird or specify its package"))
             }
@@ -85,7 +90,10 @@ class DeviceApplication(
     }
 
     private suspend fun launch(pkg: PackageId, email: Boolean): DeviceResult<ActionOutcome> {
-        val ok = uiMutex.withLock { launcher.open(pkg) }
+        val ok = uiMutex.withLock {
+            launcher.launchRejection()?.let { return DeviceResult.Rejected(it) }
+            launcher.open(pkg)
+        }
         return DeviceResult.Success(ActionOutcome(ok, ActionKind.APP_LAUNCH, if (ok) null else if (email)
             "email app could not be opened; install Thunderbird or specify its package" else "no launch intent for package"))
     }

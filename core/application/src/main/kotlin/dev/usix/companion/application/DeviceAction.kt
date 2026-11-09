@@ -13,6 +13,8 @@ sealed interface DeviceAction {
     data object Back : DeviceAction
     data class Open(val packageName: String?) : DeviceAction
     data class Scroll(val direction: String?, val packageName: InputField<String> = InputField.Missing) : DeviceAction
+    data class ReadSelect(val packageName: String) : DeviceAction
+    data class ReadScroll(val packageName: String, val direction: String, val windowRef: String, val nodeRef: String) : DeviceAction
     data class OpenEmail(val packageName: InputField<String> = InputField.Missing) : DeviceAction
     data class ComposeEmail(
         val to: String?,
@@ -21,4 +23,5 @@ sealed interface DeviceAction {
         val packageName: InputField<String> = InputField.Missing,
     ) : DeviceAction
     data class Reply(val key: String?, val text: String?) : DeviceAction
+    data class ClearNotificationHistory(val packageName: String) : DeviceAction
 }

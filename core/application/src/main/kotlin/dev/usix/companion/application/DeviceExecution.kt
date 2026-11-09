@@ -19,6 +19,8 @@ class DeviceExecution(
     private val actions: ExecuteDeviceAction,
     private val eventRetention: Int = 512,
     private val observations: DeviceObservations? = null,
+    private val readNavigation: ReadNavigation? = null,
+    private val notificationHistory: NotificationHistory? = null,
 ) : LocalExecutionControl {
     private val controller = Mutex()
     private val pairing = Mutex()
@@ -27,6 +29,7 @@ class DeviceExecution(
 
     /** Called once before serving on process startup. Never re-enter an external effect. */
     fun recover() = repository.transaction {
+        readNavigation?.clear()
         repository.unfinishedReceipts().forEach { old ->
             update(old, if (old.state == ReceiptState.Executing) ReceiptState.UnknownEffect else ReceiptState.Cancelled,
                 ExecutionError(if (old.state == ReceiptState.Executing) ExecutionErrorCode.UnknownEffect else ExecutionErrorCode.Cancelled,
@@ -107,7 +110,7 @@ class DeviceExecution(
         repository.session(sessionId)?.let { repository.putSession(it.copy(revoked = true)) }
         if (repository.lease()?.sessionId == sessionId) { repository.putLease(null); controllerEvent(null) }
     }
-    override fun pause() = repository.transaction { observations?.cancelWaits(null); repository.putLease(null); controllerEvent(null) }
+    override fun pause() = repository.transaction { readNavigation?.clear(); observations?.cancelWaits(null); repository.putLease(null); controllerEvent(null) }
     override fun selectController(sessionId: String) = repository.transaction {
         val session = repository.session(sessionId) ?: return@transaction
         if (sessionError(session) != null) return@transaction
@@ -163,7 +166,9 @@ class DeviceExecution(
                             command.operation, uiRequest!!) { admission(session, command, budgetCharged = true) }
                         else when (val result = actions.execute(DeviceAction.Open(command.scope.packageId))) {
                             is DeviceResult.Success -> UiEffect(if (result.value.accepted) UiEffectState.Dispatched else UiEffectState.Possible)
-                            is DeviceResult.Rejected -> UiEffect(UiEffectState.Possible)
+                            is DeviceResult.Rejected -> if (result.error.code == DeviceErrorCode.COMPACT_WINDOW_UNAVAILABLE)
+                                UiEffect(UiEffectState.None, ExecutionError(ExecutionErrorCode.UnsupportedCapability, result.error.message))
+                            else UiEffect(UiEffectState.Possible)
                         }
                         val done = repository.transaction {
                             val fresh = repository.receipt(command.actionId)!!
@@ -338,10 +343,19 @@ class DeviceExecution(
     suspend fun executeLegacy(action: DeviceAction): DeviceResult<ActionOutcome> = controller.withLock {
         if (repository.lease()?.let { it.expiresAtMillis > clock.nowMillis() } == true)
             DeviceResult.Rejected(DeviceError(DeviceErrorCode.CONTROLLER_CONFLICT, "v2 controller is active; release it before a legacy mutation"))
+        else if (action is DeviceAction.ClearNotificationHistory)
+            notificationHistory?.clear(action.packageName) ?: DeviceResult.Rejected(DeviceError(DeviceErrorCode.NOTIFICATION_HISTORY_UNAVAILABLE, "Notification history is unavailable"))
+        else if (action is DeviceAction.ReadSelect)
+            readNavigation?.selectVisible(action.packageName) ?: DeviceResult.Rejected(DeviceError(DeviceErrorCode.APPROVAL_REQUIRED, "Reading navigation is unavailable"))
+        else if (action is DeviceAction.ReadScroll)
+            readNavigation?.scroll(action) ?: DeviceResult.Rejected(DeviceError(DeviceErrorCode.APPROVAL_REQUIRED, "Reading navigation is unavailable"))
         else if (action is DeviceAction.Tap || action is DeviceAction.Type || action == DeviceAction.Back || action is DeviceAction.Scroll || action is DeviceAction.Reply)
             DeviceResult.Rejected(DeviceError(DeviceErrorCode.APPROVAL_REQUIRED,
                 "ApprovalRequired: legacy UI/reply has no argument-bound Companion authority; use the later approved v2 workflow"))
-        else actions.execute(action)
+        else actions.execute(action).also { result ->
+            if (action is DeviceAction.Open && result is DeviceResult.Success && result.value.accepted)
+                action.packageName?.let { readNavigation?.select(it) }
+        }
     }
 
     private fun sessionError(session: ControllerSession): ExecutionError? {

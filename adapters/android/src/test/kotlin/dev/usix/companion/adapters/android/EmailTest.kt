@@ -9,6 +9,9 @@ import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.ContextWrapper
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Rect
+import android.os.Bundle
 import android.net.Uri
 import org.json.JSONObject
 import org.junit.Assert.*
@@ -25,14 +28,19 @@ import org.robolectric.annotation.Config
 class EmailTest {
     private lateinit var router: LegacyDeviceRouter
     private var launched: Intent? = null
+    private var launchOptions: Bundle? = null
     private var launchFailure: RuntimeException? = null
 
     @Before
     fun setUp() {
+        shadowOf(RuntimeEnvironment.getApplication().packageManager)
+            .setSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT, true)
         val context = object : ContextWrapper(RuntimeEnvironment.getApplication()) {
-            override fun startActivity(intent: Intent) {
+            override fun startActivity(intent: Intent) = error("Fullscreen launch must never be used")
+            override fun startActivity(intent: Intent, options: Bundle?) {
                 launchFailure?.let { throw it }
                 launched = intent
+                launchOptions = options
             }
         }
         val fake = FakeDevice().apply { accessibility = false }
@@ -54,6 +62,10 @@ class EmailTest {
         assertEquals(Intent.ACTION_SENDTO, intent.action)
         assertEquals("net.thunderbird.android", intent.`package`)
         assertTrue(intent.flags and Intent.FLAG_ACTIVITY_NEW_TASK != 0)
+        assertTrue(intent.flags and Intent.FLAG_ACTIVITY_MULTIPLE_TASK != 0)
+        @Suppress("DEPRECATION")
+        val bounds = requireNotNull(launchOptions?.getParcelable<Rect>("android:activity.launchBounds"))
+        assertTrue(bounds.width() > 0 && bounds.height() > 0)
         val mail = requireNotNull(intent.data)
         assertEquals("person+work@example.com", Uri.decode(mail.encodedSchemeSpecificPart.substringBefore('?')))
         // Thunderbird reads the encoded query before decoding its individual values. The Android
@@ -117,6 +129,20 @@ class EmailTest {
         }
         assertFalse(route("/email/open", JSONObject()).second.getBoolean("ok"))
         assertNull(launched)
+    }
+
+    @Test
+    fun unsupportedCompactWindowsRejectBothLaunchAndComposeBeforeDispatch() {
+        shadowOf(RuntimeEnvironment.getApplication().packageManager)
+            .setSystemFeature(PackageManager.FEATURE_FREEFORM_WINDOW_MANAGEMENT, false)
+        for ((path, body) in listOf("/email/open" to JSONObject(), "/open" to JSONObject().put("package", "wanted.app"),
+            "/email/compose" to JSONObject().put("to", "a@example.com"))) {
+            val (status, response) = route(path, body)
+            assertEquals("503 Service Unavailable", status)
+            assertTrue(response.getString("error").contains("Compact app launch"))
+        }
+        assertNull(launched)
+        assertNull(launchOptions)
     }
 
     private fun route(path: String, body: JSONObject): Pair<String, JSONObject> {

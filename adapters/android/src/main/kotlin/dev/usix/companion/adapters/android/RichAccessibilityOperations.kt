@@ -32,24 +32,28 @@ class RichAccessibilityOperations(private val service: AccessibilityService, pri
         return if (value.codePointCount(0, value.length) <= max) value else value.substring(0, value.offsetByCodePoints(0, max))
     }
     private fun reject(code: ExecutionErrorCode, message: String) = ExecutionResult.Rejected(ExecutionError(code, message))
-    private data class Root(val node: AccessibilityNodeInfo, val id: Int, val bounds: ScreenBounds, val signature: String, val ime: Boolean)
+    private data class Root(val node: AccessibilityNodeInfo, val id: Int, val bounds: ScreenBounds, val signature: String, val ime: Boolean,
+        val focused: Boolean? = null, val focusedWindowId: Int? = null)
 
-    private fun target(packageId: String): Root? {
+    private fun target(packageId: String, requireFocus: Boolean = false): Root? {
         val windows = service.windows.orEmpty()
         try {
             val apps = windows.filter { it.type == AccessibilityWindowInfo.TYPE_APPLICATION }.sortedByDescending { it.layer }
             val foreground = apps.firstOrNull { it.isFocused } ?: apps.firstOrNull { it.isActive }
-            if (foreground == null && apps.isNotEmpty()) return null
-            if (foreground != null) {
-                val root = foreground.root ?: return null
-                if (root.packageName?.toString() != packageId) { root.release(); return null }
-                val rect = Rect(); foreground.getBoundsInScreen(rect)
+            val candidates = if (requireFocus) listOfNotNull(foreground) else
+                listOfNotNull(foreground) + apps.filter { it != foreground }
+            for (window in candidates) {
+                val root = window.root ?: continue
+                if (root.packageName?.toString() != packageId) { root.release(); continue }
+                val rect = Rect(); window.getBoundsInScreen(rect)
                 val signature = windows.sortedBy { it.id }.joinToString(";") {
                     val b = Rect(); it.getBoundsInScreen(b)
                     "${it.id}:${it.type}:${it.layer}:${it.isActive}:${it.isFocused}:$b"
                 }
-                return Root(root, foreground.id, rect.value(), signature, windows.any { it.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD })
+                return Root(root, window.id, rect.value(), signature, windows.any { it.type == AccessibilityWindowInfo.TYPE_INPUT_METHOD },
+                    window.isFocused, apps.firstOrNull { it.isFocused }?.id)
             }
+            if (apps.isNotEmpty()) return null
             val root = service.rootInActiveWindow ?: return null
             if (root.packageName?.toString() != packageId) { root.release(); return null }
             val bounds = Rect(); root.getBoundsInScreen(bounds)
@@ -59,7 +63,7 @@ class RichAccessibilityOperations(private val service: AccessibilityService, pri
 
     @Suppress("DEPRECATION")
     fun observe(packageId: String): ExecutionResult<ObservedScreen> {
-        val root = target(packageId) ?: return reject(ExecutionErrorCode.ExpiredReference, "Selected package has no foreground accessible application window")
+        val root = target(packageId) ?: return reject(ExecutionErrorCode.ExpiredReference, "Selected package has no visible accessible application window")
         val nodes = mutableListOf<ObservedNode>()
         var complete = true
         fun walk(node: AccessibilityNodeInfo, ref: String, parent: String?, inheritedSensitive: Boolean, depth: Int) {
@@ -95,7 +99,8 @@ class RichAccessibilityOperations(private val service: AccessibilityService, pri
             val display = if (Build.VERSION.SDK_INT >= 30) manager.maximumWindowMetrics.bounds.value()
                 else ScreenBounds(0, 0, service.resources.displayMetrics.widthPixels, service.resources.displayMetrics.heightPixels)
             return ExecutionResult.Success(ObservedScreen(packageId, root.id, generation(), display, root.bounds,
-                manager.defaultDisplay?.rotation ?: 0, nodes.firstOrNull { it.focused }?.ref, root.ime, root.signature, nodes, complete))
+                manager.defaultDisplay?.rotation ?: 0, nodes.firstOrNull { it.focused }?.ref, root.ime, root.signature, nodes, complete,
+                root.focused, root.focusedWindowId))
         } finally { root.node.release() }
     }
 
@@ -104,8 +109,27 @@ class RichAccessibilityOperations(private val service: AccessibilityService, pri
         // run consecutively on main without another suspension point.
         guard()?.let { return UiEffect(UiEffectState.None, it) }
         val live = observe(expected.packageId)
-        if (live !is ExecutionResult.Success || live.value != expected)
+        // Reading scrolls bind the full selected tree, window geometry and focus context.
+        // Text updates in the user's other app only advance the global event counter.
+        val current = (live as? ExecutionResult.Success)?.value
+        val bound = if (operation == "ui.scroll" && request.windowScoped) current?.copy(generation = expected.generation) else current
+        if (bound != expected)
             return UiEffect(UiEffectState.None, ExecutionError(ExecutionErrorCode.StaleSnapshot, "Screen changed immediately before dispatch"))
+        fun area(bounds: ScreenBounds) = (bounds.right.toLong() - bounds.left).coerceAtLeast(0) *
+            (bounds.bottom.toLong() - bounds.top).coerceAtLeast(0)
+        val displayArea = area(expected.displayBounds)
+        val windowArea = area(expected.windowBounds)
+        if (windowArea == 0L || displayArea == 0L || windowArea > displayArea / 2)
+            return UiEffect(UiEffectState.None, ExecutionError(ExecutionErrorCode.UnsupportedCapability,
+                "UI automation requires a compact window occupying at most half of the display; the platform may have ignored the launch bounds"))
+        // Global actions and display gestures cannot be routed to an unfocused popup.
+        // Scoped node actions below act on the selected package's own node handles.
+        if (operation in setOf("ui.back", "ui.home", "ui.tap", "ui.swipe")) {
+            val focused = target(expected.packageId, requireFocus = true)
+                ?: return UiEffect(UiEffectState.None, ExecutionError(ExecutionErrorCode.Busy,
+                    "Selected window is not focused; use scoped node actions in a popup"))
+            focused.node.release()
+        }
         if (operation == "ui.back" || operation == "ui.home") {
             val action = if (operation == "ui.back") AccessibilityService.GLOBAL_ACTION_BACK else AccessibilityService.GLOBAL_ACTION_HOME
             return acknowledgement(service.performGlobalAction(action))
@@ -134,7 +158,15 @@ class RichAccessibilityOperations(private val service: AccessibilityService, pri
                 "ui.select" -> AccessibilityNodeInfo.ACTION_SELECT
                 "ui.long_press" -> AccessibilityNodeInfo.ACTION_LONG_CLICK
                 "ui.set_text" -> AccessibilityNodeInfo.ACTION_SET_TEXT
-                "ui.scroll" -> if (request.forward) AccessibilityNodeInfo.ACTION_SCROLL_FORWARD else AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD
+                "ui.scroll" -> {
+                    val vertical = when (request.verticalDirection) {
+                        "up" -> AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_UP.id
+                        "down" -> AccessibilityNodeInfo.AccessibilityAction.ACTION_SCROLL_DOWN.id
+                        else -> null
+                    }
+                    if (vertical != null && node.actionList.any { it.id == vertical }) vertical
+                    else if (request.forward) AccessibilityNodeInfo.ACTION_SCROLL_FORWARD else AccessibilityNodeInfo.ACTION_SCROLL_BACKWARD
+                }
                 else -> return UiEffect(UiEffectState.None, ExecutionError(ExecutionErrorCode.UnsupportedCapability, "Unknown UI operation"))
             }
             val args = if (operation == "ui.set_text") Bundle().apply { putCharSequence(AccessibilityNodeInfo.ACTION_ARGUMENT_SET_TEXT_CHARSEQUENCE, request.text) } else null

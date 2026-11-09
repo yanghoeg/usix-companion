@@ -14,7 +14,12 @@ sealed interface WireField {
 sealed interface LegacyCommand {
     data object Health : LegacyCommand
     data class Screen(val packageName: String?) : LegacyCommand
+    data class ReadWindow(val packageName: String?) : LegacyCommand
+    data class ReadSelect(val packageName: String) : LegacyCommand
+    data class ReadScroll(val packageName: String, val direction: String, val windowRef: String, val nodeRef: String) : LegacyCommand
     data object Notifications : LegacyCommand
+    data class NotificationHistory(val packageName: String, val query: String, val since: Long?, val until: Long?, val limit: Int, val before: String?) : LegacyCommand
+    data class ClearNotificationHistory(val packageName: String) : LegacyCommand
     data class Tap(val x: Int?, val y: Int?) : LegacyCommand
     data class Type(val text: String?, val packageName: WireField) : LegacyCommand
     data object Back : LegacyCommand
@@ -37,7 +42,23 @@ object LegacyCodec {
         when {
             method == "GET" && path == "/health" -> LegacyCommand.Health
             method == "GET" && path.substringBefore('?') == "/screen" -> LegacyCommand.Screen(queryPackage(path))
+            method == "GET" && path.substringBefore('?') == "/read-window" -> LegacyCommand.ReadWindow(queryPackage(path))
+            method == "POST" && path == "/read-select" -> JSONObject(body).let {
+                require(it.keySet() == setOf("package"))
+                require(it.opt("package") is String)
+                LegacyCommand.ReadSelect(it.getString("package").also { value -> require(value.isNotBlank() && value.length <= 256) })
+            }
+            method == "POST" && path == "/read-scroll" -> JSONObject(body).let {
+                require(it.keySet() == setOf("package", "direction", "windowRef", "nodeRef"))
+                fun text(key: String): String { require(it.opt(key) is String); return it.getString(key).also { value -> require(value.isNotBlank() && value.length <= if (key == "nodeRef") 512 else 256) } }
+                LegacyCommand.ReadScroll(text("package"), text("direction"), text("windowRef"), text("nodeRef"))
+            }
             method == "GET" && path.substringBefore('?') == "/notifications" -> LegacyCommand.Notifications
+            method == "GET" && path.substringBefore('?') == "/notifications/history" -> historyQuery(path)
+            method == "POST" && path == "/notifications/history/clear" -> JSONObject(body).let {
+                require(it.keySet() == setOf("package") && it.opt("package") is String)
+                LegacyCommand.ClearNotificationHistory(it.getString("package").also { value -> require(value.isNotBlank() && value.length <= 256) })
+            }
             method == "POST" && path == "/back" -> LegacyCommand.Back
             method == "POST" && path == "/tap" -> JSONObject(body).let {
                 LegacyCommand.Tap(if (it.has("x")) it.getInt("x") else null, if (it.has("y")) it.getInt("y") else null)
@@ -70,6 +91,28 @@ object LegacyCodec {
             URLDecoder.decode(it.substringBefore('='), "UTF-8") == "package"
         } ?: return null
         return URLDecoder.decode(pair.substringAfter('=', ""), "UTF-8").ifEmpty { null }
+    }
+
+    private fun historyQuery(path: String): LegacyCommand.NotificationHistory {
+        require(path.length <= 8192)
+        val fields = mutableMapOf<String, String>()
+        path.substringAfter('?', "").split('&').forEach { pair ->
+            require('=' in pair)
+            val key = URLDecoder.decode(pair.substringBefore('='), "UTF-8")
+            val value = URLDecoder.decode(pair.substringAfter('='), "UTF-8")
+            require(key in setOf("package", "query", "since", "until", "limit", "before") && key !in fields)
+            fields[key] = value
+        }
+        val pkg = requireNotNull(fields["package"])
+        require(pkg.isNotBlank() && pkg.length <= 256)
+        fun number(key: String): Long? = fields[key]?.let {
+            require(Regex("[0-9]{1,19}").matches(it)); requireNotNull(it.toLongOrNull())
+        }
+        val limit = number("limit") ?: 50L
+        require(limit in 1L..100L)
+        val query = fields["query"].orEmpty()
+        require(query.length <= 256 && (fields["before"]?.length ?: 0) <= 64)
+        return LegacyCommand.NotificationHistory(pkg, query, number("since"), number("until"), limit.toInt(), fields["before"])
     }
 
     fun error(status: String, message: String) = LegacyResponse(status, JSONObject().put("ok", false).put("error", message).toString())
