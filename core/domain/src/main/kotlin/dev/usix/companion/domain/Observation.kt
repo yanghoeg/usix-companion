@@ -21,6 +21,7 @@ data class ObservedScreen(
     val displayBounds: ScreenBounds, val windowBounds: ScreenBounds, val rotation: Int,
     val focusRef: String?, val inputWindowVisible: Boolean, val windowSignature: String,
     val nodes: List<ObservedNode>, val complete: Boolean,
+    val windowFocused: Boolean? = null, val focusedWindowId: Int? = null,
 )
 data class ScreenSnapshot(
     val ref: String, val context: ExecutionContext, val scope: ExecutionScope,
@@ -49,6 +50,9 @@ data class UiActionRequest(
     val x: Int? = null, val y: Int? = null, val endX: Int? = null, val endY: Int? = null,
     val durationMillis: Long = 250,
     val forward: Boolean = true,
+    val verticalDirection: String? = null,
+    /** Internal reading-navigation binding; v2 wire requests retain device-wide revisions. */
+    val windowScoped: Boolean = false,
 )
 /** These criteria establish UI state only; they cannot prove sending or delivery. */
 data class UiGoal(

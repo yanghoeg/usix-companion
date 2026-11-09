@@ -9,11 +9,14 @@ import dagger.hilt.components.SingletonComponent
 import dev.usix.companion.adapters.android.AndroidAppLauncher
 import dev.usix.companion.adapters.android.AndroidExecutionReadiness
 import dev.usix.companion.adapters.android.AndroidNotificationAdapter
+import dev.usix.companion.adapters.android.NotificationHistoryRecorder
+import dev.usix.companion.adapters.android.NotificationHistoryCaptureState
 import dev.usix.companion.adapters.android.ConnectedAccessibilityAdapter
 import dev.usix.companion.adapters.persistence.BridgeCredentialStore
 import dev.usix.companion.adapters.persistence.ExecutionDatabase
 import dev.usix.companion.adapters.persistence.RoomExecutionRepository
 import dev.usix.companion.adapters.persistence.RemoteEndpointPreferences
+import dev.usix.companion.adapters.persistence.FileNotificationHistoryStore
 import dev.usix.companion.adapters.transport.LegacyDeviceRouter
 import dev.usix.companion.adapters.transport.LoopbackBridgeServer
 import dev.usix.companion.adapters.transport.DeviceV2Router
@@ -23,6 +26,8 @@ import dev.usix.companion.application.DeviceApplication
 import dev.usix.companion.application.DeviceQuery
 import dev.usix.companion.application.DeviceExecution
 import dev.usix.companion.application.DeviceObservations
+import dev.usix.companion.application.ReadNavigation
+import dev.usix.companion.application.NotificationHistory
 import dev.usix.companion.application.ExecuteDeviceAction
 import dev.usix.companion.application.DeviceAction
 import dev.usix.companion.application.ExecutionClock
@@ -39,7 +44,15 @@ object CompanionModule {
     @Provides @Singleton
     fun accessibility() = ConnectedAccessibilityAdapter(Dispatchers.Main.immediate, Dispatchers.IO)
     @Provides @Singleton
-    fun notifications(@ApplicationContext context: Context) = AndroidNotificationAdapter(context, Dispatchers.Main.immediate)
+    fun notificationCaptureState() = NotificationHistoryCaptureState()
+    @Provides @Singleton
+    fun notificationHistory(@ApplicationContext context: Context, capture: NotificationHistoryCaptureState) = NotificationHistory(
+        FileNotificationHistoryStore(java.io.File(context.noBackupFilesDir, "notification-history/archive.bin"), Dispatchers.IO),
+        ExecutionClock { System.currentTimeMillis() }, capture)
+    @Provides @Singleton
+    fun notificationRecorder(history: NotificationHistory, capture: NotificationHistoryCaptureState) = NotificationHistoryRecorder(history, capture, Dispatchers.IO)
+    @Provides @Singleton
+    fun notifications(@ApplicationContext context: Context, history: NotificationHistoryRecorder) = AndroidNotificationAdapter(context, Dispatchers.Main.immediate, history)
     @Provides @Singleton
     fun launcher(@ApplicationContext context: Context) = AndroidAppLauncher(context, Dispatchers.Main.immediate)
     @Provides @Singleton
@@ -52,13 +65,17 @@ object CompanionModule {
     @Provides @Singleton
     fun journal(@ApplicationContext context: Context) = RoomExecutionRepository(ExecutionDatabase.open(context))
     @Provides @Singleton
-    fun readiness(@ApplicationContext context: Context, accessibility: ConnectedAccessibilityAdapter) = AndroidExecutionReadiness(context, accessibility)
+    fun readiness(@ApplicationContext context: Context, accessibility: ConnectedAccessibilityAdapter, launcher: AndroidAppLauncher) =
+        AndroidExecutionReadiness(context, accessibility, launcher)
     @Provides @Singleton
     fun observations(accessibility: ConnectedAccessibilityAdapter) = DeviceObservations(accessibility,
         ExecutionClock { System.currentTimeMillis() }, ExecutionIds { java.util.UUID.randomUUID().toString() })
     @Provides @Singleton
-    fun execution(journal: RoomExecutionRepository, readiness: AndroidExecutionReadiness, application: DeviceApplication, observations: DeviceObservations) =
-        DeviceExecution(journal, ExecutionClock { System.currentTimeMillis() }, ExecutionIds { java.util.UUID.randomUUID().toString() }, ExecutionCrypto(), readiness, application, observations = observations)
+    fun readNavigation(accessibility: ConnectedAccessibilityAdapter, readiness: AndroidExecutionReadiness) = ReadNavigation(accessibility,
+        ExecutionClock { System.currentTimeMillis() }, ExecutionIds { java.util.UUID.randomUUID().toString() }, readiness)
+    @Provides @Singleton
+    fun execution(journal: RoomExecutionRepository, readiness: AndroidExecutionReadiness, application: DeviceApplication, observations: DeviceObservations, readNavigation: ReadNavigation, notificationHistory: NotificationHistory) =
+        DeviceExecution(journal, ExecutionClock { System.currentTimeMillis() }, ExecutionIds { java.util.UUID.randomUUID().toString() }, ExecutionCrypto(), readiness, application, observations = observations, readNavigation = readNavigation, notificationHistory = notificationHistory)
     @Provides @Singleton
     fun v2Router(execution: DeviceExecution, application: DeviceApplication, credentials: BridgeCredentialStore, readiness: AndroidExecutionReadiness) =
         DeviceV2Router(execution, application, credentials, readiness) { System.currentTimeMillis() }
@@ -68,10 +85,10 @@ object CompanionModule {
     fun remote(settings: RemoteEndpointPreferences, router: DeviceV2Router, execution: DeviceExecution) =
         OutboundDeviceConnection(settings, router, { execution.deviceId })
     @Provides @Singleton
-    fun bridge(application: DeviceApplication, credentials: BridgeCredentialStore, execution: DeviceExecution, v2Router: DeviceV2Router) =
+    fun bridge(application: DeviceApplication, credentials: BridgeCredentialStore, execution: DeviceExecution, v2Router: DeviceV2Router, readNavigation: ReadNavigation, notificationHistory: NotificationHistory) =
         LoopbackBridgeServer(LegacyDeviceRouter(application, object : ExecuteDeviceAction {
             override suspend fun execute(action: DeviceAction) = execution.executeLegacy(action)
-        }), credentials, v2 = v2Router, prover = credentials)
+        }, readNavigation, notificationHistory), credentials, v2 = v2Router, prover = credentials)
     @Provides fun viewModelFactory(query: DeviceQuery, credentials: PairingCredentials, execution: DeviceExecution, remote: OutboundDeviceConnection) =
         ControlViewModel.Factory(query, credentials, execution, remote)
 }

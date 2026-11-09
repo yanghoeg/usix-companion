@@ -29,12 +29,12 @@ data class NotificationInfo(
 
 data class MailDraft(val to: String, val subject: String, val body: String, val packageId: PackageId)
 
-enum class ActionKind { UI, APP_LAUNCH, MAIL_DRAFT, NOTIFICATION_REPLY }
+enum class ActionKind { UI, APP_LAUNCH, MAIL_DRAFT, NOTIFICATION_REPLY, NOTIFICATION_HISTORY }
 
 /** Acceptance is only dispatch acknowledgement, never verified completion. */
 data class ActionOutcome(val accepted: Boolean, val kind: ActionKind, val detail: String? = null)
 
-enum class DeviceErrorCode { INVALID_ARGUMENT, ACCESSIBILITY_UNAVAILABLE, CONTROLLER_CONFLICT, APPROVAL_REQUIRED }
+enum class DeviceErrorCode { INVALID_ARGUMENT, ACCESSIBILITY_UNAVAILABLE, CONTROLLER_CONFLICT, APPROVAL_REQUIRED, COMPACT_WINDOW_UNAVAILABLE, READ_WINDOW_UNAVAILABLE, STALE_READ_WINDOW, NOTIFICATION_HISTORY_UNAVAILABLE }
 data class DeviceError(val code: DeviceErrorCode, val message: String)
 
 sealed interface DeviceResult<out T> {

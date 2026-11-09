@@ -46,6 +46,23 @@ class DeviceExecutionTest {
         assertEquals(first, receipt(app.execute(session, command.copy(requestId = id(31)))))
         assertEquals(1, dispatches); assertEquals(1, store.session(session.context.sessionId)!!.actionsUsed)
     }
+    @Test fun compactLaunchRejectedBeforeDispatchHasAStableFailedReceipt() = runBlocking {
+        val session = pair(); val command = command(session)
+        var attempts = 0
+        val blocked = DeviceExecution(store, ExecutionClock { now }, ExecutionIds { id(sequence++) }, crypto,
+            ExecutionReadiness { _, _ -> null }, object : ExecuteDeviceAction {
+                override suspend fun execute(action: DeviceAction): DeviceResult<ActionOutcome> {
+                    attempts++
+                    return DeviceResult.Rejected(DeviceError(DeviceErrorCode.COMPACT_WINDOW_UNAVAILABLE, "Compact launch unavailable"))
+                }
+            })
+        val failed = receipt(blocked.execute(session, command))
+        assertEquals(ReceiptState.Failed, failed.state)
+        assertEquals(ExecutionErrorCode.UnsupportedCapability, failed.error!!.code)
+        assertEquals(failed, receipt(blocked.execute(session, command.copy(requestId = id(31)))))
+        assertEquals(1, attempts)
+        assertEquals(0, dispatches)
+    }
     @Test fun alteredPayloadScopeOperationAndTaskCannotReuseActionId() = runBlocking {
         val s = pair(); val c = command(s); app.execute(s, c)
         listOf(c.copy(payloadHash = "sha256:" + "b".repeat(64)), c.copy(scope = ExecutionScope("another.app")),

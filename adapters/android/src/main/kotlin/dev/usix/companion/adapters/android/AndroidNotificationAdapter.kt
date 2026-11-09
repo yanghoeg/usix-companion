@@ -14,8 +14,9 @@ import dev.usix.companion.domain.PackageId
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 
-/** Live Android handles are session-local; persistence of events/receipts belongs to P2. */
-class AndroidNotificationAdapter(private val context: Context, private val mainDispatcher: CoroutineDispatcher) : NotificationPort {
+/** Live reply handles stay session-local; optional history records text on a separate IO worker. */
+class AndroidNotificationAdapter(private val context: Context, private val mainDispatcher: CoroutineDispatcher,
+    private val history: NotificationHistoryRecorder? = null) : NotificationPort {
     private class ReplyHandle(val pending: PendingIntent, val input: RemoteInput, val inputs: Array<RemoteInput>)
     private val items = ArrayDeque<NotificationInfo>()
     private val handles = HashMap<String, ReplyHandle>()
@@ -27,21 +28,24 @@ class AndroidNotificationAdapter(private val context: Context, private val mainD
     fun connect(active: () -> Array<out StatusBarNotification>): Boolean {
         disconnect()
         val notifications = try { active() } catch (_: SecurityException) { return false }
-        notifications.sortedBy { it.postTime }.forEach(::posted)
+        notifications.sortedBy { it.postTime }.forEach { posted(it, recoveredActive = true) }
         listenerConnected = true
+        history?.connected(true)
         return true
     }
 
     @Synchronized
     fun disconnect() {
         listenerConnected = false
+        history?.connected(false)
         items.clear()
         handles.clear()
     }
 
     @Synchronized
-    fun posted(sbn: StatusBarNotification) {
+    fun posted(sbn: StatusBarNotification, recoveredActive: Boolean = false) {
         val notification = sbn.notification ?: return
+        history?.posted(sbn, recoveredActive)
         var handle: ReplyHandle? = null
         notification.actions?.forEach { action ->
             val inputs = action.remoteInputs

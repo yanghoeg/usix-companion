@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
-val appVersionName = (project.findProperty("versionName") as? String) ?: "0.3.0"
+val appVersionName = (project.findProperty("versionName") as? String) ?: "0.3.3"
 
 android {
     namespace = "dev.usix.companion"
@@ -15,7 +15,7 @@ android {
         applicationId = "dev.usix.companion"
         minSdk = libs.versions.min.sdk.get().toInt()
         targetSdk = libs.versions.target.sdk.get().toInt()
-        versionCode = 8
+        versionCode = 11
         versionName = appVersionName
     }
 

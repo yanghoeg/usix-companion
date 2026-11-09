@@ -162,12 +162,12 @@ class DeviceV2Router(
                 rejection?.code == ExecutionErrorCode.DeviceLocked -> "device_locked"
                 rejection?.code == ExecutionErrorCode.AccessibilityDisconnected -> "accessibility_disconnected"
                 rejection?.code == ExecutionErrorCode.AppMissing -> "app_missing"
-                rejection?.code == ExecutionErrorCode.UnsupportedCapability -> "permission_required"
+                rejection?.code == ExecutionErrorCode.UnsupportedCapability -> "unsupported"
                 rejection?.code == ExecutionErrorCode.Busy -> "busy"
                 rejection != null || grantMissing -> "permission_required"
                 else -> "ready"
             }
-            return mapOf("operation" to operation, "supported" to supported, "readiness" to state, "authority" to authority,
+            return mapOf("operation" to operation, "supported" to (supported && rejection?.code != ExecutionErrorCode.UnsupportedCapability), "readiness" to state, "authority" to authority,
                 "requiresController" to mutation, "requiresSnapshot" to snapshot, "requiresAccount" to (session.accountRef != null),
                 "reason" to (reason ?: rejection?.message ?: if (grantMissing) "UI execution requires explicit controlled-fixture setup; general app approvals are P4 work" else null))
         }

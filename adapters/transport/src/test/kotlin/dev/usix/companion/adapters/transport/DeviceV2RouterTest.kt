@@ -69,4 +69,18 @@ class DeviceV2RouterTest {
         assertEquals("UnsupportedCapability", DeviceV2Codec.obj(StrictJson.objectValue(response.json)["error"])["code"])
         assertTrue(device.calls.isEmpty())
     }
+
+    @Test fun unavailableCompactLaunchIsAdvertisedAsUnsupported() = runBlocking {
+        val paired = pair()
+        val compactReadiness = ExecutionReadiness { operation, _ ->
+            if (operation == "app.open") ExecutionError(ExecutionErrorCode.UnsupportedCapability, "Compact launch unavailable") else null
+        }
+        val compactRouter = DeviceV2Router(execution, device.application(), owner, compactReadiness) { now }
+        val response = compactRouter.route("POST", "/v2/capabilities", packet(), compactRouter.authorize("/v2/capabilities", paired.bearer)!!)
+        val capabilities = StrictJson.objectValue(response.json)["capabilities"] as List<*>
+        val open = capabilities.map { DeviceV2Codec.obj(it) }.single { it["operation"] == "app.open" }
+        assertEquals(false, open["supported"])
+        assertEquals("unsupported", open["readiness"])
+        assertTrue(device.calls.isEmpty())
+    }
 }

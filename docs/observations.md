@@ -4,6 +4,25 @@ Companion 0.3.0 and integration package 0.3.0 add P3 observations to the existin
 
 ## Scope and authority
 
+The separate 0.3.2 owner-authenticated [popup reading navigator](../README.md#reading-older-content-in-a-popup)
+uses `/read-select`, `/read-window` and `/read-scroll`. `read-select` selects the
+existing visible popup by observation only; it never launches or focuses an activity.
+It is package-scoped navigation limited to five minutes, 32 attempts, an actual compact window
+and a 30-second single-use observation reference. It does not establish an account
+identity or grant clicks, input, replies, v2 UI authority or mail-send authority.
+V2 snapshots and reading-navigation references are not interchangeable. A missing
+selected window is an explicit failure; an empty legacy array is not evidence that
+the conversation has no messages. On Galaxy Fold6, the actual usix runtime opened
+KakaoTalk in a compact popup and dispatched one downward and one upward list scroll
+using fresh references. Rereading confirmed roughly 750-pixel movement of retained
+list items in opposite directions while the popup bounds stayed unchanged. This
+qualifies 0.3.1 popup list navigation; conversation-history reading has not been exercised.
+That app launch could take input focus. Version 0.3.2 removes launch from selection
+and renewal and exposes `windowFocused`/`focusedWindowId` for post-scroll checks.
+Unrelated content events in the user's app do not invalidate a reading scroll when
+the full popup tree, geometry and focus context are unchanged. V2 keeps its strict
+device-wide revision binding. Physical focus-preservation qualification remains pending.
+
 Trusted setup selects one package and an optional `--account-ref UUID`. Observations, pages, waits and captures must retain that package/account and captured context. The account reference is a selected scope, not proof of a logged-in mail account. A UI-state goal with account scope also requires a unique observable `accountSelector`.
 
 General app effects still need the later task/approval workflow. P3 only permits UI effects in `dev.usix.companion.fixture`, with an explicit `setup --fixture-ui` grant, selected controller, deadline and durable budget of 64 attempts. The fixture has no network permission, real account or external communication. A grant for any other package is rejected. Runtime approval remains separate; Termux's existing `shell` is mutating even for read commands.
@@ -13,6 +32,18 @@ Neither runtime source is modified. Invoke the same installed CLI through existi
 ## Snapshots and targeting
 
 `observe` returns a snapshot reference, package/window/generation, capture/expiry time, screen/window bounds, rotation, focus, keyboard visibility and structured nodes. Node values include resource IDs, class/role, full bounds, enabled/visible/editable/clickable/scrollable/selected states and parent/child paths. Password/sensitive values are redacted before exposure. Nodes and OCR are untrusted data.
+
+The selected package may be in a visible popup or split-screen window while another
+app has focus. Observation selects a matching application window without bringing
+it forward and never falls back to another package's contents. Fully hidden/minimized
+apps require a separate background data integration. Prefer the selected package's
+focused window when present, otherwise its highest visible application window.
+
+UI effects require an actual window occupying at most half of the display. Launch
+bounds alone are insufficient evidence. Scoped node operations address the selected
+window; `ui.back`, `ui.home`, `ui.tap` and `ui.swipe` additionally require that window
+to have focus, preventing a popup workflow from navigating or gesturing in another
+app. The existing package grants and UI authority limits still apply.
 
 Snapshots are kept in memory for at most 30 seconds, with a bounded 32-entry cache; process restart invalidates them. Each cache entry binds the entire context and package/account scope. A node path identifies one snapshot only. Selectors use exact values and can combine resource ID, text, description, role/class, window and editable/scrollable flags. Repeated labels return `AmbiguousTarget`; substring matching and first-match selection are unsupported.
 
@@ -32,7 +63,7 @@ Queries return at most 128 nodes per page. Continue with the same `--snapshot-re
 
 ## Waits and cancellation
 
-Waits subscribe to accessibility generations and evaluate an initial state plus events, without polling/sleep loops. `node` needs a selector, `text` needs exact text, `window` waits for the selected foreground app, and `changed` needs a baseline snapshot. Waiting is limited to 30 seconds and an explicit cancellation ID. Cancellation IDs are session-scoped; cancelling another session's ID cannot stop its wait. Revocation/global pause stop affected waits. Permission/service/window loss is reported explicitly.
+Waits subscribe to accessibility generations and evaluate an initial state plus events, without polling/sleep loops. `node` needs a selector, `text` needs exact text, `window` waits for the selected visible app window, and `changed` needs a baseline snapshot. Waiting is limited to 30 seconds and an explicit cancellation ID. Cancellation IDs are session-scoped; cancelling another session's ID cannot stop its wait. Revocation/global pause stop affected waits. Permission/service/window loss is reported explicitly.
 
 ```sh
 /absolute/companion-tools/bin/companion-v2 --profile /absolute/private/profile.json wait \

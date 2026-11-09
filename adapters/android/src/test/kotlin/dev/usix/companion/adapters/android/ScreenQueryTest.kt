@@ -141,6 +141,16 @@ class ScreenQueryTest {
     }
 
     @Test
+    fun sensitiveParentAlsoMasksItsOtherwiseOrdinaryChildren() {
+        val root = node("mail.app", "password container").apply { isPassword = true }
+        shadowOf(root).addChild(node("mail.app", "PRIVATE_CHILD_VALUE"))
+        shadow.activeRoot = root
+        val values = labels(screen("mail.app"))
+        assertFalse(values.contains("PRIVATE_CHILD_VALUE"))
+        assertEquals(listOf("[redacted]", "[redacted]"), values)
+    }
+
+    @Test
     fun scrollOnlyActsOnTheRequestedAppAndUsesTheRequestedDirection() {
         val actions = mutableListOf<Int>()
         val root = node("mail.app", "Inbox").apply {

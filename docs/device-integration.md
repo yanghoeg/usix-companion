@@ -4,6 +4,20 @@ Companion 0.3.0 implements the shared [device v2 contract](../contracts/device/v
 
 ## Current capabilities
 
+Companion 0.3.3 also exposes paired loopback notification-history lookup and explicit
+archive clearing. This is a background KakaoTalk preview archive, not a new v2
+operation or full conversation API. Existing shell tools call the updated
+`companion_http.py`; see [collection, retention and query semantics](notification-history.md).
+
+The background/compact source update uses direct data integrations first and
+requests bounded freeform windows for app/draft launch. An unavailable platform
+feature stops launch and is reflected in capabilities. Visible popups can be
+observed without changing focus; UI effects require an actual window occupying
+at most half the display. Launch acknowledgement does not confirm that the
+platform honored the requested bounds. This update requires a new APK and
+Galaxy Z Fold6 device verification; the historical P3 evidence below predates
+these presentation constraints. See [background and compact operation](../README.md#background-and-compact-operation).
+
 `device.health` is read-only. `app.open` has a durable receipt and opens the one package explicitly selected during trusted setup. It requires an unexpired session, its bounded setup grant, an unlocked device, an installed launchable app and the selected controller lease. It reports `Dispatched`, never verified business completion. P3 adds [rich observations, waits, screenshot/OCR and controlled UI-state verification](observations.md). UI effects currently require the explicit fixture-only grant. General app authority and verified mail sends remain P4 work; capability readiness reports that boundary.
 
 Legacy v1 health/observations/app opening/draft composing retain their request/response fields. Compose retains `sent: false`. While a v2 controller owns the device, legacy effects return 409. Unbound legacy UI mutations and notification replies return 403 `ApprovalRequired`; they lack the exact Companion authority required for consequential effects. Existing runtime approval alone cannot supply this authority. These routes are retained, with explicit errors and no new mandatory request fields. Legacy effects have no caller action ID, durable retry deduplication or verified completion; never automatically retry them.

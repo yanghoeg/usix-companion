@@ -66,6 +66,59 @@ password is configured separately from the webmail password in webmail settings.
 Company external-mail access must already be enabled. See the
 [official mail settings](https://ezportal.bizmeka.com/help/ko/gw-docs/PRO_000178.html).
 
+## Background and compact operation
+
+Version 0.3.3 adds a persistent KakaoTalk notification archive. Reading, searching and
+summarizing these records never opens KakaoTalk, changes input focus or marks a chat
+read. Notification access is needed to collect new previews; existing records remain
+queryable while the listener is disconnected, accessibility is disabled or the phone
+is locked. [Archive API and coverage](docs/notification-history.md).
+
+```sh
+python3 "$HOME/.usix/companion_http.py" notifications-history '{"package":"com.kakao.talk","limit":50}'
+python3 "$HOME/.usix/companion_http.py" notifications-history '{"package":"com.kakao.talk","query":"회의"}'
+```
+
+The archive retains only exposed notification text, for 30 days and at most 10,000
+records in the app's private backup-excluded directory. Removed notifications survive;
+message identities prevent duplicate MessagingStyle entries on updates/reconnect.
+Muted or unposted messages, pre-collection conversations and attachment contents are
+unavailable. `conversationComplete` is always false. The unchanged usix runtime
+summarizes queried records through its existing shell tool. Source implementation
+and tests do not establish deployment on the physical phone; install the new APK.
+
+Use direct background data integrations first for every app workflow. The current
+mail helper can read server data without opening an app; notifications provide only
+the content the app actually published. Other app data needs an authorized API,
+provider or integration. Hidden apps do not expose their full contents through
+accessibility, and an unavailable source must remain an incomplete result.
+
+For UI reading, select an already visible popup with `read-select` and preserve the
+user's focused app. Missing windows and expired selections do not trigger app
+launches. Compact `open` is reserved for an explicit request to open an app; a small
+window can still take input focus when first launched.
+
+The source now requests a compact window for all Android app-launch and mail-draft
+intents. It requires the platform's freeform-window feature, requests at most 60% of
+each display dimension (also capped at 360 × 540 dp), and never retries with ordinary
+fullscreen options. Unsupported launches return an explicit availability error;
+v2 capabilities mark `app.open` unsupported in that environment. These changes need
+an updated APK; they do not change the already installed application's behavior.
+
+Launch bounds are a platform hint, so `ok:true`/`Dispatched` does not establish a
+compact window. Inspect the selected package's actual snapshot before UI work. UI
+effects reject windows larger than half the display. A platform that ignores bounds
+can still show a large window during the launch attempt; this implementation cannot
+guarantee that every third-party app will initially open as a popup. [Android launch
+bounds](https://developer.android.com/reference/android/app/ActivityOptions#setLaunchBounds(android.graphics.Rect)).
+
+Observation can read the selected app's visible popup even while another app has
+focus. Scoped node operations address that window's own nodes; global navigation and
+coordinate gestures require the selected window to have focus. Fully hidden or
+minimized apps remain unavailable. Galaxy Z Fold6 supports Samsung's popup workflow;
+automatic bounded launches still require testing on the user's current One UI and
+display configuration. [Samsung Fold6 multi-window guide](https://insights.samsung.com/2024/07/22/how-to-master-multi-active-windows-on-galaxy-z-fold6/).
+
 Android bridge for the Termux agent. When explicitly requested, Thunderbird mail and conversation screens can be
 read and used without a notification. Sign in to the mail account in Thunderbird,
 unlock the phone, and enable the companion's accessibility service. Notification
@@ -85,6 +138,9 @@ the bearer; another app that took port 8760 cannot produce it.
 | `POST /email/compose` | `{"to":"person@example.com","subject":"Hello","body":"Message"}` opens a new message with these fields filled. Optional `package` selects the mail app. Success includes `"sent":false`; this never sends mail. |
 | `GET /screen?package=net.thunderbird.android` | Reads the mail app's current accessibility tree, including empty editors and scroll containers. |
 | `POST /scroll` | Legacy shape remains `{"direction":"down","package":"net.thunderbird.android"}`. P2 rejects unbound UI mutation with 403 `ApprovalRequired`. |
+| `GET /read-window?package=com.kakao.talk` | Reads a visible popup with actual window/display bounds, text nodes and scroll targets. A missing window returns 409. |
+| `POST /read-select` | `{"package":"com.kakao.talk"}` selects an already visible compact popup for bounded reading navigation without launching or focusing an activity. |
+| `POST /read-scroll` | `{"package":"com.kakao.talk","direction":"up","windowRef":"from read-window","nodeRef":"from scrollTargets"}` scrolls one observed container in the selected popup. |
 | `POST /type` | Legacy shape remains `{"text":"Reply text","package":"net.thunderbird.android"}`. P2 rejects unbound UI mutation with 403 `ApprovalRequired`. |
 
 Native tool availability depends on the unchanged `usix-termux` version. Existing
@@ -99,6 +155,46 @@ This uses the account already configured in Thunderbird. It does not read its
 private database or connect directly to the mail server. Accessible text and
 controls depend on the installed mail app and current screen, so a live-device
 check is needed for each supported app flow.
+
+### Reading older content in a popup
+
+Version 0.3.2 selects an existing popup with owner-authenticated `read-select`,
+for five minutes and at most 32 scroll attempts. Selection and renewal only observe
+the current window. They do not launch an activity, bring a task forward or request
+keyboard/accessibility focus. Use direct integrations and notifications first.
+If no popup is visible, report that limitation; only explicitly requested app opening
+uses `open`, which can change focus even when the resulting window is small.
+`read-window` reports actual bounds, meaningful visible nodes and scroll targets.
+It issues a 30-second `windowRef` only for a complete tree in a verified window
+occupying at most half the display. Root-only fallback bounds cannot authorize
+scrolling. A missing window is a 409 error, rather than an empty successful lookup.
+Local pause, selecting another app and process restart invalidate the references.
+
+Call `python3 tools/companion_http.py read-select '{"package":"com.kakao.talk"}'`,
+then `read-scroll` with its `windowRef`, one explicit `scrollTargets` `nodeRef`,
+the same package and `direction:"up"` or `"down"`. Directional Android node actions
+are preferred, with forward/backward container actions for older apps. No global
+gesture is used, so an accessible popup can scroll while another app has focus.
+`windowFocused` describes the selected popup; `focusedWindowId` identifies the
+application window holding input focus without exposing that app's content.
+Read again after each scroll and compare those values. Stop if focus changes.
+Reading scrolls tolerate global event-counter updates from the user's other app;
+the full popup tree, window bounds and focus context are still revalidated.
+
+Every attempt invalidates all earlier references, including uncertain effects.
+`effect:"dispatched"` and `readRequired:true` mean dispatch acknowledgement.
+Query `read-window` again, compare visible content and add only newly read content.
+Stop on unchanged content, missing/ambiguous targets, incomplete observations or
+the requested limit. Never blindly retry a timed-out scroll or infer a complete
+conversation from previews. Legacy `/scroll`, clicking, typing, back and replies
+retain their existing authority requirements. The updated APK and helper are
+required. Galaxy Fold6 popup list scrolling was physically verified in 0.3.1;
+0.3.2 selection and focus preservation need separate on-device qualification.
+
+The accessibility service also requests unimportant view containers and preserves
+inherited password/sensitive masking. This can expose layout/scroll containers
+to the adapter; hidden apps and protected content remain unavailable. [Android
+view retrieval flag](https://developer.android.com/reference/android/accessibilityservice/AccessibilityServiceInfo#FLAG_INCLUDE_NOT_IMPORTANT_VIEWS).
 
 ## Independent assistant and scheduled work
 
